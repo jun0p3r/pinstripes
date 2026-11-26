@@ -926,6 +926,10 @@ notebook > stack:not(:only-child) {{
 }}
 
 /* ---------------- menus and popovers: pinstriped sheets, glossy pinstriped selection */
+/* GTK 4 popovers carry .background too: only their contents are a sheet, the surface around them
+   (arrow gap, shadow margin) must stay transparent */
+popover.background, popover.menu.background {{ background-color: transparent; background-image: none; }}
+popover > arrow {{ background-color: #f9f9f9; background-image: none; border: 1px solid rgba(0, 0, 0, 0.18); }}
 {menu_bg} {{
   background-color: #f9f9f9;
   background-image: {MENU_STRIPES};
