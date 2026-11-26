@@ -8,7 +8,7 @@ An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has four parts
 * **Oxygen Pinstripe**: an icon theme that provides Mac OS X 10.2 Aqua full-colour action icons and solid menu-extra symbolic glyphs on top of Oxygen
 * **Pinstripe** and **Pinstripe Graphite** colour schemes
 
-It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decoration.
+It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traffic-lights) window decoration.
 
 | Widget style | Plasma style |
 |---|---|
