@@ -10,7 +10,7 @@ modelled on Mac OS X 10.2 "Jaguar". Read this before changing anything.
 | Qt 6 widget style ("Pinstripe", "Pinstripe Graphite") | `style/` (C++, a `QProxyStyle` over Fusion) | `build/bin/styles/pinstripe.so` |
 | Plasma style | `tools/make_plasma_theme.py` | `plasma/pinstripe/` |
 | GTK 3 / GTK 4 theme | `tools/make_gtk_theme.py` | `gtk/Pinstripe/` |
-| Icon theme "Oxygen Pinstripe" (10.2 action + symbolic icons) | `tools/make_icons.py` | `icons/Oxygen-Pinstripe/` |
+| Icon theme "Oxygen Pinstripe" (10.2 full-colour + symbolic icons) | `tools/make_icons.py` + `tools/icons_lib/` | `icons/Oxygen-Pinstripe/` |
 | Colour schemes | `colors/*.colors` (hand-written) | installed as-is |
 | Switch / revert a session | `contrib/apply-pinstripe.sh`, `contrib/revert-pinstripe.sh` | |
 | Offscreen previews | `tools/gallery/` (Qt), `tools/preview_plasma.py`, `tools/gtk_gallery.py`, `tools/preview_icons.py` | `docs/screenshots/` |
@@ -133,71 +133,95 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Current state (update this)
 
-*Last updated: 2026-11-26 by Google Antigravity (Gemini 4).*
+*Last updated: 2026-11-26 by Perplexity Computer (Gemini 4 Carbon).*
 
-* Repos: `~/projects/pinstripe-style` (this one) and `~/projects/oxygen-traffic-lights` (window
-  decoration). Both have local commits only; nothing is pushed and no remote is set.
-* Installed on the user's machine (**built, awaiting install**):
-  * Widget style plugin (`build-system/bin/styles/pinstripe.so`), Plasma style, GTK theme,
-    `Oxygen Pinstripe` icon theme, colour schemes (`build/`), and window decoration
-    (`../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so`) all have new
-    commits ready to install:
-    * User-local themes, icons & colours:
-      `cmake --install build && rm -f ~/.cache/icon-cache.kcache` (then switch Plasma style away
-      and back to reload cached SVGs).
-    * System-wide Qt style + KWin decoration (user runs, needs sudo):
-      `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so && sudo install -Dm755 ../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so /usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so && dbus-send --session --type=method_call --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure`
-      then restart apps.
-* Recently matched to the HIG:
-  * **Mac OS X 10.2 Aqua action icons** (Chapter 11, Figures 11-18, 11-19): 111 full-colour
-    master action artworks (+200 freedesktop/GTK symlink aliases) at 16, 22, 24, 32, `32@2x`
-    and 48 px in `icons/Oxygen-Pinstripe/` (plus 426 symbolic glyphs): round clear-glass Aqua
-    navigation buttons (`Back`/`Forward` with black triangle + twin dots, `Up`/`Down`, `?` Help),
-    sky-blue pinstriped folders with `#2f4b7c`-outlined white `+` badges, curled white pages,
-    3.5" floppy disk, front-on desktop printer, Sherlock silver-rimmed glass magnifier & zoom
-    variants, yellow wooden `Compose` pencil, perforated blue and crimson Mail stamps, `@`
-    address book, Finder `Home` cottage, glossy ruby `Favorites` heart, crossed `Utilities`
-    hammer & wrench, `Disc Burner` trefoil, `Preview` rotate cards, sliding-drawer `Sidebar`,
-    and formatting palette tiles; also fixes Fedora GTK apps falling back to Oxygen's flat
-    monochrome `simbolicActions`.
-  * **Glassy bevel buttons** (Figures 7-14, 7-15): curved glass cushions with top specular lens,
-    cool silver mid-tone dip, side pillow shading, upward bottom reflection and dark `#52545a`
-    bottom rim (smoked glass with lens when pressed/toggled) across Qt, Plasma and GTK.
-  * **Selected tabs morphing into the accent strip** (Figures 7-23, 8-2): selected tabs extend
-    1 px over row 0 (`#0057ae`) of the 6-row blue strip with no bottom rim so the icy-cyan tab
-    base flows seamlessly into `#a2d7f0..#acefff` in Qt (all 4 sides + standalone `QTabBar`),
-    Plasma (`tabbar.svg`) and GTK 3 / GTK 4.
-  * **Progress & sliders**: fixed a lens double-band artifact in `GelKind::Progress`; Plasma
-    `bar_meter_*` updated to 16 px with the 15 measured rows and `slider.svg` given its own 6 px
-    dark recessed `groove` (no longer sharing the progress track).
-  * **GTK 3 & GTK 4 parity**: 16 px progress rows, flat grey disclosure triangles (white on
-    selected rows), etched group boxes (`frame` with title on the border in 11 pt small font),
-    small-font list headings with blue sorted header, 11 pt help tags and borderless toolbars.
-  * **Toolbars, help tags & title bar**: Qt 32 px Finder-style toolbars with `#a3a3a3` bottom
-    divider, 6 px / 2 px help-tag padding (`PM_ToolTipLabelFrameWidth = 1`), and 22 px title bar
-    in `../oxygen-traffic-lights` with 13 px traffic lights 9 px in at a 22 px pitch and
-    `#8b8b8b` (`139, 139, 139`) inactive title ink.
+* Repos & remotes:
+  * Pinstripe suite: GitHub `https://github.com/jun0p3r/pinstripes` (`main`), local path on user's
+    machine `~/projects/pinstripe-style`.
+  * Window decoration: GitHub `https://github.com/jun0p3r/oxygen-traffic-lights`, local sibling
+    `~/projects/oxygen-traffic-lights`.
+  * Note: the user asked to push every major and minor step to `origin/main` and keep `AGENTS.md`
+    updated for seamless handoff across Claude Code, Google Antigravity and Perplexity Computer.
+* **Oxygen-wide 10.2 Aqua icon remake (in progress — Phase 1 complete & pushed)**:
+  * Modular icon library created in `tools/icons_lib/` (`materials.py`, `places_devices.py`,
+    `apps_categories.py`) and wired into `tools/make_icons.py` (builds all PNG sizes + SVGs in
+    ~2.3 s, ~11 MB total in `icons/Oxygen-Pinstripe/`):
+    * `places/`: **74/74** Oxygen names covered (49 masters + 28 aliases at 16–128 px): sky-blue
+      and 9 colour-tinted pinstriped Aqua folders, 10.2 Save-dialog (`al-107-045.png`) recessed
+      folder glyphs (`Documents`, `Downloads`, `Music`, `Pictures`, `Movies`, `Sites`, `Public`
+      yellow diamond walking-person road sign), `Home` cottage, Aqua `Desktop`, sapphire `Network`
+      globe on drive pedestal, Xserve `network-server` blades, and empty/full chrome wire-mesh
+      `Trash` (`ch11-202-002.png`).
+    * `devices/`: **89/89** Oxygen names covered (40 masters + 50 aliases at 16–128 px): Studio
+      Display `computer`, white clamshell iBook `computer-laptop`, Figure 11-14 brushed-aluminum
+      3.5" internal drive (`#d6d5db..#9d9ca1`) and amber-anodized external USB/FireWire drive
+      (`#f4961e..#ffc448`), Figure 11-15 iridescent CD/DVD/BD discs and 3.5" floppy, snow-white
+      scroll-wheel iPod, cylindrical aluminum iSight webcam, Apple Pro Keyboard/Mouse/Speakers,
+      and UFO AirPort Base Station wireless levels.
+    * `apps/`: **207/207** Oxygen names covered (+ Plasma 6 `org.kde.*` / freedesktop aliases; 59
+      masters + 173 aliases at 16–128 px): sampled two-tone Finder smiley (`#9cbdff..#3052b6` /
+      `#dceaff..#95a6de`, open-stroke nose & smile), TextEdit angled ruled pad + chrome pen,
+      Preview stacked ocean photos + loupe, Mail scalloped hawk stamp, Safari mariner's compass,
+      pinstriped-bezel Terminal (`>_`) and Process Viewer ECG monitors, Console amber LED matrix,
+      Stickies, QuickTime player, iTunes CD + eighth notes, Calculator, Key Caps `⌘` keycap,
+      Sherlock deerstalker + magnifier, Chess wooden knight, and 12 distinct Figure 11-12 System
+      Preferences brushed-silver light-switch wall plates (`#fafafa..#dcdde0` with 4 corner screws)
+      covering all 45+ `preferences-*` entries.
+    * `categories/`: **40/40** Oxygen names covered (19 masters + 21 aliases at 16–128 px),
+      including 10.2 `Applications` ruler-pencil-brush "A" and `Utilities` hammer & wrench.
+    * `applets/`: **40/40** Oxygen PNG widget icons covered (16 masters + 24 aliases at 16–48 px).
+    * `actions/`: **111** 10.2 masters (+200 aliases at 16–48 px & `32@2x`) already built; ~787
+      additional niche Oxygen `actions/` names remain for Phase 3.
+    * `symbolic/` & `panel/status/`: 426 menu-extra & symbolic SVGs.
+  * Refreshed `docs/screenshots/plasma-desktop.png` (Dock & Go menu now render the 10.2 Finder,
+    Terminal, Safari, Mail, System Preferences, Help and Mesh Trash icons),
+    `docs/screenshots/icons-places-apps.png`, `docs/screenshots/icons.png`, `docs/preview.html`
+    and `README.md`. Removed committed `.pyc` files and added `__pycache__/` + `*.py[cod]` to
+    `.gitignore`.
+* To install on the user's Fedora machine after pulling `main`:
+  * User-local themes, icons & colours:
+    `git pull && cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/.local && cmake --install build && rm -f ~/.cache/icon-cache.kcache`
+    (then switch Plasma style or icon theme away and back in System Settings to flush caches).
+  * System-wide Qt style + KWin decoration (needs sudo, if not yet installed from last round):
+    `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so && sudo install -Dm755 ../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so /usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so && dbus-send --session --type=method_call --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure`
 * Known limits (not bugs to fix): QML/Kirigami pages can't show pinstripes; GTK tabs can't be
   centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes.
 
 ### Backlog (update this; highest value first)
 
-1. **Install the latest builds & icons** (commands above, including removing
-   `~/.cache/icon-cache.kcache`) and verify on the live desktop: 10.2 action icons in Dolphin /
-   Kate / KMail / GTK apps, menu/tooltip drop shadows, 22 px title bar, glassy bevel buttons,
-   seamless tab-to-strip join and Plasma sliders/progress. Ask the user for a live screenshot to
-   inspect, and add any app-specific action icon aliases they spot missing.
-2. **10.2 Places / Apps / Devices icons** (if the user asks next): `Oxygen Pinstripe` currently
-   provides 10.2 action icons + menu-extra symbolics and inherits Oxygen for `places/`, `apps/`,
-   `devices/` and `mimetypes/` (e.g. Finder blue folders, iMac/Cinema `Computer`, network globe,
-   silver hard disk, mesh Trash in `places/`).
-3. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
-   can be found; currently a 1.7 s cosine between full colour and a paler gel in Qt (and
-   opacity pulse in GTK).
-4. **Small control variants** (HIG chapter 8, p. 160): check whether Qt `Qt::WA_MacSmallSize` /
-   `QSizePolicy` small controls (10 px small progress bar, 11 pt small push/pop-up buttons) show
-   up in any KDE apps and are worth styling.
-5. Keep `docs/preview.html` and `docs/screenshots/` current after each round.
+1. **Finish remaking the remaining Oxygen icon categories in 10.2 Aqua style** (`tools/make_icons.py`
+   already has `try: import` hooks ready at lines 2348–2371 for all three modules — create each
+   module, rerun `python3 tools/make_icons.py`, render & visually inspect contact sheets, update
+   `AGENTS.md`, and push after each step!):
+   * **Phase 2A — `tools/icons_lib/mimetypes_icons.py` (`build_mimetypes_painters()`)**: cover all
+     **441** Oxygen `mimetypes/` names (198 upstream real + 243 aliases) using `aqua_sheet()` from
+     `materials.py` (Figure 11-11 "Do this": hovered curled white document with integrated central
+     10.2 artwork and integrated uppercase bottom label `PDF`, `PNG`, `JPEG`, `SVG`, `MP3`, `MP4`,
+     `ZIP`, `TAR`, `HTML`, `CSS`, `JS`, `PY`, `C++`, `RS`, `SH`, `TTF`, etc.; `pref_strip=True` for
+     config/desktop/theme files per Figure 11-12; `aqua_plugin_cube()` for `package-x-generic`,
+     `.rpm`, `.deb`, `.flatpak`, `.appimage`, `.apk` per Figure 11-13; `.iso`/`.dmg` optical image).
+   * **Phase 2B — `tools/icons_lib/status_emblems_emotes.py`
+     (`build_status_emblems_emotes_painters() -> (status, emblems, emotes, animations, special)`)**:
+     cover all **129** `status/` icons (10.2 amber Caution triangle with `!`, crimson octagon Stop,
+     Aqua blue Get Info sphere, brass lock, 28 Sherlock-style 3D golden sun / silver moon / puffy
+     glass cloud weather icons, iChat glossy glass presence gems, battery/volume/wireless status),
+     all **35** `emblems/` (Finder curved alias arrow `alias_arrow_badge()`, lock, heart, VCS
+     check/plus/delta/bolt, GPG trust), all **51** `emotes/` (2002 iChat glossy 3D amber-yellow gel
+     spheres with expressive faces + heart/rose/gift/food/drink), **4** `animations/` and **4**
+     `special/`.
+   * **Phase 3 — `tools/icons_lib/actions_extra.py` (`extend_action_painters(base_actions)`)**:
+     extend `actions/` from 311 names to all **1,098** Oxygen `actions/` names (IDE `code-*`,
+     `debug-*`, `run-build*`; vector/Calligra `draw-*`, `transform-*`, `align-*`, `distribute-*`,
+     `format-*-node`, `object-*`, `layer-*`; `insert-table`/`edit-table-*`, `office-chart-*`,
+     `view-calendar*`, `view-pim-*`, `view-financial-*`, `flag-*`, `tag*`, `mixer-*`, `im-*`,
+     `irc-*`, `games-*`, `view-certificate*`).
+   * Reference inventory check: clone `https://github.com/KDE/oxygen-icons.git` with
+     `--filter=blob:none --no-checkout --depth 1` and diff `git ls-tree -r HEAD` against generated
+     `icons/Oxygen-Pinstripe/32x32/<cat>/` to verify 0 missing names across all 2,212 Oxygen PNG
+     entries.
+2. **Live desktop verification**: pull on Fedora, run `cmake --install build && rm -f ~/.cache/icon-cache.kcache`,
+   and inspect Dolphin, Konsole, KMail, System Settings, Kickoff and the Plasma Dock.
+3. **Default-button pulse & small control variants** (HIG chapter 8, p. 160).
 
 ### Session log (append one line per session, newest last)
 
@@ -215,3 +239,9 @@ Claude again) relies on them to resume without re-deriving anything.
   (+200 aliases, 16–48 px & `32@2x`) to `Oxygen Pinstripe` sampled from HIG Chapter 11 (Finder,
   Mail, Preview, Print Dialog, Formatting Palette), switched Qt/Plasma/GTK previews to
   `Oxygen-Pinstripe`, and refreshed all screenshots and docs.
+* 2026-11-26 Perplexity Computer (Gemini 4 Carbon): fixed README `oxygen-traffic-lights` GitHub
+  link, cleaned `.pyc` files / `.gitignore`, created modular `tools/icons_lib/` and remade 100 %
+  of Oxygen's `places/` (74), `devices/` (89), `apps/` (207), `categories/` (40) and PNG
+  `applets/` (40) in sampled 10.2 Aqua style (16–128 px), refreshed `plasma-desktop.png` + icon
+  contact sheets, wired Phase 2/3 hooks (`mimetypes`, `status/emblems/emotes`, `actions_extra`)
+  and updated `AGENTS.md` for handoff.

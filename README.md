@@ -5,7 +5,7 @@ An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has four parts
 * **Pinstripe** and **Pinstripe Graphite**: a Qt 6 widget style (System Settings → Colors & Themes → Application Style)
 * **Pinstripe**: a Plasma style (System Settings → Colors & Themes → Plasma Style). It has a menu-bar top panel, pinstriped popups, a glass Dock with running-app triangles, yellow tooltips, gel buttons, scroll bars, sliders, progress bars and tabs.
 * **Pinstripe**: a GTK 3 and GTK 4 theme, so GTK apps match
-* **Oxygen Pinstripe**: an icon theme that provides Mac OS X 10.2 Aqua full-colour action icons and solid menu-extra symbolic glyphs on top of Oxygen
+* **Oxygen Pinstripe**: a Mac OS X 10.2 Aqua icon theme covering Places, Devices, Applications, Categories, Plasma Applets, Actions and solid menu-extra symbolic glyphs over Oxygen
 * **Pinstripe** and **Pinstripe Graphite** colour schemes
 
 It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traffic-lights) window decoration.
@@ -20,10 +20,24 @@ It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traf
 
 ## Oxygen Pinstripe icons
 
-![Oxygen Pinstripe action and symbolic icons](docs/screenshots/icons.png)
+![Oxygen Pinstripe Places, Devices, Apps and Categories](docs/screenshots/icons-places-apps.png)
 
-Oxygen Pinstripe adds two Mac OS X 10.2 "Jaguar" layers on top of Oxygen:
+![Oxygen Pinstripe full contact sheet](docs/screenshots/icons.png)
 
+Oxygen Pinstripe remakes the Oxygen icon set in Mac OS X 10.2 "Jaguar" Aqua style:
+
+* **Full-colour 10.2 Places, Devices, Applications, Categories & Applets** (183 master artworks +
+  296 aliases across 16, 22, 32, 48, 64 and 128 px — 100 % of Oxygen's `places/`, `devices/`,
+  `apps/`, `categories/` and PNG `applets/` names), sampled from Apple's June 2002 HIG Chapter 11
+  (Figures 11-2 to 11-15 and Save-dialog Figure `al-107-045`): two-tone Finder smiley face,
+  TextEdit angled pad with chrome pen, Preview stacked photos with photographer's loupe, Mail
+  scalloped hawk stamp, Safari mariner's compass, pinstriped-bezel Terminal (`>_`) and Process
+  Viewer ECG monitors, Console amber dot-matrix log display, System Preferences brushed-silver
+  light-switch wall plates, Stickies, QuickTime player, iTunes CD + 3D eighth notes, Chess wooden
+  knight, sky-blue and colour-tinted pinstriped Aqua folders (including `Public`'s yellow diamond
+  pedestrian road sign), 3.5" internal aluminum and orange external USB/FireWire drives,
+  iridescent CD/DVD/BD discs, snow-white scroll-wheel iPod, cylindrical iSight webcam, sapphire
+  glass network globe on drive pedestal, and gleaming chrome wire-mesh Trash (empty and full).
 * **Full-colour 10.2 Aqua action icons** (111 master artworks + 200 freedesktop/GTK aliases at
   16, 22, 24, 32, `32@2x` and 48 px in `Context=Actions`), sampled from Apple's 2002 HIG
   Chapter 11 (Figures 11-18, 11-19 and dialog figures): round clear-glass navigation buttons
@@ -37,7 +51,8 @@ Oxygen Pinstripe adds two Mac OS X 10.2 "Jaguar" layers on top of Oxygen:
 * **Solid, rounded symbolic & menu-extra glyphs** (426 names, 139 distinct shapes) modelled on
   the 10.2 menu extras — the AirPort fan, the speaker with waves, the horizontal battery, the
   eject key, and solid triangle arrows — instead of thin wireframe line art.
-* It inherits Oxygen (then Breeze and hicolor) for application, place, device and mimetype icons.
+* It inherits Oxygen (then Breeze and hicolor) as a fallback for remaining `mimetypes/`, `status/`,
+  `emblems/`, `emotes/` and niche IDE/office `actions/` while those categories are finished.
 * The tray names are also provided at panel sizes (16 to 24 px), so the Plasma system tray
   shows the menu extras instead of Oxygen's colour tray icons: volume, network, battery
   (including power profiles), Bluetooth, brightness, notifications, updates, microphone,

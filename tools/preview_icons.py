@@ -1,12 +1,8 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-2.0-or-later
-"""Contact sheet of the Oxygen Pinstripe icon theme:
-1. Full-colour Mac OS X 10.2 Aqua action icons (32px and 16px on window pinstripes, with old
-   Oxygen/Breeze icon for comparison).
-2. Symbolic & menu-extra glyphs (16px and 32px on pinstripes, 16px white on glossy selection,
-   and old symbolic icon for comparison).
+"""Contact sheet generator for the Oxygen Pinstripe Mac OS X 10.2 Aqua icon theme.
 
-    python3 tools/preview_icons.py out.png
+    python3 tools/preview_icons.py out.png [cat1,cat2,...]
 """
 import glob
 import os
@@ -19,7 +15,19 @@ from PySide6.QtSvg import QSvgRenderer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 THEME = os.path.join(ROOT, "icons", "Oxygen-Pinstripe")
-SHOW = sys.argv[2].split(",") if len(sys.argv) > 2 else None
+
+CAT_TITLES = [
+    ("places",     "Places & Folders (10.2 Aqua pinstriped folders, Home cottage, Desktop, Network, Mesh Trash)"),
+    ("devices",    "Hardware & Removable Media (Studio Display, iBook, 3.5\" & FireWire/USB drives, iPod, iSight, CD/DVD)"),
+    ("apps",       "User Applications & Utilities (Finder, TextEdit, Preview, Mail, Safari, Terminal, System Preferences)"),
+    ("categories", "Application Categories & System Preferences Panes"),
+    ("mimetypes",  "Document & Package Mimetypes (hovered curled sheets with integrated artwork & labels)"),
+    ("status",     "Alerts, Weather, Presence & Status Icons"),
+    ("emblems",    "Finder Badges & VCS Emblems"),
+    ("emotes",     "iChat Glossy 3D Gel Emotes"),
+    ("applets",    "Plasma Desktop Widget Icons"),
+    ("actions",    "Toolbar & Menu Action Icons"),
+]
 
 
 def stripes():
@@ -35,53 +43,52 @@ def recolored(path, color):
     return QSvgRenderer(QByteArray(data.encode()))
 
 
-def old_symbolic(name):
-    for base in ("/usr/share/icons/oxygen", "/usr/share/icons/breeze"):
-        r = glob.glob(f"{base}/**/{name}-symbolic.svg", recursive=True)
-        if r:
-            return r[0]
-    return None
-
-
-def old_action(name):
-    for p in (f"/usr/share/icons/oxygen/base/32x32/actions/{name}.png",
-              f"/usr/share/icons/oxygen/base/16x16/actions/{name}.png"):
-        if os.path.exists(p):
-            return p
-    return None
-
-
 def main():
     app = QGuiApplication(sys.argv)
+    out_path = sys.argv[1] if len(sys.argv) > 1 else "icons.png"
+    only = set(sys.argv[2].split(",")) if len(sys.argv) > 2 and sys.argv[2] else None
 
-    # 1. Distinct full-colour 10.2 action icons (skip symlinks)
-    act_files = sorted(
-        f for f in glob.glob(os.path.join(THEME, "32x32", "actions", "*.png"))
-        if not os.path.islink(f) and (not SHOW or os.path.basename(f)[:-4] in SHOW)
-    )
-    actions = [(os.path.basename(f)[:-4], f, f.replace("/32x32/", "/16x16/")) for f in act_files]
+    cols = 12
+    cw, ch = 96, 90
+    hdr_h = 34
 
-    # 2. Distinct symbolic glyphs
-    sym_files = sorted(glob.glob(os.path.join(THEME, "symbolic", "*", "*.svg")))
+    sections = []
+    for cat, title in CAT_TITLES:
+        if only and cat not in only:
+            continue
+        pref_sz = "48x48" if os.path.isdir(os.path.join(THEME, "48x48", cat)) else "32x32"
+        files = sorted(
+            f for f in glob.glob(os.path.join(THEME, pref_sz, cat, "*.png"))
+            if not os.path.islink(f)
+        )
+        if not files:
+            continue
+        all_links = sum(1 for f in glob.glob(os.path.join(THEME, "32x32", cat, "*.png")) if os.path.islink(f))
+        entries = []
+        for f in files:
+            name = os.path.basename(f)[:-4]
+            f16 = os.path.join(THEME, "16x16", cat, f"{name}.png")
+            entries.append((name, f, f16))
+        sections.append((f"{title} — {len(entries)} masters (+{all_links} aliases)", entries))
+
+    sym_files = [] if (only and "symbolic" not in only) else sorted(glob.glob(os.path.join(THEME, "symbolic", "*", "*.svg")))
     seen, symbolics = set(), []
     for f in sym_files:
         name = os.path.basename(f)[:-len("-symbolic.svg")]
         key = open(f).read()
-        if key in seen and not SHOW:
+        if key in seen:
             continue
         seen.add(key)
-        if SHOW and name not in SHOW:
-            continue
         symbolics.append((name, f))
 
-    cols = 12
-    cw, ch = 96, 92
-    hdr_h = 34
-    act_rows = (len(actions) + cols - 1) // cols if actions else 0
-    sym_rows = (len(symbolics) + cols - 1) // cols if symbolics else 0
-    total_h = (hdr_h + act_rows * ch if act_rows else 0) + (hdr_h + sym_rows * ch if sym_rows else 0) + 8
+    total_h = 10
+    for _, entries in sections:
+        rows = (len(entries) + cols - 1) // cols
+        total_h += hdr_h + rows * ch + 6
+    if symbolics:
+        total_h += hdr_h + ((len(symbolics) + cols - 1) // cols) * ch + 6
 
-    img = QImage(cols * cw, max(92, total_h), QImage.Format_ARGB32)
+    img = QImage(cols * cw, max(96, total_h), QImage.Format_ARGB32)
     p = QPainter(img)
     p.setRenderHint(QPainter.Antialiasing)
     p.setRenderHint(QPainter.SmoothPixmapTransform)
@@ -95,62 +102,51 @@ def main():
     font.setFamilies(["Lucida Grande", "Luxi Sans", "DejaVu Sans"])
     font.setPixelSize(9)
 
-    y_off = 0
-    if actions:
+    y_off = 4
+    for sec_title, entries in sections:
         p.setFont(title_font)
         p.setPen(QColor(20, 20, 22))
-        p.drawText(QRectF(12, y_off + 8, cols * cw - 24, 20), Qt.AlignVCenter,
-                   f"Mac OS X 10.2 Action Icons ({len(actions)} master artworks, 32 px & 16 px vs old Oxygen)")
-        p.fillRect(QRectF(12, y_off + 29, cols * cw - 24, 1), QColor(163, 163, 163))
-        p.fillRect(QRectF(12, y_off + 30, cols * cw - 24, 1), QColor(255, 255, 255, 190))
+        p.drawText(QRectF(12, y_off + 6, cols * cw - 24, 20), Qt.AlignVCenter, sec_title)
+        p.fillRect(QRectF(12, y_off + 28, cols * cw - 24, 1), QColor(163, 163, 163))
+        p.fillRect(QRectF(12, y_off + 29, cols * cw - 24, 1), QColor(255, 255, 255, 190))
         y_off += hdr_h
 
         p.setFont(font)
-        for i, (name, f32, f16) in enumerate(actions):
+        for i, (name, f_big, f16) in enumerate(entries):
             x, y = (i % cols) * cw, y_off + (i // cols) * ch
-            p.drawPixmap(x + 8, y + 8, 32, 32, QPixmap(f32))
+            p.drawPixmap(x + 12, y + 6, 40, 40, QPixmap(f_big))
             if os.path.exists(f16):
-                p.drawPixmap(x + 46, y + 16, 16, 16, QPixmap(f16))
-            old = old_action(name)
-            if old:
-                p.drawPixmap(x + 70, y + 12, 20, 20, QPixmap(old))
-                p.setPen(QColor(135, 135, 135))
-                p.drawText(QRectF(x + 64, y + 34, 32, 10), Qt.AlignCenter, "old")
-            p.setPen(QColor(35, 35, 35))
-            p.drawText(QRectF(x + 2, y + 54, cw - 4, 34), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWrapAnywhere, name)
-        y_off += act_rows * ch + 6
+                p.drawPixmap(x + 62, y + 22, 16, 16, QPixmap(f16))
+            p.setPen(QColor(32, 32, 35))
+            p.drawText(QRectF(x + 2, y + 52, cw - 4, 34), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWrapAnywhere, name)
+        y_off += ((len(entries) + cols - 1) // cols) * ch + 6
 
     if symbolics:
         p.setFont(title_font)
         p.setPen(QColor(20, 20, 22))
         p.drawText(QRectF(12, y_off + 6, cols * cw - 24, 20), Qt.AlignVCenter,
-                   f"Menu Extras & Symbolic Glyphs ({len(symbolics)} distinct solid shapes, recolourable)")
-        p.fillRect(QRectF(12, y_off + 27, cols * cw - 24, 1), QColor(163, 163, 163))
-        p.fillRect(QRectF(12, y_off + 28, cols * cw - 24, 1), QColor(255, 255, 255, 190))
+                   f"Menu Extras & Symbolic Glyphs — {len(symbolics)} distinct solid shapes (recolourable)")
+        p.fillRect(QRectF(12, y_off + 28, cols * cw - 24, 1), QColor(163, 163, 163))
+        p.fillRect(QRectF(12, y_off + 29, cols * cw - 24, 1), QColor(255, 255, 255, 190))
         y_off += hdr_h
 
         p.setFont(font)
         for i, (name, f) in enumerate(symbolics):
             x, y = (i % cols) * cw, y_off + (i // cols) * ch
-            recolored(f, "#1a1a1a").render(p, QRectF(x + 6, y + 6, 16, 16))
-            recolored(f, "#1a1a1a").render(p, QRectF(x + 28, y + 6, 32, 32))
-            sel = QRectF(x + 64, y + 6, 26, 22)
+            recolored(f, "#1a1a1a").render(p, QRectF(x + 8, y + 8, 16, 16))
+            recolored(f, "#1a1a1a").render(p, QRectF(x + 30, y + 8, 32, 32))
+            sel = QRectF(x + 66, y + 8, 24, 22)
             g = QLinearGradient(sel.topLeft(), sel.bottomLeft())
-            for pos, c in ((0, "#4a84de"), (0.48, "#2668d6"), (0.52, "#2c74e2"), (1, "#80caff")):
-                g.setColorAt(pos, QColor(c))
+            for pos, col in ((0, "#4a84de"), (0.48, "#2668d6"), (0.52, "#2c74e2"), (1, "#80caff")):
+                g.setColorAt(pos, QColor(col))
             p.fillRect(sel, g)
-            recolored(f, "#ffffff").render(p, QRectF(x + 69, y + 9, 16, 16))
-            old = old_symbolic(name)
-            if old:
-                QSvgRenderer(old).render(p, QRectF(x + 70, y + 32, 16, 16))
-                p.setPen(QColor(150, 150, 150))
-                p.drawText(QRectF(x + 62, y + 48, 32, 10), Qt.AlignCenter, "old")
+            recolored(f, "#ffffff").render(p, QRectF(x + 70, y + 11, 16, 16))
             p.setPen(QColor(40, 40, 40))
-            p.drawText(QRectF(x + 2, y + 60, cw - 4, 30), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWrapAnywhere, name)
+            p.drawText(QRectF(x + 2, y + 54, cw - 4, 32), Qt.AlignHCenter | Qt.AlignTop | Qt.TextWrapAnywhere, name)
 
     p.end()
-    img.save(sys.argv[1] if len(sys.argv) > 1 else "icons.png")
-    print(f"wrote {len(actions)} action icons + {len(symbolics)} symbolic glyphs")
+    img.save(out_path)
+    print(f"wrote {out_path} ({img.width()}x{img.height()})")
 
 
 if __name__ == "__main__":

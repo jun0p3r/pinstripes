@@ -2272,34 +2272,47 @@ def svg(solid, faint, size=16):
             + "\n".join(body) + "\n</svg>\n")
 
 
-TRAY = ("audio-volume", "network-wireless", "network-wired", "network-offline", "network-bluetooth", "battery", "bluetooth", "notification",
+TRAY = ("audio-volume", "network-wireless", "network-wired", "network-offline", "network-bluetooth", "network-vpn", "battery", "bluetooth", "notification",
         "brightness", "high-brightness", "low-brightness", "video-display-brightness", "update-", "kpackagekit", "mic-", "microphone-",
         "media-playback-playing", "media-playback-paused", "media-playback-stopped", "camera-on", "camera-off", "camera-ready",
-        "klipper", "kdeconnect", "input-keyboard-virtual", "keyboard-layout")
+        "klipper", "kdeconnect", "input-keyboard-virtual", "keyboard-layout", "firewall-applet", "pamac-tray", "redshift-status", "osd-")
 
 ACTION_SIZES = (
-    ("16x16/actions",   16, 1, "Fixed",    ""),
-    ("22x22/actions",   22, 1, "Fixed",    ""),
-    ("24x24/actions",   24, 1, "Fixed",    ""),
-    ("32x32/actions",   32, 1, "Fixed",    ""),
-    ("32x32@2/actions", 32, 2, "Fixed",    "Scale=2\n"),
-    ("48x48/actions",   48, 1, "Scalable", "MinSize=36\nMaxSize=256\n"),
+    ("16x16",   16, 1, "Fixed",    ""),
+    ("22x22",   22, 1, "Fixed",    ""),
+    ("24x24",   24, 1, "Fixed",    ""),
+    ("32x32",   32, 1, "Fixed",    ""),
+    ("32x32@2", 32, 2, "Fixed",    "Scale=2\n"),
+    ("48x48",   48, 1, "Scalable", "MinSize=36\nMaxSize=256\n"),
+)
+
+RICHER_SIZES = (
+    ("16x16",   16, 1, "Fixed",    ""),
+    ("22x22",   22, 1, "Fixed",    ""),
+    ("32x32",   32, 1, "Fixed",    ""),
+    ("48x48",   48, 1, "Fixed",    ""),
+    ("64x64",   64, 1, "Fixed",    ""),
+    ("128x128", 128, 1, "Scalable", "MinSize=72\nMaxSize=256\n"),
+)
+
+COMPACT_SIZES = (
+    ("16x16",   16, 1, "Fixed",    ""),
+    ("22x22",   22, 1, "Fixed",    ""),
+    ("32x32",   32, 1, "Fixed",    ""),
+    ("48x48",   48, 1, "Scalable", "MinSize=36\nMaxSize=256\n"),
 )
 
 
-def build():
-    app = QGuiApplication.instance() or QGuiApplication(sys.argv)
-    if os.path.isdir(OUT):
-        shutil.rmtree(OUT)
-
-    # 1. Full-colour 10.2 Aqua action icons + alias symlinks
-    actions = build_action_painters()
-    alias_total = 0
-    for subdir, sz, scale_f, _, _ in ACTION_SIZES:
-        d = os.path.join(OUT, subdir)
+def _emit_category(cat, items, size_specs):
+    alias_count = 0
+    dirs_out = []
+    for sz_dir, sz, scale_f, kind, extra in size_specs:
+        rel = f"{sz_dir}/{cat}"
+        dirs_out.append((rel, cat, sz, kind, extra))
+        d = os.path.join(OUT, rel)
         os.makedirs(d, exist_ok=True)
         px = sz * scale_f
-        for canon, aliases, fn in actions:
+        for canon, aliases, fn in items:
             img = render_action_png(fn, px)
             img.save(os.path.join(d, f"{canon}.png"))
             for al in aliases:
@@ -2307,8 +2320,62 @@ def build():
                     dst = os.path.join(d, f"{al}.png")
                     if not os.path.lexists(dst):
                         os.symlink(f"{canon}.png", dst)
-                        if subdir == "32x32/actions":
-                            alias_total += 1
+                        if sz_dir == "32x32" and scale_f == 1:
+                            alias_count += 1
+    return dirs_out, alias_count
+
+
+def build():
+    app = QGuiApplication.instance() or QGuiApplication(sys.argv)
+    if os.path.isdir(OUT):
+        shutil.rmtree(OUT)
+
+    from icons_lib.places_devices import build_places_painters, build_devices_painters
+    from icons_lib.apps_categories import build_apps_and_categories_painters
+
+    cat_groups = [
+        ("actions", build_action_painters(), ACTION_SIZES),
+        ("places", build_places_painters(), RICHER_SIZES),
+        ("devices", build_devices_painters(), RICHER_SIZES),
+    ]
+    apps_p, cats_p, applets_p = build_apps_and_categories_painters()
+    cat_groups.extend([
+        ("apps", apps_p, RICHER_SIZES),
+        ("categories", cats_p, RICHER_SIZES),
+        ("applets", applets_p, COMPACT_SIZES),
+    ])
+
+    try:
+        from icons_lib.mimetypes_icons import build_mimetypes_painters
+        cat_groups.append(("mimetypes", build_mimetypes_painters(), RICHER_SIZES))
+    except ImportError:
+        pass
+
+    try:
+        from icons_lib.status_emblems_emotes import build_status_emblems_emotes_painters
+        st_p, em_p, emo_p, anim_p, spec_p = build_status_emblems_emotes_painters()
+        cat_groups.extend([
+            ("status", st_p, RICHER_SIZES),
+            ("emblems", em_p, COMPACT_SIZES),
+            ("emotes", emo_p, COMPACT_SIZES),
+            ("animations", anim_p, COMPACT_SIZES),
+            ("special", spec_p, COMPACT_SIZES),
+        ])
+    except ImportError:
+        pass
+
+    try:
+        from icons_lib.actions_extra import extend_action_painters
+        cat_groups[0] = ("actions", extend_action_painters(cat_groups[0][1]), ACTION_SIZES)
+    except ImportError:
+        pass
+
+    all_color_dirs = []
+    summary = []
+    for cat, items, specs in cat_groups:
+        c_dirs, n_al = _emit_category(cat, items, specs)
+        all_color_dirs.extend(c_dirs)
+        summary.append(f"{cat}:{len(items)}(+{n_al})")
 
     # 2. Symbolic & panel menu-extra SVGs
     sym_icons = build_symbolic_icons()
@@ -2326,22 +2393,25 @@ def build():
             with open(os.path.join(d, f"{name}.svg"), "w") as f:
                 f.write(svg(solid, faint))
 
-    act_dirs = [sd for sd, *_ in ACTION_SIZES]
-    dirs = act_dirs + [f"symbolic/{c_}" for c_ in sorted(contexts)] + ["panel/status"]
-    ctx_names = {"actions": "Actions", "status": "Status", "devices": "Devices", "places": "Places", "apps": "Applications",
-                 "emblems": "Emblems", "mimetypes": "MimeTypes"}
+    ctx_names = {
+        "actions": "Actions", "status": "Status", "devices": "Devices",
+        "places": "Places", "apps": "Applications", "categories": "Categories",
+        "applets": "Applications", "emblems": "Emblems", "emotes": "Emotes",
+        "mimetypes": "MimeTypes", "animations": "Animations", "special": "Actions",
+    }
+    dirs = [rel for rel, *_ in all_color_dirs] + [f"symbolic/{c_}" for c_ in sorted(contexts)] + ["panel/status"]
     with open(os.path.join(OUT, "index.theme"), "w") as f:
         f.write("[Icon Theme]\nName=Oxygen Pinstripe\n"
-                "Comment=Mac OS X 10.2 Aqua action icons and menu-extra symbolic glyphs over Oxygen\n"
-                "Inherits=oxygen,breeze,hicolor\nExample=folder-new\nDisplayDepth=32\nDesktopDefault=48\nToolbarDefault=32\nMainToolbarDefault=32\nSmallDefault=16\nPanelDefault=22\n"
+                "Comment=Mac OS X 10.2 Aqua icon theme and menu-extra symbolic glyphs\n"
+                "Inherits=oxygen,breeze,hicolor\nExample=system-file-manager\nDisplayDepth=32\nDesktopDefault=48\nToolbarDefault=32\nMainToolbarDefault=32\nSmallDefault=16\nPanelDefault=22\n"
                 "FollowsColorScheme=true\n"
                 f"Directories={','.join(dirs)}\n\n")
-        for sd, sz, _, kind, extra in ACTION_SIZES:
-            f.write(f"[{sd}]\nContext=Actions\nSize={sz}\n{extra}Type={kind}\n\n")
+        for rel, cat, sz, kind, extra in all_color_dirs:
+            f.write(f"[{rel}]\nContext={ctx_names[cat]}\nSize={sz}\n{extra}Type={kind}\n\n")
         for c_ in sorted(contexts):
             f.write(f"[symbolic/{c_}]\nContext={ctx_names[c_]}\nSize=16\nMinSize=8\nMaxSize=512\nType=Scalable\n\n")
         f.write("[panel/status]\nContext=Status\nSize=22\nMinSize=16\nMaxSize=24\nType=Scalable\n\n")
-    print(f"wrote {len(actions)} 10.2 action icons (+{alias_total} aliases) and {len(sym_icons)} symbolic icons to {OUT}")
+    print("wrote 10.2 Aqua icons ->", ", ".join(summary), f"+ {len(sym_icons)} symbolics to {OUT}")
 
 
 if __name__ == "__main__":

@@ -116,7 +116,11 @@ def main():
         pm = QPixmap(wall).scaled(W, H, Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
         p.drawPixmap(0, 0, pm)
     else:
-        p.fillRect(0, 0, W, H, QColor(40, 90, 170))
+        bg = QRadialGradient(QPointF(W * 0.52, H * 0.14), W * 0.72)
+        bg.setColorAt(0.0, QColor(24, 188, 242))
+        bg.setColorAt(0.48, QColor(18, 132, 204))
+        bg.setColorAt(1.0, QColor(12, 82, 152))
+        p.fillRect(0, 0, W, H, bg)
 
     font = QFont()
     font.setFamilies(["Lucida Grande", "Luxi Sans", "DejaVu Sans"])  # 10.2 used Lucida Grande 13pt
