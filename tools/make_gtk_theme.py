@@ -76,20 +76,21 @@ SLICES = {n: v for n, v in {
 
 def three(name):
     """Background layers that draw a gel as start cap + stretched middle + end cap.
-    GTK ignores the centre slice of border-image, so this replaces it. The element's
+    GTK ignores the centre slice of border-image, so this replaces it. The middle column is
+    tiled, not stretched: GTK 3 fades the edges of a stretched 1px image. The element's
     padding must equal the cap sizes: the middle layer is clipped to the content box."""
     axis, a, b = SLICES[name]
     sc = lambda k: f'-gtk-scaled(url("assets/{name}-{k}.png"), url("assets/{name}-{k}@2.png"))'  # noqa: E731
     if axis == "h":
         return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
                 f"background-position: left top, right top, left top; "
-                f"background-size: {a}px 100%, {b}px 100%, 100% 100%; "
-                f"background-repeat: no-repeat; background-origin: border-box, border-box, content-box; "
+                f"background-size: {a}px 100%, {b}px 100%, 1px 100%; "
+                f"background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; "
                 f"background-clip: border-box, border-box, content-box; border-image: none;")
     return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
             f"background-position: left top, left bottom, left top; "
-            f"background-size: 100% {a}px, 100% {b}px, 100% 100%; "
-            f"background-repeat: no-repeat; background-origin: border-box, border-box, content-box; "
+            f"background-size: 100% {a}px, 100% {b}px, 100% 1px; "
+            f"background-repeat: no-repeat, no-repeat, repeat-y; background-origin: border-box, border-box, content-box; "
             f"background-clip: border-box, border-box, content-box; border-image: none;")
 
 
@@ -398,7 +399,7 @@ label:disabled, label:backdrop:disabled {{ color: #8a8a8a; }}
 button {{
   min-height: 22px;
   min-width: 41px;
-  padding: 0 14px;
+  padding: 0 13px;  /* one less than the 14px caps: the middle tucks under them, no seam */
   border-style: solid;
   border-width: 0;
   {three("button")}
@@ -543,13 +544,13 @@ scrollbar.horizontal {scroll_trough.split()[-1]} {{ background-image: linear-gra
 }}
 scrollbar.vertical slider {{
   min-height: 24px;
-  padding: 7px 0 8px 0;
+  padding: 6px 0 7px 0;
   border-width: 0;
   {three("thumb-v")}
 }}
 scrollbar.horizontal slider {{
   min-width: 24px;
-  padding: 0 8px 0 7px;
+  padding: 0 7px 0 6px;
   border-width: 0;
   {three("thumb-h")}
 }}
@@ -616,14 +617,14 @@ scale slider:backdrop {{ background-image: {scaled("knob-backdrop")}; }}
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {{
   min-height: 14px; min-width: 14px;
-  padding: 0 4px;
+  padding: 0 3px;
   border-style: solid;
   border-width: 0;
   {three("trough")}
 }}
 progressbar progress {{
   min-height: 14px; min-width: 8px;
-  padding: 0 4px;
+  padding: 0 3px;
   margin: 0;
   border-style: solid;
   border-width: 0;
@@ -646,7 +647,7 @@ notebook > header.top {{
 }}
 notebook > header tab {{
   min-height: 23px;
-  padding: 0 12px;
+  padding: 0 11px;
   margin: 0 -1px 0 0;
   background-color: transparent;
   border-style: solid;
@@ -697,7 +698,7 @@ separator {{ background: none; min-height: 1px; min-width: 1px; }}
 /* ---------------- combo boxes / drop-downs: white pop-up with the blue double-arrow cap */
 combobox button.combo, dropdown > button, button.dropdown, combobox > box > button {{
   min-height: 22px;
-  padding: 0 29px 0 9px;
+  padding: 0 28px 0 8px;
   border-style: solid;
   border-width: 0;
   {three("popup")}

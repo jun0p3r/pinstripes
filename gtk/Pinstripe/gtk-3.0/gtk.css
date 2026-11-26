@@ -35,10 +35,10 @@ label:disabled, label:backdrop:disabled { color: #8a8a8a; }
 button {
   min-height: 22px;
   min-width: 41px;
-  padding: 0 14px;
+  padding: 0 13px;  /* one less than the 14px caps: the middle tucks under them, no seam */
   border-style: solid;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   border-radius: 0;
   box-shadow: none;
   color: #000000;
@@ -46,14 +46,14 @@ button {
   -gtk-icon-shadow: none;
 }
 button:active, button:checked {
-  background-image: -gtk-scaled(url("assets/button-pressed-s.png"), url("assets/button-pressed-s@2.png")), -gtk-scaled(url("assets/button-pressed-e.png"), url("assets/button-pressed-e@2.png")), -gtk-scaled(url("assets/button-pressed-m.png"), url("assets/button-pressed-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/button-pressed-s.png"), url("assets/button-pressed-s@2.png")), -gtk-scaled(url("assets/button-pressed-e.png"), url("assets/button-pressed-e@2.png")), -gtk-scaled(url("assets/button-pressed-m.png"), url("assets/button-pressed-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 button.suggested-action, button.default, button.default:focus {
-  background-image: -gtk-scaled(url("assets/button-default-s.png"), url("assets/button-default-s@2.png")), -gtk-scaled(url("assets/button-default-e.png"), url("assets/button-default-e@2.png")), -gtk-scaled(url("assets/button-default-m.png"), url("assets/button-default-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/button-default-s.png"), url("assets/button-default-s@2.png")), -gtk-scaled(url("assets/button-default-e.png"), url("assets/button-default-e@2.png")), -gtk-scaled(url("assets/button-default-m.png"), url("assets/button-default-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: pinstripe-pulse 1.7s ease-in-out infinite;
 }
 button.suggested-action:backdrop, button.default:backdrop {
-  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: none;
 }
 @keyframes pinstripe-pulse {
@@ -62,7 +62,7 @@ button.suggested-action:backdrop, button.default:backdrop {
   100% { opacity: 1.0; }
 }
 button:disabled { opacity: 0.55; color: #555555; }
-button.destructive-action { background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; color: #a01010; }
+button.destructive-action { background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; color: #a01010; }
 
 /* flat and toolbar buttons: no frame in Aqua, darken while pressed */
 button.flat, headerbar button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize), toolbar button, .toolbar button,
@@ -180,18 +180,18 @@ scrollbar slider {
 }
 scrollbar.vertical slider {
   min-height: 24px;
-  padding: 7px 0 8px 0;
+  padding: 6px 0 7px 0;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/thumb-v-s.png"), url("assets/thumb-v-s@2.png")), -gtk-scaled(url("assets/thumb-v-e.png"), url("assets/thumb-v-e@2.png")), -gtk-scaled(url("assets/thumb-v-m.png"), url("assets/thumb-v-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/thumb-v-s.png"), url("assets/thumb-v-s@2.png")), -gtk-scaled(url("assets/thumb-v-e.png"), url("assets/thumb-v-e@2.png")), -gtk-scaled(url("assets/thumb-v-m.png"), url("assets/thumb-v-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 1px; background-repeat: no-repeat, no-repeat, repeat-y; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 scrollbar.horizontal slider {
   min-width: 24px;
-  padding: 0 8px 0 7px;
+  padding: 0 7px 0 6px;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/thumb-h-s.png"), url("assets/thumb-h-s@2.png")), -gtk-scaled(url("assets/thumb-h-e.png"), url("assets/thumb-h-e@2.png")), -gtk-scaled(url("assets/thumb-h-m.png"), url("assets/thumb-h-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/thumb-h-s.png"), url("assets/thumb-h-s@2.png")), -gtk-scaled(url("assets/thumb-h-e.png"), url("assets/thumb-h-e@2.png")), -gtk-scaled(url("assets/thumb-h-m.png"), url("assets/thumb-h-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
-scrollbar.vertical slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-v-backdrop-s.png"), url("assets/thumb-v-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-e.png"), url("assets/thumb-v-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-m.png"), url("assets/thumb-v-backdrop-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
-scrollbar.horizontal slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-h-backdrop-s.png"), url("assets/thumb-h-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-e.png"), url("assets/thumb-h-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-m.png"), url("assets/thumb-h-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+scrollbar.vertical slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-v-backdrop-s.png"), url("assets/thumb-v-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-e.png"), url("assets/thumb-v-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-m.png"), url("assets/thumb-v-backdrop-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 1px; background-repeat: no-repeat, no-repeat, repeat-y; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+scrollbar.horizontal slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-h-backdrop-s.png"), url("assets/thumb-h-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-e.png"), url("assets/thumb-h-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-m.png"), url("assets/thumb-h-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 scrollbar button {
   min-width: 15px; min-height: 15px;
   padding: 0; border-width: 0; border-image: none; animation: none;
@@ -253,20 +253,20 @@ scale slider:backdrop { background-image: -gtk-scaled(url("assets/knob-backdrop.
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {
   min-height: 14px; min-width: 14px;
-  padding: 0 4px;
+  padding: 0 3px;
   border-style: solid;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/trough-s.png"), url("assets/trough-s@2.png")), -gtk-scaled(url("assets/trough-e.png"), url("assets/trough-e@2.png")), -gtk-scaled(url("assets/trough-m.png"), url("assets/trough-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/trough-s.png"), url("assets/trough-s@2.png")), -gtk-scaled(url("assets/trough-e.png"), url("assets/trough-e@2.png")), -gtk-scaled(url("assets/trough-m.png"), url("assets/trough-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 progressbar progress {
   min-height: 14px; min-width: 8px;
-  padding: 0 4px;
+  padding: 0 3px;
   margin: 0;
   border-style: solid;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/progress-s.png"), url("assets/progress-s@2.png")), -gtk-scaled(url("assets/progress-e.png"), url("assets/progress-e@2.png")), -gtk-scaled(url("assets/progress-m.png"), url("assets/progress-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/progress-s.png"), url("assets/progress-s@2.png")), -gtk-scaled(url("assets/progress-e.png"), url("assets/progress-e@2.png")), -gtk-scaled(url("assets/progress-m.png"), url("assets/progress-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
-progressbar progress:backdrop { background-image: -gtk-scaled(url("assets/progress-backdrop-s.png"), url("assets/progress-backdrop-s@2.png")), -gtk-scaled(url("assets/progress-backdrop-e.png"), url("assets/progress-backdrop-e@2.png")), -gtk-scaled(url("assets/progress-backdrop-m.png"), url("assets/progress-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+progressbar progress:backdrop { background-image: -gtk-scaled(url("assets/progress-backdrop-s.png"), url("assets/progress-backdrop-s@2.png")), -gtk-scaled(url("assets/progress-backdrop-e.png"), url("assets/progress-backdrop-e@2.png")), -gtk-scaled(url("assets/progress-backdrop-m.png"), url("assets/progress-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 progressbar.osd progress { min-height: 4px; }
 
 /* ---------------- notebooks: 23px tabs centred over a 6px blue accent bar */
@@ -283,16 +283,16 @@ notebook > header.top {
 }
 notebook > header tab {
   min-height: 23px;
-  padding: 0 12px;
+  padding: 0 11px;
   margin: 0 -1px 0 0;
   background-color: transparent;
   border-style: solid;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/tab-s.png"), url("assets/tab-s@2.png")), -gtk-scaled(url("assets/tab-e.png"), url("assets/tab-e@2.png")), -gtk-scaled(url("assets/tab-m.png"), url("assets/tab-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/tab-s.png"), url("assets/tab-s@2.png")), -gtk-scaled(url("assets/tab-e.png"), url("assets/tab-e@2.png")), -gtk-scaled(url("assets/tab-m.png"), url("assets/tab-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   color: #000000;
 }
-notebook > header tab:checked { background-image: -gtk-scaled(url("assets/tab-active-s.png"), url("assets/tab-active-s@2.png")), -gtk-scaled(url("assets/tab-active-e.png"), url("assets/tab-active-e@2.png")), -gtk-scaled(url("assets/tab-active-m.png"), url("assets/tab-active-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
-notebook > header tab:checked:backdrop { background-image: -gtk-scaled(url("assets/tab-active-backdrop-s.png"), url("assets/tab-active-backdrop-s@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-e.png"), url("assets/tab-active-backdrop-e@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-m.png"), url("assets/tab-active-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+notebook > header tab:checked { background-image: -gtk-scaled(url("assets/tab-active-s.png"), url("assets/tab-active-s@2.png")), -gtk-scaled(url("assets/tab-active-e.png"), url("assets/tab-active-e@2.png")), -gtk-scaled(url("assets/tab-active-m.png"), url("assets/tab-active-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+notebook > header tab:checked:backdrop { background-image: -gtk-scaled(url("assets/tab-active-backdrop-s.png"), url("assets/tab-active-backdrop-s@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-e.png"), url("assets/tab-active-backdrop-e@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-m.png"), url("assets/tab-active-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 notebook > stack:not(:only-child) {
   background-color: rgba(0, 0, 0, 0.03);
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.16), rgba(0,0,0,0) 6px);
@@ -334,13 +334,13 @@ popover separator, menu separator { margin: 5px 0; background: none; }
 /* ---------------- combo boxes / drop-downs: white pop-up with the blue double-arrow cap */
 combobox button.combo, dropdown > button, button.dropdown, combobox > box > button {
   min-height: 22px;
-  padding: 0 29px 0 9px;
+  padding: 0 28px 0 8px;
   border-style: solid;
   border-width: 0;
-  background-image: -gtk-scaled(url("assets/popup-s.png"), url("assets/popup-s@2.png")), -gtk-scaled(url("assets/popup-e.png"), url("assets/popup-e@2.png")), -gtk-scaled(url("assets/popup-m.png"), url("assets/popup-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
+  background-image: -gtk-scaled(url("assets/popup-s.png"), url("assets/popup-s@2.png")), -gtk-scaled(url("assets/popup-e.png"), url("assets/popup-e@2.png")), -gtk-scaled(url("assets/popup-m.png"), url("assets/popup-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: none;
 }
-combobox button.combo:backdrop, dropdown > button:backdrop { background-image: -gtk-scaled(url("assets/popup-backdrop-s.png"), url("assets/popup-backdrop-s@2.png")), -gtk-scaled(url("assets/popup-backdrop-e.png"), url("assets/popup-backdrop-e@2.png")), -gtk-scaled(url("assets/popup-backdrop-m.png"), url("assets/popup-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+combobox button.combo:backdrop, dropdown > button:backdrop { background-image: -gtk-scaled(url("assets/popup-backdrop-s.png"), url("assets/popup-backdrop-s@2.png")), -gtk-scaled(url("assets/popup-backdrop-e.png"), url("assets/popup-backdrop-e@2.png")), -gtk-scaled(url("assets/popup-backdrop-m.png"), url("assets/popup-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 combobox arrow, dropdown arrow { -gtk-icon-source: none; min-width: 0; min-height: 0; }
 
 /* ---------------- tooltips: Aqua's pale yellow */
