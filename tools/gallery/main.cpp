@@ -204,9 +204,10 @@ static QWidget *dockMdiWindow()
     tb->addAction(QIcon::fromTheme(QStringLiteral("go-next")), QStringLiteral("Forward"));
     tb->addSeparator();
     tb->addAction(QIcon::fromTheme(QStringLiteral("computer")), QStringLiteral("Computer"));
-    tb->addAction(QIcon::fromTheme(QStringLiteral("user-home")), QStringLiteral("Home"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("go-home")), QStringLiteral("Home"));
     tb->addAction(QIcon::fromTheme(QStringLiteral("bookmarks")), QStringLiteral("Favorites"));
-    tb->addAction(QIcon::fromTheme(QStringLiteral("applications-other")), QStringLiteral("Applications"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("edit-find")), QStringLiteral("Search"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("folder-new")), QStringLiteral("New Folder"));
     mw->resize(620, 400);
     return mw;
 }
@@ -247,7 +248,7 @@ static QWidget *dialogWindow()
     lay->addWidget(flat);
     // bevel buttons (HIG Figure 7-14): icon above the label; the middle one toggled on
     auto *bevels = new QHBoxLayout;
-    const char *names[][2] = {{"document-print", "Print"}, {"preferences-system", "Settings"}, {"internet-mail", "Mail"}};
+    const char *names[][2] = {{"document-print", "Print"}, {"configure", "Settings"}, {"mail-message-new", "Compose"}};
     for (int i = 0; i < 3; ++i) {
         auto *b = new QToolButton;
         b->setIcon(QIcon::fromTheme(QString::fromLatin1(names[i][0])));
@@ -355,8 +356,10 @@ int main(int argc, char **argv)
     render(s, QStringLiteral("more-active.png"), true);
     s->hide();
 
-    QIcon::setThemeSearchPaths({QDir::homePath() + QStringLiteral("/.local/share/icons"), QStringLiteral("/usr/share/icons")});
-    QIcon::setThemeName(QStringLiteral("oxygen"));
+    QIcon::setThemeSearchPaths({QDir::currentPath() + QStringLiteral("/icons"),
+                                QDir::homePath() + QStringLiteral("/.local/share/icons"),
+                                QStringLiteral("/usr/share/icons")});
+    QIcon::setThemeName(QStringLiteral("Oxygen-Pinstripe"));
     QWidget *dlg = dialogWindow();
     render(dlg, QStringLiteral("dialog.png"), true);
     dlg->hide();

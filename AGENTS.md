@@ -10,7 +10,7 @@ modelled on Mac OS X 10.2 "Jaguar". Read this before changing anything.
 | Qt 6 widget style ("Pinstripe", "Pinstripe Graphite") | `style/` (C++, a `QProxyStyle` over Fusion) | `build/bin/styles/pinstripe.so` |
 | Plasma style | `tools/make_plasma_theme.py` | `plasma/pinstripe/` |
 | GTK 3 / GTK 4 theme | `tools/make_gtk_theme.py` | `gtk/Pinstripe/` |
-| Icon theme "Oxygen Pinstripe" (symbolic icons) | `tools/make_icons.py` | `icons/Oxygen-Pinstripe/` |
+| Icon theme "Oxygen Pinstripe" (10.2 action + symbolic icons) | `tools/make_icons.py` | `icons/Oxygen-Pinstripe/` |
 | Colour schemes | `colors/*.colors` (hand-written) | installed as-is |
 | Switch / revert a session | `contrib/apply-pinstripe.sh`, `contrib/revert-pinstripe.sh` | |
 | Offscreen previews | `tools/gallery/` (Qt), `tools/preview_plasma.py`, `tools/gtk_gallery.py`, `tools/preview_icons.py` | `docs/screenshots/` |
@@ -139,15 +139,27 @@ Claude again) relies on them to resume without re-deriving anything.
   decoration). Both have local commits only; nothing is pushed and no remote is set.
 * Installed on the user's machine (**built, awaiting install**):
   * Widget style plugin (`build-system/bin/styles/pinstripe.so`), Plasma style, GTK theme,
-    colour schemes (`build/`), and window decoration
+    `Oxygen Pinstripe` icon theme, colour schemes (`build/`), and window decoration
     (`../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so`) all have new
     commits ready to install:
-    * User-local themes/colours: `cmake --install build` (then switch Plasma style away and back
-      to reload cached SVGs).
+    * User-local themes, icons & colours:
+      `cmake --install build && rm -f ~/.cache/icon-cache.kcache` (then switch Plasma style away
+      and back to reload cached SVGs).
     * System-wide Qt style + KWin decoration (user runs, needs sudo):
       `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so && sudo install -Dm755 ../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so /usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so && dbus-send --session --type=method_call --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure`
       then restart apps.
 * Recently matched to the HIG:
+  * **Mac OS X 10.2 Aqua action icons** (Chapter 11, Figures 11-18, 11-19): 111 full-colour
+    master action artworks (+200 freedesktop/GTK symlink aliases) at 16, 22, 24, 32, `32@2x`
+    and 48 px in `icons/Oxygen-Pinstripe/` (plus 426 symbolic glyphs): round clear-glass Aqua
+    navigation buttons (`Back`/`Forward` with black triangle + twin dots, `Up`/`Down`, `?` Help),
+    sky-blue pinstriped folders with `#2f4b7c`-outlined white `+` badges, curled white pages,
+    3.5" floppy disk, front-on desktop printer, Sherlock silver-rimmed glass magnifier & zoom
+    variants, yellow wooden `Compose` pencil, perforated blue and crimson Mail stamps, `@`
+    address book, Finder `Home` cottage, glossy ruby `Favorites` heart, crossed `Utilities`
+    hammer & wrench, `Disc Burner` trefoil, `Preview` rotate cards, sliding-drawer `Sidebar`,
+    and formatting palette tiles; also fixes Fedora GTK apps falling back to Oxygen's flat
+    monochrome `simbolicActions`.
   * **Glassy bevel buttons** (Figures 7-14, 7-15): curved glass cushions with top specular lens,
     cool silver mid-tone dip, side pillow shading, upward bottom reflection and dark `#52545a`
     bottom rim (smoked glass with lens when pressed/toggled) across Qt, Plasma and GTK.
@@ -170,17 +182,21 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Backlog (update this; highest value first)
 
-1. **Install the latest builds** (commands above) and verify on the live desktop: menu/tooltip
-   drop shadows, 22 px title bar, glassy bevel buttons, seamless tab-to-strip join, Plasma
-   sliders/progress and GTK apps. Ask the user for a live screenshot to inspect.
-2. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
+1. **Install the latest builds & icons** (commands above, including removing
+   `~/.cache/icon-cache.kcache`) and verify on the live desktop: 10.2 action icons in Dolphin /
+   Kate / KMail / GTK apps, menu/tooltip drop shadows, 22 px title bar, glassy bevel buttons,
+   seamless tab-to-strip join and Plasma sliders/progress. Ask the user for a live screenshot to
+   inspect, and add any app-specific action icon aliases they spot missing.
+2. **10.2 Places / Apps / Devices icons** (if the user asks next): `Oxygen Pinstripe` currently
+   provides 10.2 action icons + menu-extra symbolics and inherits Oxygen for `places/`, `apps/`,
+   `devices/` and `mimetypes/` (e.g. Finder blue folders, iMac/Cinema `Computer`, network globe,
+   silver hard disk, mesh Trash in `places/`).
+3. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
    can be found; currently a 1.7 s cosine between full colour and a paler gel in Qt (and
    opacity pulse in GTK).
-3. **Small control variants** (HIG chapter 8, p. 160): check whether Qt `Qt::WA_MacSmallSize` /
+4. **Small control variants** (HIG chapter 8, p. 160): check whether Qt `Qt::WA_MacSmallSize` /
    `QSizePolicy` small controls (10 px small progress bar, 11 pt small push/pop-up buttons) show
    up in any KDE apps and are worth styling.
-4. **Sheets and drawers** (HIG chapter 5): Qt has no direct equivalent; skip unless the user
-   asks.
 5. Keep `docs/preview.html` and `docs/screenshots/` current after each round.
 
 ### Session log (append one line per session, newest last)
@@ -195,3 +211,7 @@ Claude again) relies on them to resume without re-deriving anything.
   parity (progress rows, expanders, group boxes, sorted small-font headers); Finder toolbars,
   help-tag padding, 22 px title bar + 13 px traffic lights in `oxygen-traffic-lights`; refreshed
   all previews.
+* 2026-11-26 Antigravity (Gemini 4): added 111 full-colour Mac OS X 10.2 Aqua action icons
+  (+200 aliases, 16–48 px & `32@2x`) to `Oxygen Pinstripe` sampled from HIG Chapter 11 (Finder,
+  Mail, Preview, Print Dialog, Formatting Palette), switched Qt/Plasma/GTK previews to
+  `Oxygen-Pinstripe`, and refreshed all screenshots and docs.

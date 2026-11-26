@@ -7,10 +7,12 @@ Run it under a Broadway display so nothing appears on screen:
     broadwayd :7 &        GDK_BACKEND=broadway BROADWAY_DISPLAY=:7 python3 tools/gtk_gallery.py 3 out.png
     gtk4-broadwayd :8 &   GDK_BACKEND=broadway BROADWAY_DISPLAY=:8 python3 tools/gtk_gallery.py 4 out.png
 """
+import os
 import sys
 
 import gi
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 VERSION = sys.argv[1] if len(sys.argv) > 1 else "3"
 OUT = sys.argv[2] if len(sys.argv) > 2 else f"gtk{VERSION}-gallery.png"
 gi.require_version("Gtk", f"{VERSION}.0")
@@ -19,11 +21,14 @@ from gi.repository import GLib, Gtk  # noqa: E402
 if VERSION == "4":
     gi.require_version("Gsk", "4.0")
     from gi.repository import Gdk, Gsk  # noqa: E402
+    Gtk.init()
+else:
+    Gtk.IconTheme.get_default().prepend_search_path(os.path.join(ROOT, "icons"))
 
 settings = Gtk.Settings.get_default()
 settings.set_property("gtk-theme-name", "Pinstripe")
 settings.set_property("gtk-font-name", sys.argv[3] if len(sys.argv) > 3 else "Luxi Sans 10")
-settings.set_property("gtk-icon-theme-name", "oxygen")
+settings.set_property("gtk-icon-theme-name", "Oxygen-Pinstripe")
 
 
 def add(box, w):
@@ -155,7 +160,7 @@ def build():
 
     bevels = Gtk.Box(spacing=8)
     bevels.set_valign(Gtk.Align.CENTER)
-    for idx, (ic, lbl) in enumerate((("printer", "Print"), ("preferences-system", "Settings"))):
+    for idx, (ic, lbl) in enumerate((("document-print", "Print"), ("configure", "Settings"))):
         b = Gtk.ToggleButton()
         b.set_active(idx == 1)
         b.set_size_request(58, 57)

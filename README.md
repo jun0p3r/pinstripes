@@ -5,7 +5,7 @@ An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has four parts
 * **Pinstripe** and **Pinstripe Graphite**: a Qt 6 widget style (System Settings → Colors & Themes → Application Style)
 * **Pinstripe**: a Plasma style (System Settings → Colors & Themes → Plasma Style). It has a menu-bar top panel, pinstriped popups, a glass Dock with running-app triangles, yellow tooltips, gel buttons, scroll bars, sliders, progress bars and tabs.
 * **Pinstripe**: a GTK 3 and GTK 4 theme, so GTK apps match
-* **Oxygen Pinstripe**: an icon theme that keeps Oxygen's full-colour icons and replaces the symbolic ones
+* **Oxygen Pinstripe**: an icon theme that provides Mac OS X 10.2 Aqua full-colour action icons and solid menu-extra symbolic glyphs on top of Oxygen
 * **Pinstripe** and **Pinstripe Graphite** colour schemes
 
 It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decoration.
@@ -20,22 +20,29 @@ It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decor
 
 ## Oxygen Pinstripe icons
 
-![symbolic icons](docs/screenshots/icons.png)
+![Oxygen Pinstripe action and symbolic icons](docs/screenshots/icons.png)
 
-Oxygen's symbolic icons, and the Breeze ones it falls back to, are thin line art in two
-different styles. Oxygen Pinstripe replaces them with one family of solid, rounded glyphs
-modelled on the 10.2 menu extras: the AirPort fan, the speaker with waves, the horizontal
-battery, the eject key, and solid triangle arrows. It covers 408 names (132 distinct
-glyphs): volume, wireless, wired, battery and charging levels, Bluetooth, notifications,
-session and power, search and zoom, files and folders, editing, navigation, media, window
-and view controls, and dialogs.
+Oxygen Pinstripe adds two Mac OS X 10.2 "Jaguar" layers on top of Oxygen:
 
-* It inherits Oxygen (then Breeze and hicolor), so every full-colour icon is still Oxygen's.
+* **Full-colour 10.2 Aqua action icons** (111 master artworks + 200 freedesktop/GTK aliases at
+  16, 22, 24, 32, `32@2x` and 48 px in `Context=Actions`), sampled from Apple's 2002 HIG
+  Chapter 11 (Figures 11-18, 11-19 and dialog figures): round clear-glass navigation buttons
+  (`Back` / `Forward` with crisp black triangle + twin dots, `Up`, `Down`, `?` Help), sky-blue
+  pinstriped Aqua folders with navy-outlined `+` badges (`New Folder`, `Open`), curled white
+  document sheets, 3.5" floppy disk, front-on desktop printer, Sherlock silver-rimmed glass
+  magnifier and zoom lenses, yellow wooden `Compose` pencil, perforated blue and crimson Mail
+  postage stamps, spiral-bound `@` address book, Finder `Home` cottage, glossy ruby `Favorites`
+  heart, crossed `Utilities` hammer & wrench, `Disc Burner` trefoil, `Preview` rotate cards,
+  sliding-drawer `Sidebar`, and formatting palette tiles.
+* **Solid, rounded symbolic & menu-extra glyphs** (426 names, 139 distinct shapes) modelled on
+  the 10.2 menu extras — the AirPort fan, the speaker with waves, the horizontal battery, the
+  eject key, and solid triangle arrows — instead of thin wireframe line art.
+* It inherits Oxygen (then Breeze and hicolor) for application, place, device and mimetype icons.
 * The tray names are also provided at panel sizes (16 to 24 px), so the Plasma system tray
   shows the menu extras instead of Oxygen's colour tray icons: volume, network, battery
   (including power profiles), Bluetooth, brightness, notifications, updates, microphone,
   camera, clipboard, KDE Connect and media.
-* The glyphs are filled shapes only, with no strokes, using KDE's `ColorScheme-Text` class
+* Symbolic glyphs are filled shapes only, with no strokes, using KDE's `ColorScheme-Text` class
   and `fill:currentColor`, so KDE and GTK recolour them. Unused signal bars and quiet
   volume waves are the same colour at 35 % opacity.
 

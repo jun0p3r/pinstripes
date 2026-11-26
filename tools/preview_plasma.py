@@ -18,6 +18,7 @@ from PySide6.QtSvg import QSvgRenderer
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 THEME = os.path.join(ROOT, "plasma", "pinstripe")
+PINSTRIPE_ICONS = os.path.join(ROOT, "icons", "Oxygen-Pinstripe")
 ICONS = "/usr/share/icons/oxygen/base"
 
 
@@ -94,10 +95,11 @@ class FrameSvg:
 
 
 def icon(name, size=48):
-    for cat in ("apps", "places", "categories", "actions", "status", "devices", "mimetypes"):
-        f = os.path.join(ICONS, f"{size}x{size}", cat, name + ".png")
-        if os.path.exists(f):
-            return QPixmap(f)
+    for base in (PINSTRIPE_ICONS, ICONS):
+        for cat in ("apps", "places", "categories", "actions", "status", "devices", "mimetypes"):
+            f = os.path.join(base, f"{size}x{size}", cat, name + ".png")
+            if os.path.exists(f):
+                return QPixmap(f)
     return QPixmap()
 
 

@@ -1,13 +1,49 @@
 [Icon Theme]
 Name=Oxygen Pinstripe
-Comment=Oxygen with solid, rounded symbolic icons after the Mac OS X 10.2 menu extras
+Comment=Mac OS X 10.2 Aqua action icons and menu-extra symbolic glyphs over Oxygen
 Inherits=oxygen,breeze,hicolor
-Example=folder
+Example=folder-new
 DisplayDepth=32
 DesktopDefault=48
+ToolbarDefault=32
+MainToolbarDefault=32
+SmallDefault=16
 PanelDefault=22
 FollowsColorScheme=true
-Directories=symbolic/actions,symbolic/apps,symbolic/devices,symbolic/emblems,symbolic/mimetypes,symbolic/places,symbolic/status,panel/status
+Directories=16x16/actions,22x22/actions,24x24/actions,32x32/actions,32x32@2/actions,48x48/actions,symbolic/actions,symbolic/apps,symbolic/devices,symbolic/emblems,symbolic/mimetypes,symbolic/places,symbolic/status,panel/status
+
+[16x16/actions]
+Context=Actions
+Size=16
+Type=Fixed
+
+[22x22/actions]
+Context=Actions
+Size=22
+Type=Fixed
+
+[24x24/actions]
+Context=Actions
+Size=24
+Type=Fixed
+
+[32x32/actions]
+Context=Actions
+Size=32
+Type=Fixed
+
+[32x32@2/actions]
+Context=Actions
+Size=32
+Scale=2
+Type=Fixed
+
+[48x48/actions]
+Context=Actions
+Size=48
+MinSize=36
+MaxSize=256
+Type=Scalable
 
 [symbolic/actions]
 Context=Actions

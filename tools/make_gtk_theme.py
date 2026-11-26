@@ -1004,7 +1004,7 @@ def build():
             f.write(common_css(v) + lights_css(v))
     with open(os.path.join(OUT, "index.theme"), "w") as f:
         f.write("[Desktop Entry]\nType=X-GNOME-Metatheme\nName=Pinstripe\nComment=Mac OS X 10.2 Aqua for GTK\nEncoding=UTF-8\n\n"
-                "[X-GNOME-Metatheme]\nGtkTheme=Pinstripe\nIconTheme=oxygen\n")
+                "[X-GNOME-Metatheme]\nGtkTheme=Pinstripe\nIconTheme=Oxygen-Pinstripe\n")
     print("wrote", OUT)
 
 
