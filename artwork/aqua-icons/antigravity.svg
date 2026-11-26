@@ -1,0 +1,162 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Soft desk & levitation shadows (modelled on 10.2 Project Builder i-003.png top-right) -->
+    <filter id="sheetShadow" x="-25%" y="-20%" width="155%" height="155%">
+      <feGaussianBlur stdDeviation="3.0"/>
+    </filter>
+    <filter id="levitateShadow" x="-35%" y="-35%" width="175%" height="175%">
+      <feGaussianBlur stdDeviation="3.8"/>
+    </filter>
+    <filter id="causticBlur" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.6"/>
+    </filter>
+    <filter id="colorBlend" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7.5"/>
+    </filter>
+    <filter id="innerCushion" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5"/>
+    </filter>
+
+    <!-- Crisp white blueprint border paper -->
+    <linearGradient id="paperFrame" x1="16" y1="14" x2="96" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.60" stop-color="#f4f7fc"/>
+      <stop offset="1.00" stop-color="#dce3ef"/>
+    </linearGradient>
+
+    <!-- Rich cyan-cobalt 10.2 architectural blueprint field (sampled i-003.png top-right) -->
+    <linearGradient id="blueprintBlue" x1="20" y1="18" x2="92" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#194294"/>
+      <stop offset="0.48" stop-color="#265cc0"/>
+      <stop offset="1.00" stop-color="#3574de"/>
+    </linearGradient>
+
+    <!-- Fine cyan blueprint grid pattern -->
+    <pattern id="bpGrid" width="9" height="9" patternUnits="userSpaceOnUse">
+      <path d="M 9,0 L 0,0 0,9" fill="none" stroke="#8ec2ff" stroke-width="0.45" stroke-opacity="0.32"/>
+    </pattern>
+
+    <!-- Frosted translucent drafting masking tape (i-003.png signature detail) -->
+    <linearGradient id="maskingTape" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0.00" stop-color="#f7f6ee" stop-opacity="0.82"/>
+      <stop offset="0.50" stop-color="#e8e5d8" stop-opacity="0.72"/>
+      <stop offset="1.00" stop-color="#d4d0c0" stop-opacity="0.68"/>
+    </linearGradient>
+
+    <!-- 3D Extruded glass underside bevel for levitating Antigravity arch -->
+    <linearGradient id="archSide3D" x1="40" y1="24" x2="112" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0d6e42"/>
+      <stop offset="0.35" stop-color="#b83228"/>
+      <stop offset="0.72" stop-color="#1449a8"/>
+      <stop offset="1.00" stop-color="#1854bd"/>
+    </linearGradient>
+
+    <!-- Aqua upper glass specular highlight -->
+    <linearGradient id="archGlassGloss" x1="72" y1="24" x2="76" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.56"/>
+      <stop offset="0.34" stop-color="#ffffff" stop-opacity="0.24"/>
+      <stop offset="0.78" stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <!-- Official Google Antigravity parabolic arch path (scaled from 600x600 viewBox to ~80x76 at (34, 24)) -->
+    <path id="agyArch" d="M 106.5,97.5 C 111.0,100.8 117.7,98.6 111.5,92.5 C 93.1,74.6 97.0,25.5 74.1,25.5 C 51.2,25.5 55.1,74.6 36.7,92.5 C 30.0,99.2 37.3,100.9 41.7,97.5 C 59.0,85.8 57.9,65.1 74.1,65.1 C 90.3,65.1 89.2,85.8 106.5,97.5 Z"/>
+
+    <clipPath id="clipArch">
+      <use href="#agyArch"/>
+    </clipPath>
+    <clipPath id="clipBlueprint">
+      <rect x="20.5" y="20.5" width="71.0" height="77.0"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. Tilted Architectural Blueprint Sheet on Desk (-10.5 deg, matching 10.2 Project Builder i-003.png) -->
+  <g transform="rotate(-10.5 56 59)">
+    <!-- Soft desk drop shadow -->
+    <rect x="18.2" y="19.8" width="76.6" height="82.6" rx="0.8" fill="#000b22" fill-opacity="0.32" filter="url(#sheetShadow)"/>
+
+    <!-- Crisp white photo/vellum margin -->
+    <rect x="16.8" y="16.8" width="78.4" height="84.4" rx="0.6" fill="url(#paperFrame)" stroke="#a8b4c6" stroke-width="0.65"/>
+
+    <!-- Cyan-cobalt blueprint field -->
+    <rect x="20.5" y="20.5" width="71.0" height="77.0" fill="url(#blueprintBlue)"/>
+
+    <g clip-path="url(#clipBlueprint)">
+      <!-- Fine blueprint coordinate grid -->
+      <rect x="20.5" y="20.5" width="71.0" height="77.0" fill="url(#bpGrid)"/>
+
+      <!-- Crisp white architectural schematic & anti-gravity orbital geometry -->
+      <g fill="none" stroke="#dbeeff" stroke-opacity="0.68">
+        <!-- Outer technical border -->
+        <rect x="23.5" y="23.5" width="65.0" height="71.0" stroke-width="0.6"/>
+        <!-- Parabolic flight envelope & orbital circle -->
+        <circle cx="55.0" cy="59.0" r="22.5" stroke-width="0.65"/>
+        <path d="M 27.0,86.0 Q 55.0,16.0 83.0,86.0" stroke-width="0.8" stroke-dasharray="2.2,1.6"/>
+        <!-- Crosshair axes & dimension ticks -->
+        <line x1="23.5" y1="59.0" x2="88.5" y2="59.0" stroke-width="0.5"/>
+        <line x1="55.0" y1="23.5" x2="55.0" y2="94.5" stroke-width="0.5"/>
+        <!-- Upper-left construction box (homage to i-003.png blueprint!) -->
+        <rect x="26.5" y="26.5" width="16.0" height="16.0" stroke-width="0.65"/>
+        <line x1="26.5" y1="26.5" x2="42.5" y2="42.5" stroke-width="0.55"/>
+        <line x1="42.5" y1="26.5" x2="26.5" y2="42.5" stroke-width="0.55"/>
+      </g>
+
+      <!-- Readable micro-dimension callouts on blueprint -->
+      <text x="65.0" y="33.5" font-family="Luxi Sans, DejaVu Sans, sans-serif" font-size="5.4"
+            fill="#d8ecff" fill-opacity="0.82" letter-spacing="0.2">0.00g</text>
+      <text x="27.0" y="91.5" font-family="Luxi Sans, DejaVu Sans, sans-serif" font-size="4.6"
+            fill="#d8ecff" fill-opacity="0.72">AGY-10.2</text>
+    </g>
+
+    <!-- Two strips of translucent frosted drafting tape at top-right & bottom-left corners (exact i-003.png cue!) -->
+    <polygon points="78,11 99,19 95,26 74,18" fill="url(#maskingTape)" stroke="#c8c4b4" stroke-width="0.45"/>
+    <polygon points="11,88 31,98 27,105 8,95" fill="url(#maskingTape)" stroke="#c8c4b4" stroke-width="0.45"/>
+    <polygon points="10,23 26,11 31,17 15,29" fill="url(#maskingTape)" stroke="#c8c4b4" stroke-width="0.45"/>
+  </g>
+
+  <!-- 2. Levitating 3D Translucent Aqua Glass Google Antigravity Arch -->
+  <g transform="rotate(4.5 74 64)">
+    <!-- Deep levitation shadow + colorful Aqua glass caustic cast down-left onto blueprint & desk! -->
+    <use href="#agyArch" transform="translate(-4.5, 7.5)" fill="#041232" fill-opacity="0.44" filter="url(#levitateShadow)"/>
+    <use href="#agyArch" transform="translate(-2.8, 5.2)" fill="#3898ff" fill-opacity="0.34" filter="url(#causticBlur)"/>
+
+    <!-- 3D Extruded Glass Thickness Rim Underneath Arch -->
+    <use href="#agyArch" transform="translate(0.0, 2.5)" fill="url(#archSide3D)" opacity="0.92"/>
+
+    <!-- Base Sapphire Aqua Glass Body -->
+    <use href="#agyArch" fill="#297eff"/>
+
+    <!-- Authentic Multi-Hue Google Antigravity Internal Glass Refraction + 10.2 Aqua Gloss -->
+    <g clip-path="url(#clipArch)">
+      <g filter="url(#colorBlend)">
+        <!-- Sapphire-cyan lower legs & inner arch glow -->
+        <ellipse cx="74" cy="84" rx="44" ry="26" fill="#247bff"/>
+        <ellipse cx="42" cy="94" rx="18" ry="14" fill="#9ce8ff"/>
+        <ellipse cx="106" cy="94" rx="18" ry="14" fill="#88d4ff"/>
+        <!-- Emerald green left-mid flank -->
+        <ellipse cx="52" cy="54" rx="23" ry="27" fill="#00ba58"/>
+        <!-- Rich sunlit amber-gold apex-left -->
+        <ellipse cx="66" cy="28" rx="20" ry="16" fill="#ffbe0a"/>
+        <!-- Vivid ruby-coral upper-right flank -->
+        <ellipse cx="90" cy="45" rx="23" ry="25" fill="#fc322c"/>
+      </g>
+
+      <!-- Incandescent cyan-white Aqua bounce glow along lower inner vault -->
+      <path d="M 38,98 C 56,84 57,63 74,63 C 91,63 92,84 110,98"
+            fill="none" stroke="#d8f8ff" stroke-width="5.5" stroke-opacity="0.62" filter="url(#innerCushion)"/>
+
+      <!-- Soft 3D inner cushion bevel around entire glass silhouette -->
+      <use href="#agyArch" fill="none" stroke="#0b2868" stroke-width="2.6" stroke-opacity="0.34" filter="url(#innerCushion)"/>
+
+      <!-- Razor-sharp curved 10.2 Aqua upper glass specular reflection -->
+      <path d="M 34,22 L 114,22 L 114,57 C 92,50 60,52 38,68 Z" fill="url(#archGlassGloss)"/>
+
+      <!-- Crisp overhead white rim gleam along outer parabolic crown -->
+      <path d="M 41.5,87.0 C 55.5,69.0 54.0,27.0 74.1,27.0 C 94.2,27.0 92.7,69.0 106.7,87.0"
+            fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.88"/>
+    </g>
+
+    <!-- Delicate jewel-glass outer surface rim (zero cartoon outline) -->
+    <use href="#agyArch" fill="none" stroke="#1b4d9e" stroke-width="0.75" stroke-opacity="0.52"/>
+  </g>
+</svg>

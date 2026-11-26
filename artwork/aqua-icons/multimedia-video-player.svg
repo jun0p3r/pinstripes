@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Sampled 10.2 Brushed-Aluminum Media Player Window (HIG Fig. 11-9 left / i-009.png!) -->
+    <filter id="winShadow" x="-20%" y="-15%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="ringShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+
+    <!-- Brushed aluminum player bezel (sampled i-009.png left: #ededf0 -> #c4c5cb -> #8d8e96 chin) -->
+    <linearGradient id="metalBezel" x1="64" y1="12" x2="64" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f7f7fa"/>
+      <stop offset="0.12" stop-color="#e2e3e8"/>
+      <stop offset="0.76" stop-color="#c8c9d0"/>
+      <stop offset="0.90" stop-color="#aeb0b8"/>
+      <stop offset="1.00" stop-color="#7c7e86"/>
+    </linearGradient>
+
+    <pattern id="metalBrush" width="20" height="3" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="20" height="1" fill="#ffffff" fill-opacity="0.24"/>
+      <rect x="0" y="1.6" width="20" height="0.8" fill="#4e5058" fill-opacity="0.08"/>
+    </pattern>
+
+    <!-- Sculpted 3D Translucent Sapphire-Aqua Media Ring & Play Triangle (homage to i-009.png!) -->
+    <linearGradient id="aquaRing" x1="64" y1="28" x2="64" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ccf2ff"/>
+      <stop offset="0.28" stop-color="#3c94f8"/>
+      <stop offset="0.68" stop-color="#1458c8"/>
+      <stop offset="1.00" stop-color="#68beff"/>
+    </linearGradient>
+
+    <linearGradient id="btnMetal" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.50" stop-color="#dcdfe6"/>
+      <stop offset="1.00" stop-color="#969aa4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Overhead player drop shadow -->
+  <rect x="15.0" y="16.0" width="98.0" height="99.0" rx="5.5" fill="#000000" fill-opacity="0.34" filter="url(#winShadow)"/>
+
+  <!-- 1. Brushed-Aluminum Player Chassis (x=14..114, y=12..113, rx=5.0, exact i-009.png left!) -->
+  <rect x="14.0" y="12.0" width="100.0" height="101.0" rx="5.0" fill="url(#metalBezel)" stroke="#5c5e66" stroke-width="0.9"/>
+  <rect x="14.8" y="12.8" width="98.4" height="99.4" rx="4.4" fill="url(#metalBrush)"/>
+  <!-- Curved darker metallic lower chin arc (exact i-009.png detail!) -->
+  <path d="M 14.8,104.0 Q 64.0,112.5 113.2,104.0 L 113.2,108.5 C 113.2,110.8 111.5,112.2 109.2,112.2 L 18.8,112.2 C 16.5,112.2 14.8,110.8 14.8,108.5 Z"
+        fill="#72747c" fill-opacity="0.68"/>
+  <path d="M 15.4,108.0 L 15.4,17.0 C 15.4,14.6 17.0,13.3 19.4,13.3 L 108.6,13.3 C 111.0,13.3 112.6,14.6 112.6,17.0 L 112.6,108.0"
+        fill="none" stroke="#ffffff" stroke-width="1.3" opacity="0.88"/>
+
+  <!-- 2. Deep Recessed Jet-Black Theatre Screen (x=22..106, y=21..82) -->
+  <rect x="21.5" y="20.5" width="85.0" height="62.0" rx="1.2" fill="#050608" stroke="#ffffff" stroke-width="0.9"/>
+
+  <!-- Sculpted 3D Translucent Sapphire-Aqua Ring + Glossy Play Triangle Inside Screen -->
+  <g filter="url(#ringShadow)" opacity="0.55" transform="translate(1.2, 2.2)">
+    <circle cx="64" cy="51.5" r="22.0" fill="none" stroke="#000000" stroke-width="7.8"/>
+  </g>
+  <circle cx="64" cy="51.5" r="22.0" fill="none" stroke="url(#aquaRing)" stroke-width="7.6"/>
+  <path d="M 45.0,42.5 A 21.0,21.0 0 0 1 83.0,42.5" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.85"/>
+  <!-- Sculpted Aqua Play Triangle centered inside ring -->
+  <polygon points="58.5,41.5 74.5,51.5 58.5,61.5" fill="url(#aquaRing)" stroke="#bdf0ff" stroke-width="0.75" stroke-linejoin="round"/>
+
+  <!-- 3. Recessed Pale-LCD Scrubbing Timebar (x=22..106, y=86..93, exact i-009.png!) -->
+  <rect x="22.0" y="86.0" width="84.0" height="7.0" rx="1.2" fill="#eef4ec" stroke="#6c706c" stroke-width="0.75"/>
+  <rect x="26.0" y="88.8" width="76.0" height="1.6" fill="#aeb6ae"/>
+  <rect x="26.0" y="88.8" width="34.0" height="1.6" fill="#2c78dc"/>
+
+  <!-- 4. Sculpted Round Spun-Metal Transport Controls Along Bottom (y=96..109, exact i-009.png!) -->
+  <!-- Volume slider on left -->
+  <line x1="23.0" y1="101.5" x2="38.5" y2="101.5" stroke="#484a52" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="30.5" cy="101.5" r="2.6" fill="url(#btnMetal)" stroke="#484a52" stroke-width="0.65"/>
+
+  <!-- Rewind, Large Play, Fast-Forward Round Chrome Buttons -->
+  <circle cx="51.0" cy="101.5" r="4.8" fill="url(#btnMetal)" stroke="#484a52" stroke-width="0.75"/>
+  <polygon points="52.4,99.4 48.8,101.5 52.4,103.6" fill="#22242a"/>
+
+  <circle cx="64.0" cy="102.0" r="6.8" fill="url(#btnMetal)" stroke="#3c3e46" stroke-width="0.85"/>
+  <polygon points="62.2,98.6 67.8,102.0 62.2,105.4" fill="#181a20"/>
+
+  <circle cx="77.0" cy="101.5" r="4.8" fill="url(#btnMetal)" stroke="#484a52" stroke-width="0.75"/>
+  <polygon points="75.6,99.4 79.2,101.5 75.6,103.6" fill="#22242a"/>
+</svg>

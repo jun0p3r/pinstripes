@@ -145,19 +145,37 @@ Claude again) relies on them to resume without re-deriving anything.
 * **Icon direction (decided by the user, 2026-11-26)**: the procedural `tools/icons_lib/`
   places/devices/apps/categories/applets read as flat clip-art, so they are **no longer emitted**
   (the modules stay in the repo, unused). `Oxygen Pinstripe` now has three layers:
-  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, curated by hand; shared authoring guide in
-    `artwork/aqua-icons/STYLE-GUIDE.md`. Since 2026-11-26 ten of
-    the eleven are Antigravity's (the user's pick, as the starting point for a full set; its notes:
-    `artwork/aqua-icons/NOTES-antigravity.md`). `system-file-manager` is Claude's, because
-    Antigravity's was Apple's Finder face, a trademark that must not ship. Four third-party app
-    icons (`antigravity`, `bazaar`, `discord`, `github-desktop`) are also drafted in
-    `~/projects/agy-aqua-icons/svg/` awaiting user sign-off to wire in. Claude's generator
-    `tools/draw_aqua_icons.py` now writes drafts to `artwork/drafts/claude/` only. Originally
-    written by `tools/draw_aqua_icons.py`,
-    rendered to PNG by `make_icons.py` via librsvg with KDE aliases in `ARTWORK_ICONS`): folder,
-    user-home, folder-download, user-trash, system-file-manager, utilities-terminal,
-    systemsettings, drive-harddisk, internet-web-browser, accessories-text-editor,
-    accessories-calculator. They follow the HIG chapter 11 figures as closely as possible (the
+  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, **66 master SVGs + 163 KDE/freedesktop
+    aliases**, curated by hand; shared authoring guide in `artwork/aqua-icons/STYLE-GUIDE.md` and
+    notes in `artwork/aqua-icons/NOTES-antigravity.md`. Pre-rendered to PNG at `16`, `22`, `32`,
+    `48`, `64`, `128 px` by `make_icons.py` via `librsvg` + `cairo` so Qt's broken `QSvgRenderer`
+    never touches them; showcase in `docs/screenshots/icons-artwork.png`):
+    * **Places (20)**: `folder`, `user-home`, `folder-download`, `folder-documents`, `folder-music`,
+      `folder-pictures`, `folder-videos`, `folder-desktop`, `folder-templates`,
+      `folder-publicshare`, `network-server`, 7 coloured 10.2 Aqua folders (`folder-red`,
+      `-orange`, `-yellow`, `-green`, `-cyan`, `-violet`, `-grey`), `user-trash`, and
+      `user-trash-full`.
+    * **Devices (13)**: `drive-harddisk`, `drive-removable-media`, `drive-removable-media-usb`,
+      `drive-removable-media-usb-pendrive`, `media-optical`, `drive-optical`, `media-floppy`,
+      `media-flash-sd-mmc`, `computer` (iMac G4 dome), `computer-laptop` (Titanium PowerBook G4),
+      `printer`, `camera-photo`, and `phone`.
+    * **System Settings KCMs (20)**: `systemsettings`, `preferences-desktop-wallpaper`,
+      `preferences-desktop-theme-global`, `preferences-desktop-theme-windowdecorations`,
+      `preferences-desktop-font`, `preferences-desktop-animations`,
+      `preferences-desktop-notification-bell`, `preferences-desktop-sound`,
+      `preferences-system-network`, `preferences-desktop-display-randr`,
+      `preferences-system-bluetooth`, `preferences-system-power-management`,
+      `preferences-security`, `preferences-system-users`, `preferences-desktop-keyboard`,
+      `preferences-desktop-mouse`, `preferences-system-time`, `plasma-search`,
+      `preferences-desktop-default-applications`, and `preferences-desktop-accessibility` (never
+      aliasing generic `preferences-desktop` or `preferences-system`).
+    * **Applications (13)**: trademark-free `system-file-manager` (brushed-platinum 2-drawer filing
+      cabinet with fanned Aqua folders), `utilities-terminal`, `internet-web-browser`,
+      `internet-mail` (`i-003.png` hawk postage stamp), `accessories-text-editor`,
+      `accessories-calculator`, `image-viewer` (`i-006.png` Polaroids + loupe),
+      `multimedia-video-player` (`i-009.png` brushed-metal player), `accessories-screenshot`,
+      `antigravity`, `bazaar` (`io.github.kolunmi.Bazaar`), `discord`, and `github-desktop`
+      (`io.github.shiftey.Desktop`). They follow the HIG chapter 11 figures as closely as possible (the
     user wants them truthful to 10.2 and skeuomorphic, not a loose remix): no hard outlines, light
     from directly above, colours measured from the figures (monitor bezel #c6c7c8, screen
     #484b50; globe navy #28338a at the top to #bfe0fa at the bottom; disk top #c4c3c8..#aaa9af,
@@ -203,21 +221,16 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Backlog (update this; highest value first)
 
-1. **Grow the hand-drawn set into a full icon set** following `artwork/aqua-icons/STYLE-GUIDE.md`
-   (agreed split in `~/projects/AGENT-CHAT.md`: **Antigravity** owns `places` + `devices` + a
-   Finder-free `system-file-manager`; **Claude** owns `preferences-*` System Settings KCMs + common
-   KDE apps; never alias generic `preferences-desktop` or `preferences-system`). Next on
-   `places`/`devices`: the folder
-   family (`folder-documents`, `-music`, `-pictures`, `-videos`, `-desktop`, `-public`,
-   `-templates`, coloured folders), `user-trash-full`, and removable/optical/USB/camera/printer
-   devices. Add each SVG to `artwork/aqua-icons/` + `ARTWORK_ICONS` in `tools/make_icons.py`, compare against
-   the HIG figures, and render the resolver sheet (QIcon.fromTheme with explicit
-   `setThemeSearchPaths`, since PySide's bundled Qt only searches `:/icons`). Don't recreate the
-   cancelled procedural phases (mimetypes, status, emblems, actions_extra): Crystal covers them,
-   and those `try: import` hooks in `make_icons.py` would shadow it.
-2. **Live desktop check of the new icons** in Konsole, KMail, System Settings, Kickoff and the Dock
-   (Dolphin checked 2026-11-26).
-3. **Default-button pulse & small control variants** (HIG chapter 8, p. 160).
+1. **Extend hand-drawn 10.2 Aqua icons as needed from live desktop testing** (following
+   `artwork/aqua-icons/STYLE-GUIDE.md` and pre-rasterizing via `librsvg` in `make_icons.py` so
+   `QSvgRenderer` never touches complex SVGs): e.g. common document `mimetypes` (`application-pdf`,
+   `text-plain`, `image-x-generic`, `audio-x-generic`, `package-x-generic` curled 10.2 document
+   sheets from HIG `i-004.png` / `i-007.png`) or any niche KCM/app that falls back to a poorly
+   Qt-rendered `KrystalSVG` SVG. Don't recreate the cancelled procedural `QPainterPath` modules.
+2. **Live desktop check of the 66-icon suite** in Dolphin, Konsole, KMail, System Settings, Kickoff
+   and the Dock (`~/.cache/icon-cache.kcache` cleared; toggle icon theme or restart `plasmashell`
+   to flush in-memory caches).
+3. **Small control variants** (HIG chapter 8, p. 160; default-button pulse landed in `44ccf13`).
 
 ### Session log (append one line per session, newest last)
 
@@ -270,3 +283,10 @@ Claude again) relies on them to resume without re-deriving anything.
   buttons; a visible default-button pulse; `layoutSpacing()` (nested layouts were ~2 px apart);
   libadwaita via `~/.config/gtk-4.0/gtk.css`; glass `overflow-menu`. Confirmed limits: Kirigami
   pages (and QML KCMs inside `QmlConfigModuleWidget`) paint a flat colour.
+* 2026-11-26 Antigravity (Gemini 4): expanded `artwork/aqua-icons/` from 11 to **66 hand-crafted
+  10.2 Aqua SVGs (+163 aliases)** across 7 batches (semantic & coloured folders, `user-trash-full`,
+  trademark-free filing-cabinet `system-file-manager`, removable/USB/pendrive/optical/floppy/SD
+  media, iMac G4 `computer`, Titanium PowerBook `computer-laptop`, `printer`, `camera-photo`,
+  `phone`, Xserve `network-server`, 19 System Settings KCMs, Mail/Gwenview/Media/Spectacle, and
+  `antigravity`/`bazaar`/`discord`/`github-desktop`), pre-rendered to PNG via `librsvg`, installed
+  locally, and refreshed `docs/screenshots/icons-artwork.png` and `icons.png`.

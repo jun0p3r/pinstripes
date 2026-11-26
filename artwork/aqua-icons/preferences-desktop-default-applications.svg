@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Exact HIG Chapter 11 Frosted White-Acrylic Application Cube (i-016.png!) -->
+    <filter id="floorBlur" x="-30%" y="-45%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.6"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
+    <!-- Sampled i-016.png Isometric Frosted White-Acrylic Cube Faces -->
+    <linearGradient id="cubeTop" x1="64" y1="14" x2="64" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="1.00" stop-color="#f2f4f8"/>
+    </linearGradient>
+    <linearGradient id="cubeLeft" x1="16" y1="30" x2="64" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f8f9fc"/>
+      <stop offset="0.65" stop-color="#e5e8ef"/>
+      <stop offset="1.00" stop-color="#cfd3dc"/>
+    </linearGradient>
+    <linearGradient id="cubeRight" x1="64" y1="30" x2="112" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.65" stop-color="#eceef4"/>
+      <stop offset="1.00" stop-color="#d5d9e2"/>
+    </linearGradient>
+
+    <!-- Glossy Violet-Magenta & Sapphire-Cyan 10.2 Aqua Emblems on Cube Faces (sampled i-016.png!) -->
+    <linearGradient id="noteGrad" x1="26" y1="48" x2="54" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#6b78ff"/>
+      <stop offset="0.50" stop-color="#d442f5"/>
+      <stop offset="1.00" stop-color="#ff3888"/>
+    </linearGradient>
+    <radialGradient id="petalAqua" cx="88" cy="72" r="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#bdf0ff"/>
+      <stop offset="0.55" stop-color="#2c8cf5"/>
+      <stop offset="1.00" stop-color="#0d429e"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Isometric Floor Shadow -->
+  <polygon points="16,96 64,115 112,96 64,82" fill="#000614" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <polygon points="20,95 64,113 108,95 64,86" fill="#000614" fill-opacity="0.46" filter="url(#contactBlur)"/>
+
+  <!-- 1. Isometric Frosted White-Acrylic Cube (exact i-016.png proportions!) -->
+  <!-- Top diamond face -->
+  <polygon points="64,15.5 111.5,29.5 64,44.0 16.5,29.5" fill="url(#cubeTop)" stroke="#aeb4c0" stroke-width="0.8" stroke-linejoin="round"/>
+  <!-- Left vertical face -->
+  <polygon points="16.5,29.5 64,44.0 64,111.5 16.5,94.0" fill="url(#cubeLeft)" stroke="#9ea4b2" stroke-width="0.85" stroke-linejoin="round"/>
+  <!-- Right vertical face -->
+  <polygon points="64,44.0 111.5,29.5 111.5,94.0 64,111.5" fill="url(#cubeRight)" stroke="#9ea4b2" stroke-width="0.85" stroke-linejoin="round"/>
+
+  <!-- Crisp Glossy White Acrylic Edge Bevels -->
+  <polyline points="17.5,29.8 64,43.8 110.5,29.8" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"/>
+  <line x1="64" y1="44.0" x2="64" y2="110.5" stroke="#ffffff" stroke-width="1.5"/>
+
+  <!-- 2. Left Face: Glossy Indigo-Magenta 10.2 Musical Eighth Notes (i-016.png!) -->
+  <g transform="matrix(0.88, 0.28, 0, 0.94, 4.5, -6.0)">
+    <path d="M 31.0,54.0 L 51.0,50.5 L 51.0,82.0 L 47.5,82.0 L 47.5,58.0 L 34.5,60.5 L 34.5,85.0 L 31.0,85.0 Z" fill="url(#noteGrad)"/>
+    <ellipse cx="29.0" cy="85.8" rx="5.8" ry="4.2" fill="url(#noteGrad)" transform="rotate(-18 29.0 85.8)"/>
+    <ellipse cx="45.5" cy="82.8" rx="5.8" ry="4.2" fill="url(#noteGrad)" transform="rotate(-18 45.5 82.8)"/>
+    <ellipse cx="27.8" cy="84.6" rx="2.6" ry="1.2" fill="#ffffff" fill-opacity="0.72"/>
+    <ellipse cx="44.3" cy="81.6" rx="2.6" ry="1.2" fill="#ffffff" fill-opacity="0.72"/>
+  </g>
+
+  <!-- 3. Right Face: 8-Petal Sapphire-Aqua Blossom (exact i-016.png right face!) -->
+  <g transform="translate(88.0, 71.5) matrix(0.86, -0.28, 0, 0.96, 0, 0)">
+    <g fill="url(#petalAqua)" stroke="#081a48" stroke-width="1.1">
+      <ellipse cx="0" cy="-14" rx="4.2" ry="9.5"/>
+      <ellipse cx="0" cy="14" rx="4.2" ry="9.5"/>
+      <ellipse cx="-14" cy="0" rx="9.5" ry="4.2"/>
+      <ellipse cx="14" cy="0" rx="9.5" ry="4.2"/>
+      <ellipse cx="0" cy="-14" rx="4.2" ry="9.5" transform="rotate(45)"/>
+      <ellipse cx="0" cy="14" rx="4.2" ry="9.5" transform="rotate(45)"/>
+      <ellipse cx="-14" cy="0" rx="9.5" ry="4.2" transform="rotate(45)"/>
+      <ellipse cx="14" cy="0" rx="9.5" ry="4.2" transform="rotate(45)"/>
+    </g>
+    <circle cx="0" cy="0" r="5.8" fill="#080c18"/>
+  </g>
+</svg>
