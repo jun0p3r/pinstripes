@@ -42,7 +42,7 @@ constexpr int PopupTextInset = 9;
 constexpr int PopupCapWidth = 20;
 constexpr int TabHeight = 23;
 constexpr int TabTextInset = 12;
-constexpr int TabAccentBar = 6;
+constexpr int TabAccentBar = 6; // plus a 3px shadow drawn inside the pane
 constexpr int TextFieldHeight = 22;
 constexpr int ScrollBarWidth = 15;
 constexpr int ScrollArrowLength = 16;
@@ -288,7 +288,7 @@ void Style::timerEvent(QTimerEvent *event)
 
 // ---------------------------------------------------------------- helpers
 
-void Style::paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &r, const Gel &g, Qt::Orientation o, bool shadow) const
+void Style::paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &r, const Gel &g, Qt::Orientation o, bool shadow, const QPainterPath *rimPath) const
 {
     p->save();
     p->setRenderHint(QPainter::Antialiasing, true);
@@ -320,7 +320,7 @@ void Style::paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &r,
     rim.setColorAt(1, g.rimBottom);
     p->setBrush(Qt::NoBrush);
     p->setPen(QPen(QBrush(rim), 1.0));
-    p->drawPath(path);
+    p->drawPath(rimPath ? *rimPath : path);
     p->restore();
 }
 
@@ -583,13 +583,33 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
         p->setPen(QColor(0, 0, 0, 52));
         p->setBrush(Qt::NoBrush);
         p->drawRect(pane.adjusted(0, 0, -1, -1));
-        GelOptions o;
-        o.radius = 0;
-        o.shadow = false;
-        o.lensInset = 0;
-        o.lensHeight = 0.4;
-        o.orientation = vertical(side) ? Qt::Vertical : Qt::Horizontal;
-        paintGel(p, QRectF(bar), windowActive(opt) ? coloredGel() : gel(GelKind::Clear, m_appearance), o);
+        // accent bar rows measured from HIG Figure 7-23 (outer edge first), then a grey shadow
+        static const QColor blueRows[6] = {QColor(0, 87, 174), QColor(162, 215, 240), QColor(168, 209, 238), QColor(81, 176, 234), QColor(121, 204, 255), QColor(172, 239, 255)};
+        static const QColor shadowRows[3] = {QColor(98, 98, 98), QColor(147, 147, 147), QColor(226, 226, 226, 200)};
+        const bool active = windowActive(opt);
+        auto rowRect = [&](int i) {
+            switch (side) {
+            case Side::North:
+                return QRect(bar.left(), bar.top() + i, bar.width(), 1);
+            case Side::South:
+                return QRect(bar.left(), bar.bottom() - i, bar.width(), 1);
+            case Side::West:
+                return QRect(bar.left() + i, bar.top(), 1, bar.height());
+            case Side::East:
+                default:
+                return QRect(bar.right() - i, bar.top(), 1, bar.height());
+            }
+        };
+        for (int i = 0; i < 6; ++i) {
+            QColor c = blueRows[i];
+            if (!active)
+                c = graphite(c).lighter(115);
+            else if (m_appearance == Appearance::Graphite)
+                c = graphite(c);
+            p->fillRect(rowRect(i), c);
+        }
+        for (int i = 0; i < 3; ++i)
+            p->fillRect(rowRect(6 + i), shadowRows[i]);
         p->restore();
         return;
     }
@@ -779,13 +799,14 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             path.lineTo(r.bottomLeft());
             break;
         }
+        QPainterPath rimPath = path; // open: no rim along the pane side
         path.closeSubpath();
         Gel g = gel(GelKind::TabClear, m_appearance);
         if (selected)
             g = windowActive(opt) ? gel(GelKind::TabSelected, m_appearance) : gel(GelKind::TabSelected, Appearance::Graphite);
         else if (t->state & State_Sunken)
             g = gel(GelKind::Pressed, m_appearance);
-        paintGelPath(p, path, r, g, vertical(side) ? Qt::Vertical : Qt::Horizontal, false);
+        paintGelPath(p, path, r, g, vertical(side) ? Qt::Vertical : Qt::Horizontal, false, &rimPath);
         return;
     }
     case CE_TabBarTabLabel: {

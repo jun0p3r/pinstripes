@@ -46,7 +46,7 @@ private:
     void drawTextField(const QRect &r, const QStyleOption *opt, QPainter *p, bool focus) const;
     void drawLittleArrows(const QRect &r, const QStyleOption *opt, QPainter *p, bool upPressed, bool downPressed, bool upEnabled, bool downEnabled) const;
     void drawArrow(QPainter *p, const QRectF &r, Qt::ArrowType type, const QColor &c) const;
-    void paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &bounds, const Gel &g, Qt::Orientation o, bool shadow) const;
+    void paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &bounds, const Gel &g, Qt::Orientation o, bool shadow, const QPainterPath *rimPath = nullptr) const;
     void updateAnimationTimer();
 
     Appearance m_appearance;

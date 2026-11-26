@@ -33,28 +33,27 @@ label:disabled, label:backdrop:disabled { color: #8a8a8a; }
 
 /* ---------------- push buttons: 20px clear gel capsules, 14px end caps; the default pulses */
 button {
-  min-height: 20px;
+  min-height: 22px;
   min-width: 41px;
-  padding: 0 14px 2px 14px;
+  padding: 0 14px;
   border-style: solid;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/button.png"), url("assets/button@2.png")) 10 11 11 11 / 10px 11px 11px 11px stretch;
+  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   border-radius: 0;
-  background: none;
   box-shadow: none;
   color: #000000;
   text-shadow: none;
   -gtk-icon-shadow: none;
 }
 button:active, button:checked {
-  border-image: -gtk-scaled(url("assets/button-pressed.png"), url("assets/button-pressed@2.png")) 10 11 11 11 / 10px 11px 11px 11px stretch;
+  background-image: -gtk-scaled(url("assets/button-pressed-s.png"), url("assets/button-pressed-s@2.png")), -gtk-scaled(url("assets/button-pressed-e.png"), url("assets/button-pressed-e@2.png")), -gtk-scaled(url("assets/button-pressed-m.png"), url("assets/button-pressed-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 button.suggested-action, button.default, button.default:focus {
-  border-image: -gtk-scaled(url("assets/button-default.png"), url("assets/button-default@2.png")) 10 11 11 11 / 10px 11px 11px 11px stretch;
+  background-image: -gtk-scaled(url("assets/button-default-s.png"), url("assets/button-default-s@2.png")), -gtk-scaled(url("assets/button-default-e.png"), url("assets/button-default-e@2.png")), -gtk-scaled(url("assets/button-default-m.png"), url("assets/button-default-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: pinstripe-pulse 1.7s ease-in-out infinite;
 }
 button.suggested-action:backdrop, button.default:backdrop {
-  border-image: -gtk-scaled(url("assets/button.png"), url("assets/button@2.png")) 10 11 11 11 / 10px 11px 11px 11px stretch;
+  background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: none;
 }
 @keyframes pinstripe-pulse {
@@ -63,7 +62,7 @@ button.suggested-action:backdrop, button.default:backdrop {
   100% { opacity: 1.0; }
 }
 button:disabled { opacity: 0.55; color: #555555; }
-button.destructive-action { border-image: -gtk-scaled(url("assets/button.png"), url("assets/button@2.png")) 10 11 11 11 / 10px 11px 11px 11px stretch; color: #a01010; }
+button.destructive-action { background-image: -gtk-scaled(url("assets/button-s.png"), url("assets/button-s@2.png")), -gtk-scaled(url("assets/button-e.png"), url("assets/button-e@2.png")), -gtk-scaled(url("assets/button-m.png"), url("assets/button-m@2.png")); background-position: left top, right top, left top; background-size: 14px 100%, 14px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; color: #a01010; }
 
 /* flat and toolbar buttons: no frame in Aqua, darken while pressed */
 button.flat, headerbar button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize), toolbar button, .toolbar button,
@@ -181,16 +180,18 @@ scrollbar > range > trough > slider {
 }
 scrollbar.vertical slider {
   min-height: 24px;
+  padding: 7px 0 8px 0;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/thumb-v.png"), url("assets/thumb-v@2.png")) 7 0 8 0 / 7px 0 8px 0 stretch;
+  background-image: -gtk-scaled(url("assets/thumb-v-s.png"), url("assets/thumb-v-s@2.png")), -gtk-scaled(url("assets/thumb-v-e.png"), url("assets/thumb-v-e@2.png")), -gtk-scaled(url("assets/thumb-v-m.png"), url("assets/thumb-v-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 scrollbar.horizontal slider {
   min-width: 24px;
+  padding: 0 8px 0 7px;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/thumb-h.png"), url("assets/thumb-h@2.png")) 0 8 0 7 / 0 8px 0 7px stretch;
+  background-image: -gtk-scaled(url("assets/thumb-h-s.png"), url("assets/thumb-h-s@2.png")), -gtk-scaled(url("assets/thumb-h-e.png"), url("assets/thumb-h-e@2.png")), -gtk-scaled(url("assets/thumb-h-m.png"), url("assets/thumb-h-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
-scrollbar.vertical slider:backdrop { border-image: -gtk-scaled(url("assets/thumb-v-backdrop.png"), url("assets/thumb-v-backdrop@2.png")) 7 0 8 0 / 7px 0 8px 0 stretch; }
-scrollbar.horizontal slider:backdrop { border-image: -gtk-scaled(url("assets/thumb-h-backdrop.png"), url("assets/thumb-h-backdrop@2.png")) 0 8 0 7 / 0 8px 0 7px stretch; }
+scrollbar.vertical slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-v-backdrop-s.png"), url("assets/thumb-v-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-e.png"), url("assets/thumb-v-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-v-backdrop-m.png"), url("assets/thumb-v-backdrop-m@2.png")); background-position: left top, left bottom, left top; background-size: 100% 7px, 100% 8px, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+scrollbar.horizontal slider:backdrop { background-image: -gtk-scaled(url("assets/thumb-h-backdrop-s.png"), url("assets/thumb-h-backdrop-s@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-e.png"), url("assets/thumb-h-backdrop-e@2.png")), -gtk-scaled(url("assets/thumb-h-backdrop-m.png"), url("assets/thumb-h-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 7px 100%, 8px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 scrollbar button {
   min-width: 15px; min-height: 15px;
   padding: 0; border-width: 0; border-image: none; animation: none;
@@ -247,20 +248,20 @@ scale slider:backdrop { background-image: -gtk-scaled(url("assets/knob-backdrop.
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {
   min-height: 14px; min-width: 14px;
+  padding: 0 4px;
   border-style: solid;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/trough.png"), url("assets/trough@2.png")) 4 / 4px stretch;
-  background: none;
+  background-image: -gtk-scaled(url("assets/trough-s.png"), url("assets/trough-s@2.png")), -gtk-scaled(url("assets/trough-e.png"), url("assets/trough-e@2.png")), -gtk-scaled(url("assets/trough-m.png"), url("assets/trough-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 progressbar progress {
-  min-height: 14px; min-width: 14px;
+  min-height: 14px; min-width: 8px;
+  padding: 0 4px;
   margin: 0;
   border-style: solid;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/progress.png"), url("assets/progress@2.png")) 4 / 4px stretch;
-  background: none;
+  background-image: -gtk-scaled(url("assets/progress-s.png"), url("assets/progress-s@2.png")), -gtk-scaled(url("assets/progress-e.png"), url("assets/progress-e@2.png")), -gtk-scaled(url("assets/progress-m.png"), url("assets/progress-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
-progressbar progress:backdrop { border-image: -gtk-scaled(url("assets/progress-backdrop.png"), url("assets/progress-backdrop@2.png")) 4 / 4px stretch; }
+progressbar progress:backdrop { background-image: -gtk-scaled(url("assets/progress-backdrop-s.png"), url("assets/progress-backdrop-s@2.png")), -gtk-scaled(url("assets/progress-backdrop-e.png"), url("assets/progress-backdrop-e@2.png")), -gtk-scaled(url("assets/progress-backdrop-m.png"), url("assets/progress-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 progressbar.osd progress { min-height: 4px; }
 
 /* ---------------- notebooks: 23px tabs centred over a 6px blue accent bar */
@@ -269,9 +270,9 @@ progressbar.osd progress { min-height: 4px; }
 notebook, notebook.frame { border: none; background: none; box-shadow: none; }
 notebook > header { background: none; border: none; padding: 0; }
 notebook > header.top {
-  padding: 0 10px 6px 10px;
-  background-image: linear-gradient(to bottom, #1a2c70 0px, #e4eaf7 1px, #95bfea 3px, #62a2ee 4px, #a3e4ff 6px);
-  background-size: 100% 6px;
+  padding: 0 10px 9px 10px;
+  background-image: linear-gradient(to bottom, #0057ae 0px, #0057ae 1px, #a2d7f0 1px, #a2d7f0 2px, #a8d1ee 2px, #a8d1ee 3px, #51b0ea 3px, #51b0ea 4px, #79ccff 4px, #79ccff 5px, #acefff 5px, #acefff 6px, #626262 6px, #626262 7px, #939393 7px, #939393 8px, rgba(226,226,226,0.9) 8px, rgba(226,226,226,0.9) 9px);
+  background-size: 100% 9px;
   background-position: bottom;
   background-repeat: no-repeat;
 }
@@ -279,14 +280,14 @@ notebook > header tab {
   min-height: 23px;
   padding: 0 12px;
   margin: 0 -1px 0 0;
+  background-color: transparent;
   border-style: solid;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/tab.png"), url("assets/tab@2.png")) 6 6 0 6 / 6px 6px 0 6px stretch;
-  background: none;
+  background-image: -gtk-scaled(url("assets/tab-s.png"), url("assets/tab-s@2.png")), -gtk-scaled(url("assets/tab-e.png"), url("assets/tab-e@2.png")), -gtk-scaled(url("assets/tab-m.png"), url("assets/tab-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   color: #000000;
 }
-notebook > header tab:checked { border-image: -gtk-scaled(url("assets/tab-active.png"), url("assets/tab-active@2.png")) 6 6 0 6 / 6px 6px 0 6px stretch; }
-notebook > header tab:checked:backdrop { border-image: -gtk-scaled(url("assets/tab-active-backdrop.png"), url("assets/tab-active-backdrop@2.png")) 6 6 0 6 / 6px 6px 0 6px stretch; }
+notebook > header tab:checked { background-image: -gtk-scaled(url("assets/tab-active-s.png"), url("assets/tab-active-s@2.png")), -gtk-scaled(url("assets/tab-active-e.png"), url("assets/tab-active-e@2.png")), -gtk-scaled(url("assets/tab-active-m.png"), url("assets/tab-active-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
+notebook > header tab:checked:backdrop { background-image: -gtk-scaled(url("assets/tab-active-backdrop-s.png"), url("assets/tab-active-backdrop-s@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-e.png"), url("assets/tab-active-backdrop-e@2.png")), -gtk-scaled(url("assets/tab-active-backdrop-m.png"), url("assets/tab-active-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 12px 100%, 12px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 notebook > stack:not(:only-child) {
   background-color: rgba(0, 0, 0, 0.03);
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.16), rgba(0,0,0,0) 6px);
@@ -327,14 +328,14 @@ popover > contents separator, menu separator { margin: 5px 0; background: none; 
 
 /* ---------------- combo boxes / drop-downs: white pop-up with the blue double-arrow cap */
 combobox button.combo, dropdown > button, button.dropdown, combobox > box > button {
-  min-height: 20px;
-  padding: 0 29px 2px 9px;
+  min-height: 22px;
+  padding: 0 29px 0 9px;
   border-style: solid;
   border-width: 0;
-  border-image: -gtk-scaled(url("assets/popup.png"), url("assets/popup@2.png")) 10 24 11 6 / 10px 24px 11px 6px stretch;
+  background-image: -gtk-scaled(url("assets/popup-s.png"), url("assets/popup-s@2.png")), -gtk-scaled(url("assets/popup-e.png"), url("assets/popup-e@2.png")), -gtk-scaled(url("assets/popup-m.png"), url("assets/popup-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
   animation: none;
 }
-combobox button.combo:backdrop, dropdown > button:backdrop { border-image: -gtk-scaled(url("assets/popup-backdrop.png"), url("assets/popup-backdrop@2.png")) 10 24 11 6 / 10px 24px 11px 6px stretch; }
+combobox button.combo:backdrop, dropdown > button:backdrop { background-image: -gtk-scaled(url("assets/popup-backdrop-s.png"), url("assets/popup-backdrop-s@2.png")), -gtk-scaled(url("assets/popup-backdrop-e.png"), url("assets/popup-backdrop-e@2.png")), -gtk-scaled(url("assets/popup-backdrop-m.png"), url("assets/popup-backdrop-m@2.png")); background-position: left top, right top, left top; background-size: 9px 100%, 29px 100%, 100% 100%; background-repeat: no-repeat; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none; }
 combobox arrow, dropdown arrow { -gtk-icon-source: none; min-width: 0; min-height: 0; }
 
 /* ---------------- tooltips: Aqua's pale yellow */

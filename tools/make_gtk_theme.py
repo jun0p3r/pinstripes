@@ -50,6 +50,49 @@ def save(name, w, h, paint):
         img.save(os.path.join(OUT, "assets", f"{name}{suffix}.png"))
 
 
+def slice3(name, w, h, axis, a, b):
+    """Cut assets/<name>(@2).png into <name>-s, -m, -e strips (a px start cap, b px end cap)."""
+    from PySide6.QtGui import QImage as _QImage
+    for scale, suffix in ((1, ""), (2, "@2")):
+        img = _QImage(os.path.join(OUT, "assets", f"{name}{suffix}.png"))
+        W, H = img.width(), img.height()
+        # the middle is one column (row) from the centre: stretching it can't blend its edges
+        # with transparency, which is what left seams in GTK 3
+        if axis == "h":
+            parts = {"s": (0, 0, a * scale, H), "m": (W // 2, 0, 1, H), "e": (W - b * scale, 0, b * scale, H)}
+        else:
+            parts = {"s": (0, 0, W, a * scale), "m": (0, H // 2, W, 1), "e": (0, H - b * scale, W, b * scale)}
+        for k, (x, y, ww, hh) in parts.items():
+            img.copy(x, y, ww, hh).save(os.path.join(OUT, "assets", f"{name}-{k}{suffix}.png"))
+
+
+SLICES = {n: v for n, v in {
+    "button": ("h", 14, 14), "button-default": ("h", 14, 14), "button-pressed": ("h", 14, 14),
+    "popup": ("h", 9, 29), "popup-backdrop": ("h", 9, 29),
+    "tab": ("h", 12, 12), "tab-active": ("h", 12, 12), "tab-active-backdrop": ("h", 12, 12),
+    "progress": ("h", 4, 4), "progress-backdrop": ("h", 4, 4), "trough": ("h", 4, 4),
+    "thumb-v": ("v", 7, 8), "thumb-v-backdrop": ("v", 7, 8), "thumb-h": ("h", 7, 8), "thumb-h-backdrop": ("h", 7, 8)}.items()}
+
+
+def three(name):
+    """Background layers that draw a gel as start cap + stretched middle + end cap.
+    GTK ignores the centre slice of border-image, so this replaces it. The element's
+    padding must equal the cap sizes: the middle layer is clipped to the content box."""
+    axis, a, b = SLICES[name]
+    sc = lambda k: f'-gtk-scaled(url("assets/{name}-{k}.png"), url("assets/{name}-{k}@2.png"))'  # noqa: E731
+    if axis == "h":
+        return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
+                f"background-position: left top, right top, left top; "
+                f"background-size: {a}px 100%, {b}px 100%, 100% 100%; "
+                f"background-repeat: no-repeat; background-origin: border-box, border-box, content-box; "
+                f"background-clip: border-box, border-box, content-box; border-image: none;")
+    return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
+            f"background-position: left top, left bottom, left top; "
+            f"background-size: 100% {a}px, 100% {b}px, 100% 100%; "
+            f"background-repeat: no-repeat; background-origin: border-box, border-box, content-box; "
+            f"background-clip: border-box, border-box, content-box; border-image: none;")
+
+
 def capsule(g):
     def paint(p, r):
         mp.gel(p, QRectF(0.5, 0.5, r.width() - 1, 20), g, 10, lens_inset=7.7)
@@ -115,8 +158,26 @@ def tab(g):
         for pos, c in g["body"]:
             body.setColorAt(pos, mp.qc(c))
         p.setBrush(body)
-        p.setPen(QPen(mp.qc(g["rim"][0]), 1.0))
+        p.setPen(Qt.NoPen)
         p.drawPath(path)
+        # lens over the top half, inset from the corners
+        lens = QRectF(rr.left() + 3, rr.top() + 1, rr.width() - 6, rr.height() * 0.42)
+        lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
+        for pos, c in g["lens"]:
+            lg.setColorAt(pos, mp.qc(c))
+        p.setBrush(lg)
+        p.drawRoundedRect(lens, 3, 3)
+        # rim on the sides and top only
+        rim = QPainterPath()
+        rim.moveTo(rr.left(), rr.bottom() + 0.5)
+        rim.lineTo(rr.left(), rr.top() + rad)
+        rim.quadTo(rr.left(), rr.top(), rr.left() + rad, rr.top())
+        rim.lineTo(rr.right() - rad, rr.top())
+        rim.quadTo(rr.right(), rr.top(), rr.right(), rr.top() + rad)
+        rim.lineTo(rr.right(), rr.bottom() + 0.5)
+        p.setBrush(Qt.NoBrush)
+        p.setPen(QPen(mp.qc(g["rim"][0]), 1.0))
+        p.drawPath(rim)
     return paint
 
 
@@ -253,6 +314,16 @@ def make_assets():
     for k, name in enumerate(("close", "minimize", "maximize")):
         for state in ("normal", "hover", "backdrop"):
             save(f"{name}-{state}", 16, 16, light(k, state))
+    for name, (w, h, axis, a, b) in {
+        "button": (32, 22, "h", 14, 14), "button-default": (32, 22, "h", 14, 14), "button-pressed": (32, 22, "h", 14, 14),
+        "popup": (48, 22, "h", 9, 29), "popup-backdrop": (48, 22, "h", 9, 29),
+        "tab": (40, 23, "h", 12, 12), "tab-active": (40, 23, "h", 12, 12), "tab-active-backdrop": (40, 23, "h", 12, 12),
+        "progress": (30, 14, "h", 4, 4), "progress-backdrop": (30, 14, "h", 4, 4), "trough": (30, 14, "h", 4, 4),
+        "thumb-v": (15, 40, "v", 7, 8), "thumb-v-backdrop": (15, 40, "v", 7, 8),
+        "thumb-h": (40, 15, "h", 7, 8), "thumb-h-backdrop": (40, 15, "h", 7, 8),
+    }.items():
+        slice3(name, w, h, axis, a, b)
+        SLICES[name] = (axis, a, b)
 
 
 # ------------------------------------------------------------------ CSS
@@ -268,7 +339,10 @@ SELECTION = ("linear-gradient(to bottom, rgba(255,255,255,0.67), rgba(255,255,25
              "repeating-linear-gradient(to bottom, rgba(255,255,255,0.13) 0px, rgba(255,255,255,0.13) 1px, rgba(0,26,100,0.17) 1px, rgba(0,26,100,0.17) 2px, "
              "rgba(0,26,100,0.26) 2px, rgba(0,26,100,0.26) 3px, rgba(0,26,100,0.17) 3px, rgba(0,26,100,0.17) 4px), "
              "linear-gradient(to bottom, #4a84de 0%, #2668d6 48%, #2c74e2 52%, #54a2f6 80%, #80caff 100%)")
-ACCENT = "linear-gradient(to bottom, #1a2c70 0px, #e4eaf7 1px, #95bfea 3px, #62a2ee 4px, #a3e4ff 6px)"
+# accent bar rows measured from HIG Figure 7-23: six blue rows, then a three-row grey shadow
+ACCENT = ("linear-gradient(to bottom, #0057ae 0px, #0057ae 1px, #a2d7f0 1px, #a2d7f0 2px, #a8d1ee 2px, #a8d1ee 3px, "
+          "#51b0ea 3px, #51b0ea 4px, #79ccff 4px, #79ccff 5px, #acefff 5px, #acefff 6px, #626262 6px, #626262 7px, "
+          "#939393 7px, #939393 8px, rgba(226,226,226,0.9) 8px, rgba(226,226,226,0.9) 9px)")
 
 
 def common_css(v):
@@ -322,28 +396,27 @@ label:disabled, label:backdrop:disabled {{ color: #8a8a8a; }}
 
 /* ---------------- push buttons: 20px clear gel capsules, 14px end caps; the default pulses */
 button {{
-  min-height: 20px;
+  min-height: 22px;
   min-width: 41px;
-  padding: 0 14px 2px 14px;
+  padding: 0 14px;
   border-style: solid;
   border-width: 0;
-  border-image: {scaled("button")} 10 11 11 11 / 10px 11px 11px 11px stretch;
+  {three("button")}
   border-radius: 0;
-  background: none;
   box-shadow: none;
   color: #000000;
   text-shadow: none;
   -gtk-icon-shadow: none;
 }}
 button:active, button:checked {{
-  border-image: {scaled("button-pressed")} 10 11 11 11 / 10px 11px 11px 11px stretch;
+  {three("button-pressed")}
 }}
 button.suggested-action, button.default, button.default:focus {{
-  border-image: {scaled("button-default")} 10 11 11 11 / 10px 11px 11px 11px stretch;
+  {three("button-default")}
   animation: pinstripe-pulse 1.7s ease-in-out infinite;
 }}
 button.suggested-action:backdrop, button.default:backdrop {{
-  border-image: {scaled("button")} 10 11 11 11 / 10px 11px 11px 11px stretch;
+  {three("button")}
   animation: none;
 }}
 @keyframes pinstripe-pulse {{
@@ -352,7 +425,7 @@ button.suggested-action:backdrop, button.default:backdrop {{
   100% {{ opacity: 1.0; }}
 }}
 button:disabled {{ opacity: 0.55; color: #555555; }}
-button.destructive-action {{ border-image: {scaled("button")} 10 11 11 11 / 10px 11px 11px 11px stretch; color: #a01010; }}
+button.destructive-action {{ {three("button")} color: #a01010; }}
 
 /* flat and toolbar buttons: no frame in Aqua, darken while pressed */
 button.flat, headerbar button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize), toolbar button, .toolbar button,
@@ -470,16 +543,18 @@ scrollbar.horizontal {scroll_trough.split()[-1]} {{ background-image: linear-gra
 }}
 scrollbar.vertical slider {{
   min-height: 24px;
+  padding: 7px 0 8px 0;
   border-width: 0;
-  border-image: {scaled("thumb-v")} 7 0 8 0 / 7px 0 8px 0 stretch;
+  {three("thumb-v")}
 }}
 scrollbar.horizontal slider {{
   min-width: 24px;
+  padding: 0 8px 0 7px;
   border-width: 0;
-  border-image: {scaled("thumb-h")} 0 8 0 7 / 0 8px 0 7px stretch;
+  {three("thumb-h")}
 }}
-scrollbar.vertical slider:backdrop {{ border-image: {scaled("thumb-v-backdrop")} 7 0 8 0 / 7px 0 8px 0 stretch; }}
-scrollbar.horizontal slider:backdrop {{ border-image: {scaled("thumb-h-backdrop")} 0 8 0 7 / 0 8px 0 7px stretch; }}
+scrollbar.vertical slider:backdrop {{ {three("thumb-v-backdrop")} }}
+scrollbar.horizontal slider:backdrop {{ {three("thumb-h-backdrop")} }}
 scrollbar button {{
   min-width: 15px; min-height: 15px;
   padding: 0; border-width: 0; border-image: none; animation: none;
@@ -541,20 +616,20 @@ scale slider:backdrop {{ background-image: {scaled("knob-backdrop")}; }}
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {{
   min-height: 14px; min-width: 14px;
+  padding: 0 4px;
   border-style: solid;
   border-width: 0;
-  border-image: {scaled("trough")} 4 / 4px stretch;
-  background: none;
+  {three("trough")}
 }}
 progressbar progress {{
-  min-height: 14px; min-width: 14px;
+  min-height: 14px; min-width: 8px;
+  padding: 0 4px;
   margin: 0;
   border-style: solid;
   border-width: 0;
-  border-image: {scaled("progress")} 4 / 4px stretch;
-  background: none;
+  {three("progress")}
 }}
-progressbar progress:backdrop {{ border-image: {scaled("progress-backdrop")} 4 / 4px stretch; }}
+progressbar progress:backdrop {{ {three("progress-backdrop")} }}
 progressbar.osd progress {{ min-height: 4px; }}
 
 /* ---------------- notebooks: 23px tabs centred over a 6px blue accent bar */
@@ -563,9 +638,9 @@ progressbar.osd progress {{ min-height: 4px; }}
 notebook, notebook.frame {{ border: none; background: none; box-shadow: none; }}
 notebook > header {{ background: none; border: none; padding: 0; }}
 notebook > header.top {{
-  padding: 0 10px 6px 10px;
+  padding: 0 10px 9px 10px;
   background-image: {ACCENT};
-  background-size: 100% 6px;
+  background-size: 100% 9px;
   background-position: bottom;
   background-repeat: no-repeat;
 }}
@@ -573,14 +648,14 @@ notebook > header tab {{
   min-height: 23px;
   padding: 0 12px;
   margin: 0 -1px 0 0;
+  background-color: transparent;
   border-style: solid;
   border-width: 0;
-  border-image: {scaled("tab")} 6 6 0 6 / 6px 6px 0 6px stretch;
-  background: none;
+  {three("tab")}
   color: #000000;
 }}
-notebook > header tab:checked {{ border-image: {scaled("tab-active")} 6 6 0 6 / 6px 6px 0 6px stretch; }}
-notebook > header tab:checked:backdrop {{ border-image: {scaled("tab-active-backdrop")} 6 6 0 6 / 6px 6px 0 6px stretch; }}
+notebook > header tab:checked {{ {three("tab-active")} }}
+notebook > header tab:checked:backdrop {{ {three("tab-active-backdrop")} }}
 notebook > stack:not(:only-child) {{
   background-color: rgba(0, 0, 0, 0.03);
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.16), rgba(0,0,0,0) 6px);
@@ -621,14 +696,14 @@ separator {{ background: none; min-height: 1px; min-width: 1px; }}
 
 /* ---------------- combo boxes / drop-downs: white pop-up with the blue double-arrow cap */
 combobox button.combo, dropdown > button, button.dropdown, combobox > box > button {{
-  min-height: 20px;
-  padding: 0 29px 2px 9px;
+  min-height: 22px;
+  padding: 0 29px 0 9px;
   border-style: solid;
   border-width: 0;
-  border-image: {scaled("popup")} 10 24 11 6 / 10px 24px 11px 6px stretch;
+  {three("popup")}
   animation: none;
 }}
-combobox button.combo:backdrop, dropdown > button:backdrop {{ border-image: {scaled("popup-backdrop")} 10 24 11 6 / 10px 24px 11px 6px stretch; }}
+combobox button.combo:backdrop, dropdown > button:backdrop {{ {three("popup-backdrop")} }}
 combobox arrow, dropdown arrow {{ -gtk-icon-source: none; min-width: 0; min-height: 0; }}
 
 /* ---------------- tooltips: Aqua's pale yellow */
