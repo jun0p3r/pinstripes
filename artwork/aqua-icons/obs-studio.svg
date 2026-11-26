@@ -1,76 +1,57 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
   <defs>
-    
-    <filter id="floorBlur" x="-35%" y="-50%" width="170%" height="210%">
-      <feGaussianBlur stdDeviation="4.6"/>
+    <filter id="obsDrop" x="-30%" y="-30%" width="160%" height="165%">
+      <feGaussianBlur stdDeviation="3.2"/>
     </filter>
-    <filter id="contactBlur" x="-25%" y="-40%" width="150%" height="190%">
-      <feGaussianBlur stdDeviation="1.8"/>
-    </filter>
-    <filter id="dropShadow" x="-25%" y="-25%" width="155%" height="160%">
-      <feGaussianBlur stdDeviation="2.8"/>
-    </filter>
-    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <filter id="obsGlowBlur" x="-25%" y="-25%" width="150%" height="150%">
       <feGaussianBlur stdDeviation="2.0"/>
     </filter>
-    <filter id="fineBlur" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="1.0"/>
-    </filter>
-
-    <linearGradient id="obsChrome" x1="20" y1="11" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+    <linearGradient id="obsRim" x1="64" y1="10" x2="64" y2="114" gradientUnits="userSpaceOnUse">
       <stop offset="0.00" stop-color="#ffffff"/>
-      <stop offset="0.18" stop-color="#dfe3eb"/>
-      <stop offset="0.46" stop-color="#7c828f"/>
-      <stop offset="0.60" stop-color="#2b2f38"/>
-      <stop offset="0.84" stop-color="#e5e8f0"/>
-      <stop offset="1.00" stop-color="#737985"/>
+      <stop offset="0.22" stop-color="#e4e8f0"/>
+      <stop offset="0.50" stop-color="#848b99"/>
+      <stop offset="0.65" stop-color="#3a3f4a"/>
+      <stop offset="0.88" stop-color="#eef1f7"/>
+      <stop offset="1.00" stop-color="#9ca3b2"/>
     </linearGradient>
-    <radialGradient id="obsidianWell" cx="64" cy="76" r="46" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#3c4454"/>
-      <stop offset="0.52" stop-color="#1b1f28"/>
-      <stop offset="1.00" stop-color="#090b10"/>
+    <linearGradient id="obsBody" x1="64" y1="15" x2="64" y2="109" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#4e5668"/>
+      <stop offset="0.38" stop-color="#1d212b"/>
+      <stop offset="0.76" stop-color="#11141c"/>
+      <stop offset="1.00" stop-color="#3c465c"/>
+    </linearGradient>
+    <radialGradient id="obsBounce" cx="64" cy="108" r="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#b8d4ff" stop-opacity="0.65"/>
+      <stop offset="0.50" stop-color="#5a769e" stop-opacity="0.28"/>
+      <stop offset="1.00" stop-color="#11141c" stop-opacity="0.00"/>
     </radialGradient>
-    <linearGradient id="silverBlade" x1="40" y1="24" x2="88" y2="96" gradientUnits="userSpaceOnUse">
+    <linearGradient id="obsShine" x1="64" y1="14" x2="64" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.78"/>
+      <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.04"/>
+    </linearGradient>
+    <linearGradient id="obsBlades" x1="300" y1="120" x2="750" y2="860" gradientUnits="userSpaceOnUse">
       <stop offset="0.00" stop-color="#ffffff"/>
-      <stop offset="0.55" stop-color="#e4e9f2"/>
-      <stop offset="1.00" stop-color="#aeb6c4"/>
+      <stop offset="0.55" stop-color="#eef2fa"/>
+      <stop offset="1.00" stop-color="#b8c2d4"/>
     </linearGradient>
-    <linearGradient id="obsLens" x1="64" y1="17" x2="64" y2="52" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.58"/>
-      <stop offset="0.45" stop-color="#bfe0ff" stop-opacity="0.18"/>
-      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.00"/>
-    </linearGradient>
-    <clipPath id="obsClip"><circle cx="64" cy="60.5" r="43"/></clipPath>
-    <path id="obsBlade" d="M64,60.5 C53,55 46,42 52,29 C57,19 72,18 81,26 C72,24 62,30 60,40 C58,49 61,56 64,60.5 Z"/>
+    <clipPath id="obsOrbClip"><circle cx="64" cy="62" r="45.5"/></clipPath>
   </defs>
-  <ellipse cx="64" cy="112.5" rx="45" ry="6.0" fill="#06080e" fill-opacity="0.34" filter="url(#floorBlur)"/>
-  <ellipse cx="64" cy="110.2" rx="28" ry="3.2" fill="#000000" fill-opacity="0.48" filter="url(#contactBlur)"/>
-
-  <!-- Spun-chrome broadcast lens barrel -->
-  <circle cx="64" cy="60.5" r="49" fill="url(#obsChrome)" stroke="#434852" stroke-width="0.9"/>
-  <circle cx="64" cy="60.5" r="44.8" fill="#12151c"/>
-
-  <!-- Deep obsidian coated optical glass & 3-blade OBS pinwheel -->
-  <g clip-path="url(#obsClip)">
-    <circle cx="64" cy="60.5" r="43" fill="url(#obsidianWell)"/>
-    <!-- Subtle sapphire optical coating reflection -->
-    <ellipse cx="74" cy="84" rx="28" ry="16" fill="#2a6be0" fill-opacity="0.22" filter="url(#softGlow)"/>
-    <!-- 3-blade pinwheel shadow -->
-    <g transform="translate(1.2, 2.2)" fill="#000000" fill-opacity="0.65" filter="url(#fineBlur)">
-      <use href="#obsBlade"/>
-      <use href="#obsBlade" transform="rotate(120 64 60.5)"/>
-      <use href="#obsBlade" transform="rotate(240 64 60.5)"/>
+  <circle cx="64" cy="65.5" r="49.5" fill="#090d17" fill-opacity="0.40" filter="url(#obsDrop)"/>
+  <!-- Spun-platinum Aqua outer ring -->
+  <circle cx="64" cy="62" r="50" fill="url(#obsRim)" stroke="#4c5260" stroke-width="0.8"/>
+  <!-- Deep Obsidian Aqua Gel Sphere -->
+  <g clip-path="url(#obsOrbClip)">
+    <circle cx="64" cy="62" r="45.5" fill="url(#obsBody)"/>
+    <ellipse cx="64" cy="105" rx="46" ry="30" fill="url(#obsBounce)" filter="url(#obsGlowBlur)"/>
+    <!-- Authentic OBS Pinwheel Silhouette + Drop Shadow -->
+    <g transform="translate(13.2, 11.4) scale(0.1025)">
+      <path d="M666.9,350.5 c-54.8,95.4-176.6,128.4-272,73.6c-1.8-1-3.5-2.1-5.2-3.1c-16.7-10.3-31.9-23.1-44.9-37.8c-34.4-38.8-52.3-89.4-49.9-141.1 c0.3-5.8,0.8-11.6,1.5-17.3c0.7-5.7,1.7-11.3,3-16.9c1.3-5.7,2.8-11.4,4.5-17c1.7-5.4,3.7-10.8,5.9-16.1c2.3-5.5,4.8-10.9,7.5-16.1 c2.9-5.5,6.1-10.9,9.5-16.2c3.1-4.8,6.5-9.5,10-14.1c3.9-5,8-9.7,12.3-14.3c4.4-4.6,8.9-9,13.7-13.2c4.8-4.3,9.9-8.2,15.1-12 c2.7-1.9,5.4-3.8,8.2-5.6C268,143.7,219.6,287.3,277.1,406.9c0.5,1.1,1.1,2.3,1.7,3.4c0.3,0.5,0.5,1,0.8,1.5 c0.1,0.3,0.3,0.6,0.5,0.9c0.3,0.4,0.4,0.3,0.9,0.3c2.6,0,5.2,0,7.7,0c4.8,0.1,9.5,0.4,14.3,0.8c90.3,8.5,163.5,76.9,178.2,166.4 c3.2,19.9,3.4,40.2,0.6,60.2c-5.3,37.7-21.3,73-46.2,101.9c-14.2,16.5-31,30.6-49.8,41.8c-37.4,22.1-81,31.4-124.2,26.5 c-7.8-0.9-15.6-2.2-23.2-4c-5-1.2-9.9-2.5-14.7-4.1c21.8,9.7,44.9,16.1,68.5,19c22.1,2.7,44.4,2.5,66.4-0.8 c39.3-5.9,76.7-21.3,108.7-44.9c23.5-17.3,43.7-38.7,59.7-63.1c0.7-1.1,1.4-2.1,2.1-3.2c0.3-0.4,0.9-1.1,0.8-1.5 c-0.3-0.7-0.6-1.3-1.1-1.9c-1.3-2.5-2.6-5-3.8-7.6c-2.5-5.1-4.7-10.4-6.7-15.7c-4.1-10.8-7.2-22-9.3-33.4c-4.6-24.5-4.6-49.5,0-74 c3.9-20.8,11.1-40.8,21.4-59.3c34.8-63.2,101-102.6,173.1-103.1c4.9,0,9.8,0.1,14.7,0.4c4.7,0.3,9.4,0.8,14.1,1.4 c4.6,0.6,9.2,1.4,13.8,2.4c4.5,0.9,8.9,2,13.4,3.3c4.3,1.2,8.6,2.6,12.8,4.1c4.3,1.5,8.5,3.2,12.7,5.1c4.3,1.9,8.4,3.9,12.6,6 c4.1,2.2,8.1,4.5,12.1,6.9c3.7,2.3,7.4,4.7,10.9,7.3c3.7,2.6,7.2,5.4,10.7,8.2c3.6,2.9,7.1,6,10.5,9.2c3.6,3.4,7.1,6.9,10.4,10.6 c3.3,3.6,6.5,7.4,9.6,11.3c3.4,4.3,6.6,8.8,9.7,13.4c3.1,4.7,6,9.6,8.7,14.5c3.8,6.9,7.1,14.1,10.1,21.4c3.2,8,5.8,16.1,8,24.4 c-5.8-44.3-23.7-86.1-51.7-120.9c-20.6-25.6-46.1-46.9-75-62.5c-29.7-16-62.3-25.6-95.9-28.3C672.6,350.8,669.8,350.6,666.9,350.5z" fill="#000000" fill-opacity="0.65" transform="translate(12, 26)"/>
+      <path d="M666.9,350.5 c-54.8,95.4-176.6,128.4-272,73.6c-1.8-1-3.5-2.1-5.2-3.1c-16.7-10.3-31.9-23.1-44.9-37.8c-34.4-38.8-52.3-89.4-49.9-141.1 c0.3-5.8,0.8-11.6,1.5-17.3c0.7-5.7,1.7-11.3,3-16.9c1.3-5.7,2.8-11.4,4.5-17c1.7-5.4,3.7-10.8,5.9-16.1c2.3-5.5,4.8-10.9,7.5-16.1 c2.9-5.5,6.1-10.9,9.5-16.2c3.1-4.8,6.5-9.5,10-14.1c3.9-5,8-9.7,12.3-14.3c4.4-4.6,8.9-9,13.7-13.2c4.8-4.3,9.9-8.2,15.1-12 c2.7-1.9,5.4-3.8,8.2-5.6C268,143.7,219.6,287.3,277.1,406.9c0.5,1.1,1.1,2.3,1.7,3.4c0.3,0.5,0.5,1,0.8,1.5 c0.1,0.3,0.3,0.6,0.5,0.9c0.3,0.4,0.4,0.3,0.9,0.3c2.6,0,5.2,0,7.7,0c4.8,0.1,9.5,0.4,14.3,0.8c90.3,8.5,163.5,76.9,178.2,166.4 c3.2,19.9,3.4,40.2,0.6,60.2c-5.3,37.7-21.3,73-46.2,101.9c-14.2,16.5-31,30.6-49.8,41.8c-37.4,22.1-81,31.4-124.2,26.5 c-7.8-0.9-15.6-2.2-23.2-4c-5-1.2-9.9-2.5-14.7-4.1c21.8,9.7,44.9,16.1,68.5,19c22.1,2.7,44.4,2.5,66.4-0.8 c39.3-5.9,76.7-21.3,108.7-44.9c23.5-17.3,43.7-38.7,59.7-63.1c0.7-1.1,1.4-2.1,2.1-3.2c0.3-0.4,0.9-1.1,0.8-1.5 c-0.3-0.7-0.6-1.3-1.1-1.9c-1.3-2.5-2.6-5-3.8-7.6c-2.5-5.1-4.7-10.4-6.7-15.7c-4.1-10.8-7.2-22-9.3-33.4c-4.6-24.5-4.6-49.5,0-74 c3.9-20.8,11.1-40.8,21.4-59.3c34.8-63.2,101-102.6,173.1-103.1c4.9,0,9.8,0.1,14.7,0.4c4.7,0.3,9.4,0.8,14.1,1.4 c4.6,0.6,9.2,1.4,13.8,2.4c4.5,0.9,8.9,2,13.4,3.3c4.3,1.2,8.6,2.6,12.8,4.1c4.3,1.5,8.5,3.2,12.7,5.1c4.3,1.9,8.4,3.9,12.6,6 c4.1,2.2,8.1,4.5,12.1,6.9c3.7,2.3,7.4,4.7,10.9,7.3c3.7,2.6,7.2,5.4,10.7,8.2c3.6,2.9,7.1,6,10.5,9.2c3.6,3.4,7.1,6.9,10.4,10.6 c3.3,3.6,6.5,7.4,9.6,11.3c3.4,4.3,6.6,8.8,9.7,13.4c3.1,4.7,6,9.6,8.7,14.5c3.8,6.9,7.1,14.1,10.1,21.4c3.2,8,5.8,16.1,8,24.4 c-5.8-44.3-23.7-86.1-51.7-120.9c-20.6-25.6-46.1-46.9-75-62.5c-29.7-16-62.3-25.6-95.9-28.3C672.6,350.8,669.8,350.6,666.9,350.5z" fill="url(#obsBlades)"/>
     </g>
-    <!-- 3 sculpted silver pinwheel blades -->
-    <g fill="url(#silverBlade)">
-      <use href="#obsBlade"/>
-      <use href="#obsBlade" transform="rotate(120 64 60.5)"/>
-      <use href="#obsBlade" transform="rotate(240 64 60.5)"/>
-    </g>
-    <!-- Red broadcast tally LED dot on upper bezel rim -->
-    <circle cx="91" cy="33" r="2.6" fill="#ff3b30"/>
-    <!-- Curved optical lens highlight -->
-    <ellipse cx="64" cy="31" rx="32" ry="15" fill="url(#obsLens)"/>
+    <!-- Curved Aqua Glass Specular Lens -->
+    <path d="M 12,12 H 116 V 52 Q 64,65 12,52 Z" fill="url(#obsShine)"/>
+    <circle cx="64" cy="62" r="45.5" fill="none" stroke="#181c26" stroke-width="2.2" stroke-opacity="0.85"/>
   </g>
-  <circle cx="64" cy="60.5" r="43" fill="none" stroke="#363c48" stroke-width="0.9"/>
+  <circle cx="64" cy="62" r="45.5" fill="none" stroke="#0d1017" stroke-width="0.7"/>
 </svg>

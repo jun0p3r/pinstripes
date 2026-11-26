@@ -1,98 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Aqua-style glassy rendition of the Claude symbol, in Claude orange -->
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="-9 -7 118 118">
   <defs>
-    
-    <filter id="floorBlur" x="-35%" y="-50%" width="170%" height="210%">
-      <feGaussianBlur stdDeviation="4.6"/>
-    </filter>
-    <filter id="contactBlur" x="-25%" y="-40%" width="150%" height="190%">
-      <feGaussianBlur stdDeviation="1.8"/>
-    </filter>
-    <filter id="dropShadow" x="-25%" y="-25%" width="155%" height="160%">
-      <feGaussianBlur stdDeviation="2.8"/>
-    </filter>
-    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="2.0"/>
-    </filter>
-    <filter id="fineBlur" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="1.0"/>
-    </filter>
-
-    <linearGradient id="chromeRim" x1="64" y1="11" x2="64" y2="110" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#ffffff"/>
-      <stop offset="0.18" stop-color="#dfe2e8"/>
-      <stop offset="0.48" stop-color="#7a7f8a"/>
-      <stop offset="0.62" stop-color="#3d4148"/>
-      <stop offset="0.84" stop-color="#e5e7ec"/>
-      <stop offset="1.00" stop-color="#9ca1ab"/>
+    <clipPath id="clip"><path  d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/></clipPath>
+    <!-- glass body: peach at the top, Claude orange through the middle, deep at the base, lifting again at the bottom -->
+    <linearGradient id="body" x1="0" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0"    stop-color="#e98f6c"/>
+      <stop offset="0.42" stop-color="#cf5f38"/>
+      <stop offset="0.78" stop-color="#e0794f"/>
+      <stop offset="1"    stop-color="#f7ad84"/>
     </linearGradient>
-    <linearGradient id="terracottaGlass" x1="64" y1="16" x2="64" y2="105" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#5c2010"/>
-      <stop offset="0.18" stop-color="#9e3d22"/>
-      <stop offset="0.52" stop-color="#d96b43"/>
-      <stop offset="0.82" stop-color="#f29b74"/>
-      <stop offset="1.00" stop-color="#ffe6d6"/>
-    </linearGradient>
-    <radialGradient id="peachCaustic" cx="64" cy="96" r="36" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#fff9f2" stop-opacity="0.95"/>
-      <stop offset="0.50" stop-color="#ffb894" stop-opacity="0.55"/>
-      <stop offset="1.00" stop-color="#d96b43" stop-opacity="0.00"/>
+    <radialGradient id="glow" cx="50" cy="104" r="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0"    stop-color="#ffe3cc" stop-opacity="0.95"/>
+      <stop offset="0.45" stop-color="#ffb98f" stop-opacity="0.55"/>
+      <stop offset="1"    stop-color="#ffb98f" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="ivorySpark" x1="64" y1="30" x2="64" y2="90" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#ffffff"/>
-      <stop offset="0.65" stop-color="#fff5eb"/>
-      <stop offset="1.00" stop-color="#ffd9c2"/>
+    <linearGradient id="shine" x1="0" y1="-2" x2="0" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0"    stop-color="#fff4ee" stop-opacity="0.88"/>
+      <stop offset="0.50" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0.12"/>
     </linearGradient>
-    <linearGradient id="lensCl" x1="64" y1="17" x2="64" y2="50" gradientUnits="userSpaceOnUse">
-      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.76"/>
-      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.28"/>
-      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.00"/>
-    </linearGradient>
-    <clipPath id="clClip"><circle cx="64" cy="60.5" r="43.5"/></clipPath>
-    <g id="sparkShape" stroke="url(#ivorySpark)">
-      <line x1="64" y1="60.5" x2="64.00" y2="31.50" stroke-width="5.2" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="76.72" y2="40.15" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="89.17" y2="48.23" stroke-width="4.8" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="88.86" y2="63.11" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="86.85" y2="78.35" stroke-width="5.0" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="71.42" y2="83.33" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="57.23" y2="87.67" stroke-width="5.0" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="47.46" y2="76.48" stroke-width="4.2" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="36.83" y2="67.27" stroke-width="4.8" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="42.07" y2="50.74" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="48.90" y2="38.12" stroke-width="4.8" stroke-linecap="round"/>
-    </g>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.4"/></filter>
+    <filter id="blur1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.4"/></filter>
   </defs>
-  <ellipse cx="64" cy="112.5" rx="44" ry="6.0" fill="#1c0a04" fill-opacity="0.32" filter="url(#floorBlur)"/>
-  <ellipse cx="64" cy="110.2" rx="27" ry="3.2" fill="#000000" fill-opacity="0.46" filter="url(#contactBlur)"/>
-  <ellipse cx="64" cy="112.5" rx="20" ry="3.0" fill="#e87348" fill-opacity="0.28" filter="url(#softGlow)"/>
 
-  <!-- Spun-chrome outer medallion bezel -->
-  <circle cx="64" cy="60.5" r="48.5" fill="url(#chromeRim)" stroke="#555962" stroke-width="0.9"/>
-  <circle cx="64" cy="60.5" r="45.0" fill="#3a160c"/>
+  <!-- drop shadow -->
+  <g transform="translate(0.4 3.6)" filter="url(#soft)"><path fill="#5a1d08" fill-opacity="0.42" d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/></g>
 
-  <!-- Terracotta Aqua Glass Cabochon -->
-  <g clip-path="url(#clClip)">
-    <circle cx="64" cy="60.5" r="43.5" fill="url(#terracottaGlass)"/>
-    <circle cx="64" cy="60.5" r="43.5" fill="url(#peachCaustic)"/>
-    <!-- Cast shadow of sculpted starburst -->
-    <g stroke="#471608" stroke-opacity="0.48" transform="translate(1.2, 2.4)" filter="url(#fineBlur)">
-      <line x1="64" y1="60.5" x2="64.00" y2="31.50" stroke-width="5.2" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="76.72" y2="40.15" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="89.17" y2="48.23" stroke-width="4.8" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="88.86" y2="63.11" stroke-width="4.5" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="86.85" y2="78.35" stroke-width="5.0" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="71.42" y2="83.33" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="57.23" y2="87.67" stroke-width="5.0" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="47.46" y2="76.48" stroke-width="4.2" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="36.83" y2="67.27" stroke-width="4.8" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="42.07" y2="50.74" stroke-width="4.4" stroke-linecap="round"/>
-      <line x1="64" y1="60.5" x2="48.90" y2="38.12" stroke-width="4.8" stroke-linecap="round"/>
-    </g>
-    <!-- Crisp sculpted ivory starburst -->
-    <use href="#sparkShape"/>
-    <circle cx="64" cy="60.5" r="6.2" fill="#ffffff"/>
-    <!-- Top glass specular crescent -->
-    <ellipse cx="64" cy="31" rx="32" ry="15" fill="url(#lensCl)"/>
+  <!-- glass body -->
+  <path fill="url(#body)" d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
+
+  <g clip-path="url(#clip)">
+    <!-- light pooling in the bottom of the glass -->
+    <ellipse cx="50" cy="98" rx="58" ry="42" fill="url(#glow)" filter="url(#blur1)"/>
+    <!-- specular highlight lens across the top -->
+    <path d="M -10 -10 H 110 V 41 Q 50 53 -10 41 Z" fill="url(#shine)"/>
   </g>
-  <circle cx="64" cy="60.5" r="43.5" fill="none" stroke="#571f0f" stroke-width="0.85" stroke-opacity="0.65"/>
+
+  <!-- body-coloured inner rim insets the highlight from the edges -->
+  <g clip-path="url(#clip)"><path fill="none" stroke="url(#body)" stroke-width="1.7" stroke-opacity="0.9" stroke-linejoin="round" d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/></g>
+
+  <!-- fine dark outline -->
+  <path fill="none" stroke="#7a2a10" stroke-opacity="0.75" stroke-width="0.35" stroke-linejoin="round" d="m19.6 66.5 19.7-11 .3-1-.3-.5h-1l-3.3-.2-11.2-.3L14 53l-9.5-.5-2.4-.5L0 49l.2-1.5 2-1.3 2.9.2 6.3.5 9.5.6 6.9.4L38 49.1h1.6l.2-.7-.5-.4-.4-.4L29 41l-10.6-7-5.6-4.1-3-2-1.5-2-.6-4.2 2.7-3 3.7.3.9.2 3.7 2.9 8 6.1L37 36l1.5 1.2.6-.4.1-.3-.7-1.1L33 25l-6-10.4-2.7-4.3-.7-2.6c-.3-1-.4-2-.4-3l3-4.2L28 0l4.2.6L33.8 2l2.6 6 4.1 9.3L47 29.9l2 3.8 1 3.4.3 1h.7v-.5l.5-7.2 1-8.7 1-11.2.3-3.2 1.6-3.8 3-2L61 2.6l2 2.9-.3 1.8-1.1 7.7L59 27.1l-1.5 8.2h.9l1-1.1 4.1-5.4 6.9-8.6 3-3.5L77 13l2.3-1.8h4.3l3.1 4.7-1.4 4.9-4.4 5.6-3.7 4.7-5.3 7.1-3.2 5.7.3.4h.7l12-2.6 6.4-1.1 7.6-1.3 3.5 1.6.4 1.6-1.4 3.4-8.2 2-9.6 2-14.3 3.3-.2.1.2.3 6.4.6 2.8.2h6.8l12.6 1 3.3 2 1.9 2.7-.3 2-5.1 2.6-6.8-1.6-16-3.8-5.4-1.3h-.8v.4l4.6 4.5 8.3 7.5L89 80.1l.5 2.4-1.3 2-1.4-.2-9.2-7-3.6-3-8-6.8h-.5v.7l1.8 2.7 9.8 14.7.5 4.5-.7 1.4-2.6 1-2.7-.6-5.8-8-6-9-4.7-8.2-.5.4-2.9 30.2-1.3 1.5-3 1.2-2.5-2-1.4-3 1.4-6.2 1.6-8 1.3-6.4 1.2-7.9.7-2.6v-.2H49L43 72l-9 12.3-7.2 7.6-1.7.7-3-1.5.3-2.8L24 86l10-12.8 6-7.9 4-4.6-.1-.5h-.3L17.2 77.4l-4.7.6-2-2 .2-3 1-1 8-5.5Z"/>
 </svg>

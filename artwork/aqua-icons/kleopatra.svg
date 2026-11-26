@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    
+    <filter id="floorBlur" x="-35%" y="-50%" width="170%" height="210%">
+      <feGaussianBlur stdDeviation="4.6"/>
+    </filter>
+    <filter id="contactBlur" x="-25%" y="-40%" width="150%" height="190%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+    <filter id="dropShadow" x="-25%" y="-25%" width="155%" height="160%">
+      <feGaussianBlur stdDeviation="2.8"/>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.0"/>
+    </filter>
+    <filter id="fineBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.0"/>
+    </filter>
+
+    <linearGradient id="certPaper" x1="20" y1="18" x2="96" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fffdf5"/>
+      <stop offset="0.60" stop-color="#f7efd8"/>
+      <stop offset="1.00" stop-color="#e3d2ab"/>
+    </linearGradient>
+    <radialGradient id="waxSeal" cx="44" cy="83" r="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ff8a92"/>
+      <stop offset="0.45" stop-color="#c91622"/>
+      <stop offset="1.00" stop-color="#6e070e"/>
+    </radialGradient>
+    <linearGradient id="goldKey" x1="56" y1="22" x2="112" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fff7b8"/>
+      <stop offset="0.32" stop-color="#f2be38"/>
+      <stop offset="0.65" stop-color="#b87c12"/>
+      <stop offset="0.88" stop-color="#ffe27a"/>
+      <stop offset="1.00" stop-color="#754905"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="64" cy="112.5" rx="45" ry="5.8" fill="#1f1305" fill-opacity="0.32" filter="url(#floorBlur)"/>
+
+  <!-- Parchment GPG Certificate with Ornate Gold Border -->
+  <g transform="rotate(-5 56 60)">
+    <rect x="18" y="18" width="74" height="86" rx="2" fill="#000000" fill-opacity="0.26" transform="translate(2, 3.5)" filter="url(#dropShadow)"/>
+    <rect x="18" y="18" width="74" height="86" rx="2" fill="url(#certPaper)" stroke="#ab9465" stroke-width="0.9"/>
+    <rect x="22.5" y="22.5" width="65" height="77" fill="none" stroke="#c99e42" stroke-width="1.1"/>
+    <text x="55" y="36" text-anchor="middle" font-family="Georgia, Liberation Serif, serif" font-weight="bold" font-size="7.2" fill="#4a3714">PGP TRUST</text>
+    <g font-family="Luxi Mono, DejaVu Sans Mono, monospace" font-size="4.6" fill="#5c4924">
+      <text x="27" y="47">4096R / 9A8F 2C1E</text>
+      <text x="27" y="55">7D3B E410 88C2 19FA</text>
+      <text x="27" y="63">Verified Signature</text>
+    </g>
+    <!-- Silk ribbons + Embossed Crimson Wax Seal -->
+    <polygon points="39,86 33,108 40,104 44,109 46,86" fill="#a8121c"/>
+    <polygon points="44,86 50,109 53,103 59,106 51,86" fill="#cf1b27"/>
+    <circle cx="45" cy="83" r="12.5" fill="url(#waxSeal)" stroke="#5c060c" stroke-width="0.8"/>
+    <circle cx="45" cy="83" r="8.5" fill="none" stroke="#ffadb3" stroke-width="0.8" stroke-opacity="0.65"/>
+  </g>
+
+  <!-- Sculpted 3D Burnished Gold & Sapphire Signet Key -->
+  <g transform="translate(88, 18) rotate(28)">
+    <g transform="translate(2.2, 3.2)" fill="#000000" fill-opacity="0.35" filter="url(#softGlow)">
+      <circle cx="14" cy="18" r="16"/>
+      <rect x="10.5" y="32" width="7" height="54" rx="2.5"/>
+      <rect x="17" y="66" width="11" height="5" rx="1"/>
+      <rect x="17" y="76" width="14" height="6" rx="1"/>
+    </g>
+    <!-- Key bow ring -->
+    <path d="M14,2 A16,16 0 1,1 13.99,2 Z M14,9.5 A8.5,8.5 0 1,0 14.01,9.5 Z" fill="url(#goldKey)" fill-rule="evenodd" stroke="#6e4406" stroke-width="0.8"/>
+    <circle cx="14" cy="5.5" r="2.6" fill="#1e78eb" stroke="#ffffff" stroke-width="0.6"/>
+    <!-- Shaft & wards -->
+    <rect x="10.5" y="32" width="7" height="54" rx="2.5" fill="url(#goldKey)" stroke="#6e4406" stroke-width="0.8"/>
+    <path d="M17.2,65 H28 V71 H22 V75 H30 V82 H17.2 Z" fill="url(#goldKey)" stroke="#6e4406" stroke-width="0.8"/>
+    <line x1="12.5" y1="34" x2="12.5" y2="84" stroke="#fff9c7" stroke-width="1.2"/>
+  </g>
+</svg>

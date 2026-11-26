@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <filter id="biSoft" x="-25%" y="-35%" width="150%" height="180%"><feGaussianBlur stdDeviation="2.6"/></filter>
+    <linearGradient id="biBlue" x1="0" y1="20" x2="0" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#9ad4ff"/><stop offset="0.48" stop-color="#1e78f0"/><stop offset="1" stop-color="#70c2ff"/>
+    </linearGradient>
+    <linearGradient id="biCyan" x1="0" y1="44" x2="0" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a8fff5"/><stop offset="0.48" stop-color="#05b8bd"/><stop offset="1" stop-color="#7cf7ec"/>
+    </linearGradient>
+    <linearGradient id="biCoral" x1="0" y1="68" x2="0" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb8ad"/><stop offset="0.48" stop-color="#eb4634"/><stop offset="1" stop-color="#ff8f80"/>
+    </linearGradient>
+    <linearGradient id="biOrchid" x1="0" y1="92" x2="0" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5c4ff"/><stop offset="0.48" stop-color="#b84ce8"/><stop offset="1" stop-color="#e79eff"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0.5, 3.6)" filter="url(#biSoft)" fill-opacity="0.38">
+    <rect x="16" y="20" width="76" height="18" rx="9" fill="#082a66"/>
+    <rect x="34" y="44" width="78" height="18" rx="9" fill="#04474a"/>
+    <rect x="16" y="68" width="76" height="18" rx="9" fill="#5e140c"/>
+    <rect x="34" y="92" width="78" height="18" rx="9" fill="#44105e"/>
+  </g>
+  <rect x="16" y="20" width="76" height="18" rx="9" fill="url(#biBlue)" stroke="#0d479e" stroke-width="0.8"/>
+  <rect x="21" y="21.5" width="66" height="6.5" rx="3.2" fill="#ffffff" fill-opacity="0.68"/>
+
+  <rect x="34" y="44" width="78" height="18" rx="9" fill="url(#biCyan)" stroke="#046b6e" stroke-width="0.8"/>
+  <rect x="39" y="45.5" width="68" height="6.5" rx="3.2" fill="#ffffff" fill-opacity="0.68"/>
+
+  <rect x="16" y="68" width="76" height="18" rx="9" fill="url(#biCoral)" stroke="#8c1f14" stroke-width="0.8"/>
+  <rect x="21" y="69.5" width="66" height="6.5" rx="3.2" fill="#ffffff" fill-opacity="0.68"/>
+
+  <rect x="34" y="92" width="78" height="18" rx="9" fill="url(#biOrchid)" stroke="#691b8f" stroke-width="0.8"/>
+  <rect x="39" y="93.5" width="68" height="6.5" rx="3.2" fill="#ffffff" fill-opacity="0.68"/>
+</svg>

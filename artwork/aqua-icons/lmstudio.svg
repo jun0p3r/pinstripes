@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 4 128 122">
+  <defs>
+    <filter id="lmSoft" x="-25%" y="-25%" width="150%" height="155%"><feGaussianBlur stdDeviation="2.6"/></filter>
+    <linearGradient id="lmGel" x1="64" y1="16" x2="64" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#9aa4ff"/>
+      <stop offset="0.45" stop-color="#5847eb"/>
+      <stop offset="0.82" stop-color="#6c52f5"/>
+      <stop offset="1.00" stop-color="#b8b4ff"/>
+    </linearGradient>
+    <linearGradient id="lmCore" x1="64" y1="16" x2="64" y2="116" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#eef0ff"/>
+      <stop offset="1.00" stop-color="#d4d8ff"/>
+    </linearGradient>
+  </defs>
+  <g transform="translate(0.5, 3.5)" filter="url(#lmSoft)">
+    <path d="M 25,17 H 81 A 7,7 0 0,1 81,31 H 25 A 7,7 0 0,1 25,17 Z M 43,34 H 105 A 7,7 0 0,1 105,48 H 43 A 7,7 0 0,1 43,34 Z M 31,51 H 93 A 7,7 0 0,1 93,65 H 31 A 7,7 0 0,1 31,51 Z M 17,68 H 79 A 7,7 0 0,1 79,82 H 17 A 7,7 0 0,1 17,68 Z M 31,85 H 93 A 7,7 0 0,1 93,99 H 31 A 7,7 0 0,1 31,85 Z M 59,102 H 109 A 7,7 0 0,1 109,116 H 59 A 7,7 0 0,1 59,102 Z" fill="#1a1259" fill-opacity="0.38"/>
+  </g>
+  <path d="M 25,17 H 81 A 7,7 0 0,1 81,31 H 25 A 7,7 0 0,1 25,17 Z M 43,34 H 105 A 7,7 0 0,1 105,48 H 43 A 7,7 0 0,1 43,34 Z M 31,51 H 93 A 7,7 0 0,1 93,65 H 31 A 7,7 0 0,1 31,51 Z M 17,68 H 79 A 7,7 0 0,1 79,82 H 17 A 7,7 0 0,1 17,68 Z M 31,85 H 93 A 7,7 0 0,1 93,99 H 31 A 7,7 0 0,1 31,85 Z M 59,102 H 109 A 7,7 0 0,1 109,116 H 59 A 7,7 0 0,1 59,102 Z" fill="url(#lmGel)" stroke="#2c1f99" stroke-width="0.75"/>
+  <!-- Inner luminous white-glass core pills matching LM Studio's dual-tone bars + top glossy strip -->
+  <g fill="url(#lmCore)" fill-opacity="0.90">
+    <rect x="34" y="18.2" width="36" height="11.6" rx="5.8"/>
+    <rect x="55" y="35.2" width="36" height="11.6" rx="5.8"/>
+    <rect x="44" y="52.2" width="36" height="11.6" rx="5.8"/>
+    <rect x="29" y="69.2" width="36" height="11.6" rx="5.8"/>
+    <rect x="44" y="86.2" width="36" height="11.6" rx="5.8"/>
+    <rect x="72" y="103.2" width="24" height="11.6" rx="5.8"/>
+  </g>
+  <!-- Crisp Aqua gel top lens highlight on each capsule -->
+  <g fill="#ffffff" fill-opacity="0.58">
+    <rect x="21" y="18" width="64" height="4.5" rx="2.2"/>
+    <rect x="39" y="35" width="70" height="4.5" rx="2.2"/>
+    <rect x="27" y="52" width="70" height="4.5" rx="2.2"/>
+    <rect x="13" y="69" width="70" height="4.5" rx="2.2"/>
+    <rect x="27" y="86" width="70" height="4.5" rx="2.2"/>
+    <rect x="55" y="103" width="58" height="4.5" rx="2.2"/>
+  </g>
+</svg>

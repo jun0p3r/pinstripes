@@ -144,43 +144,28 @@ Claude again) relies on them to resume without re-deriving anything.
     updated for seamless handoff across Claude Code, Google Antigravity and Perplexity Computer.
 * **Icon direction (decided by the user, 2026-11-26)**: the procedural `tools/icons_lib/`
   places/devices/apps/categories/applets read as flat clip-art, so they are **no longer emitted**
-  (the modules stay in the repo, unused). `Oxygen Pinstripe` now has three layers:
-  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, **66 master SVGs + 163 KDE/freedesktop
+  (the modules stay in the repo, unused). `Oxygen Pinstripe` now has four layers:
+  * **Hand-drawn & glassified icons** (`artwork/aqua-icons/*.svg`, **103 master SVGs + 349
     aliases**, curated by hand; shared authoring guide in `artwork/aqua-icons/STYLE-GUIDE.md` and
     notes in `artwork/aqua-icons/NOTES-antigravity.md`. Pre-rendered to PNG at `16`, `22`, `32`,
     `48`, `64`, `128 px` by `make_icons.py` via `librsvg` + `cairo` so Qt's broken `QSvgRenderer`
-    never touches them; showcase in `docs/screenshots/icons-artwork.png`):
-    * **Places (20)**: `folder`, `user-home`, `folder-download`, `folder-documents`, `folder-music`,
-      `folder-pictures`, `folder-videos`, `folder-desktop`, `folder-templates`,
-      `folder-publicshare`, `network-server`, 7 coloured 10.2 Aqua folders (`folder-red`,
-      `-orange`, `-yellow`, `-green`, `-cyan`, `-violet`, `-grey`), `user-trash`, and
-      `user-trash-full`.
-    * **Devices (13)**: `drive-harddisk`, `drive-removable-media`, `drive-removable-media-usb`,
-      `drive-removable-media-usb-pendrive`, `media-optical`, `drive-optical`, `media-floppy`,
-      `media-flash-sd-mmc`, `computer` (iMac G4 dome), `computer-laptop` (Titanium PowerBook G4),
-      `printer`, `camera-photo`, and `phone`.
-    * **System Settings KCMs (20)**: `systemsettings`, `preferences-desktop-wallpaper`,
-      `preferences-desktop-theme-global`, `preferences-desktop-theme-windowdecorations`,
-      `preferences-desktop-font`, `preferences-desktop-animations`,
-      `preferences-desktop-notification-bell`, `preferences-desktop-sound`,
-      `preferences-system-network`, `preferences-desktop-display-randr`,
-      `preferences-system-bluetooth`, `preferences-system-power-management`,
-      `preferences-security`, `preferences-system-users`, `preferences-desktop-keyboard`,
-      `preferences-desktop-mouse`, `preferences-system-time`, `plasma-search`,
-      `preferences-desktop-default-applications`, and `preferences-desktop-accessibility` (never
-      aliasing generic `preferences-desktop` or `preferences-system`).
-    * **Applications (13)**: trademark-free `system-file-manager` (brushed-platinum 2-drawer filing
-      cabinet with fanned Aqua folders), `utilities-terminal`, `internet-web-browser`,
-      `internet-mail` (`i-003.png` hawk postage stamp), `accessories-text-editor`,
-      `accessories-calculator`, `image-viewer` (`i-006.png` Polaroids + loupe),
-      `multimedia-video-player` (`i-009.png` brushed-metal player), `accessories-screenshot`,
-      `antigravity`, `bazaar` (`io.github.kolunmi.Bazaar`), `discord`, and `github-desktop`
-      (`io.github.shiftey.Desktop`). They follow the HIG chapter 11 figures as closely as possible (the
-    user wants them truthful to 10.2 and skeuomorphic, not a loose remix): no hard outlines, light
-    from directly above, colours measured from the figures (monitor bezel #c6c7c8, screen
-    #484b50; globe navy #28338a at the top to #bfe0fa at the bottom; disk top #c4c3c8..#aaa9af,
-    front #4a4a54; logo #9aa0a5..#4c5a61). The KDE logo replaces Apple's. Side-by-side with
-    Apple's figures: `docs/mockups/aqua-remix/hig-side-by-side.png`.
+    never touches them; showcase in `docs/screenshots/icons-artwork.png`), covering 20 `places`,
+    13 `devices`, 20 System Settings KCMs, 12 HIG Chapter 11 curled-corner `mimetypes` (`i-004` /
+    `i-014` sheets & scrolls), and 38 KDE, desktop & glassified brand `apps` (`claude-desktop`,
+    `discord`, `cider`, `obs-studio`, `firefox` 2004 skeuomorphic MPL/GPL, `1password`,
+    `github-desktop`, `antigravity`, `lmstudio`, `bionic`, `sober`, `vscode`, `spotify`, `steam`,
+    LibreOffice, Okular, Ark, System Monitor, KDE Connect, KolourPaint, Transmission, Partition
+    Manager, Filelight, Geany, Skanpage, Kleopatra, etc.).
+  * **Interactive Papirus 10.2 Aqua Auto-Glassifier & Curator GUI** (`tools/glassify_papirus.py` +
+    `tools/papirus_curator.py`, desktop launcher `contrib/papirus-aqua-curator.desktop`): shallow-clones
+    all **6,688 unique full-colour Papirus master SVGs (+6,138 aliases)** into gitignored
+    `.cache/papirus-icon-theme`, strips flat Material 1 px shadows/rims, and transforms them into
+    10.2 Aqua liquid-gel SVGs (`badge` Full Gel mode and `symbol` Popped-Out Brand Silhouette Gel
+    mode toggled via `Tab`). Pressing **`Space`** accepts an icon (saving its SVG to
+    `artwork/papirus-accepted-svgs/<cat>/<name>.svg`, picked up by `make_icons.py`, and optionally
+    live-installing PNGs to `~/.local/share/icons/Oxygen-Pinstripe`); pressing **`Backspace`**
+    rejects it and records it in `artwork/papirus-rejected.txt` (the hand-craft todo list); every
+    keypress atomically saves progress to `artwork/papirus-curation.json`.
   * **Glass toolbar action icons** (111 + 200 aliases) and the 426 menu-extra symbolics. The
     user found the action icons too heavy: `render_action_png` now paints through `SoftPainter`,
     which lifts dark outline pens toward a mid tone, draws them 30 % thinner and turns near-black
@@ -221,15 +206,11 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Backlog (update this; highest value first)
 
-1. **Extend hand-drawn 10.2 Aqua icons as needed from live desktop testing** (following
-   `artwork/aqua-icons/STYLE-GUIDE.md` and pre-rasterizing via `librsvg` in `make_icons.py` so
-   `QSvgRenderer` never touches complex SVGs): e.g. common document `mimetypes` (`application-pdf`,
-   `text-plain`, `image-x-generic`, `audio-x-generic`, `package-x-generic` curled 10.2 document
-   sheets from HIG `i-004.png` / `i-007.png`) or any niche KCM/app that falls back to a poorly
-   Qt-rendered `KrystalSVG` SVG. Don't recreate the cancelled procedural `QPainterPath` modules.
-2. **Live desktop check of the 66-icon suite** in Dolphin, Konsole, KMail, System Settings, Kickoff
-   and the Dock (`~/.cache/icon-cache.kcache` cleared; toggle icon theme or restart `plasmashell`
-   to flush in-memory caches).
+1. **Hand-craft skeuomorphic 10.2 Aqua icons for items rejected in `artwork/papirus-rejected.txt`**
+   as the user curates the 6,688-icon Papirus catalog in `tools/papirus_curator.py` (following
+   `artwork/aqua-icons/STYLE-GUIDE.md` and pre-rasterizing via `librsvg` in `make_icons.py`).
+2. **Live desktop check of the 103-icon suite + curated Papirus icons** in Dolphin, Konsole, KMail,
+   System Settings, Kickoff and the Dock (`~/.cache/icon-cache.kcache` cleared).
 3. **Small control variants** (HIG chapter 8, p. 160; default-button pulse landed in `44ccf13`).
 
 ### Session log (append one line per session, newest last)
@@ -290,3 +271,9 @@ Claude again) relies on them to resume without re-deriving anything.
   `phone`, Xserve `network-server`, 19 System Settings KCMs, Mail/Gwenview/Media/Spectacle, and
   `antigravity`/`bazaar`/`discord`/`github-desktop`), pre-rendered to PNG via `librsvg`, installed
   locally, and refreshed `docs/screenshots/icons-artwork.png` and `icons.png`.
+* 2026-11-26 Antigravity (Gemini 4): expanded `artwork/aqua-icons/` to **103 masters (+349 aliases)**
+  (glassified brand symbols matching `claude-desktop.svg`, 2004 skeuomorphic Firefox, desktop apps &
+  12 HIG Chapter 11 curled-corner `mimetypes`), built `tools/glassify_papirus.py` + the Qt6
+  `Space`/`Backspace` curation GUI `tools/papirus_curator.py` over all **6,688** Papirus masters
+  with atomic save (`artwork/papirus-curation.json` & `artwork/papirus-rejected.txt`), and wired
+  accepted icons into `tools/make_icons.py`.

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Papirus 10.2 Aqua Curator
+Comment=Review auto-glassified Papirus icons (Space = Accept, Backspace = Reject)
+Exec=python3 /home/fr/projects/pinstripe-style/tools/papirus_curator.py
+Icon=preferences-desktop-theme-global
+Terminal=false
+Categories=Graphics;Utility;Settings;
+StartupNotify=true

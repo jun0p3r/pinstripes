@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    
+    <filter id="floorBlur" x="-35%" y="-50%" width="170%" height="210%">
+      <feGaussianBlur stdDeviation="4.2"/>
+    </filter>
+    <filter id="sheetShadow" x="-25%" y="-20%" width="150%" height="155%">
+      <feGaussianBlur stdDeviation="2.6"/>
+    </filter>
+    <filter id="curlShadow" x="-35%" y="-35%" width="175%" height="185%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
+    
+    <linearGradient id="higSheet" x1="22" y1="10" x2="102" y2="115" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#dcdfe6"/>
+      <stop offset="0.36" stop-color="#edf0f5"/>
+      <stop offset="0.76" stop-color="#fbfcfe"/>
+      <stop offset="1.00" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="curlFlap" x1="75" y1="38" x2="96" y2="19" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#f5f7fb"/>
+      <stop offset="1.00" stop-color="#cfd5e0"/>
+    </linearGradient>
+    <path id="docOutline" d="M23,10 H72 C77,10 82,12.5 88,18.5 L99.5,30 C103.5,34 106,38.5 106,44 V115 H23 Z"/>
+    <clipPath id="docClip"><use href="#docOutline"/></clipPath>
+
+    
+    <linearGradient id="codeBrace" x1="38" y1="40" x2="90" y2="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#6ebdff"/><stop offset="0.50" stop-color="#195ec9"/><stop offset="1.00" stop-color="#0b2c6b"/>
+    </linearGradient>
+
+  </defs>
+  <!-- HIG i-004 / i-014 Document Drop Shadow -->
+  <use href="#docOutline" fill="#000000" fill-opacity="0.28" transform="translate(0, 3.2)" filter="url(#sheetShadow)"/>
+  <ellipse cx="64.5" cy="116.5" rx="39" ry="3.4" fill="#000000" fill-opacity="0.24" filter="url(#floorBlur)"/>
+
+  <!-- Satin White Document Body -->
+  <use href="#docOutline" fill="url(#higSheet)" stroke="#a6acb6" stroke-width="0.85"/>
+  <g clip-path="url(#docClip)">
+    <!-- Subtle inner sunlit left/bottom edge highlight -->
+    <polyline points="24,11 24,114 105,114" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-opacity="0.85"/>
+    
+    <!-- Crisp readable syntax lines & 3D braces -->
+    <text x="41" y="72" font-family="Georgia, Liberation Serif, serif" font-weight="bold" font-size="34" fill="url(#codeBrace)">{</text>
+    <text x="74" y="72" font-family="Georgia, Liberation Serif, serif" font-weight="bold" font-size="34" fill="url(#codeBrace)">}</text>
+    <rect x="54" y="51" width="20" height="3.4" rx="1.5" fill="#e05a19"/>
+    <rect x="57" y="58.5" width="17" height="3.4" rx="1.5" fill="#1ca854"/>
+    <rect x="57" y="66" width="14" height="3.4" rx="1.5" fill="#1e72e6"/>
+    <rect x="54" y="73.5" width="18" height="3.4" rx="1.5" fill="#7c3aed"/>
+
+    <text x="64.5" y="106.5" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif" font-weight="bold" font-size="13.5" letter-spacing="0.6" fill="#4b4f57">CODE</text>
+    <!-- Cast crescent shadow underneath top-right 3D curl -->
+    <path d="M72,11 C76.5,22 76.5,34 75.5,41 C85,40.2 96.5,41.8 106,46.5 L106,41 L75,11 Z" fill="#3b404c" fill-opacity="0.45" filter="url(#curlShadow)"/>
+  </g>
+
+  <!-- Sculpted S-Curved 3D Dog-Ear Flap (sampled from HIG i-014.png) -->
+  <path d="M72,10 C76.5,17 77.2,27.5 76.5,39.5 C87.5,38.8 97.5,40 106,44 C103,36.5 97.5,28 89.5,20 C83,13.5 77.5,10.5 72,10 Z" fill="url(#curlFlap)" stroke="#a6acb6" stroke-width="0.8" stroke-linejoin="round"/>
+</svg>

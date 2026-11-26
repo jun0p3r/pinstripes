@@ -2565,13 +2565,18 @@ ARTWORK_ICONS = (
     ("firefox", "apps", ("org.mozilla.firefox", "firefox-esr", "firefox-developer-edition", "firefox-nightly", "io.gitlab.librewolf-community", "librewolf")),
     ("claude-desktop", "apps", ("claude", "ai.anthropic.claude")),
     ("1password", "apps", ("com.onepassword.OnePassword", "org.kde.kwalletmanager5", "kwalletmanager", "org.gnome.seahorse.Application", "seahorse", "keepassxc", "org.keepassxc.KeePassXC", "bitwarden", "com.bitwarden.desktop")),
-    ("cider", "apps", ("Cider", "sh.cider.Cider", "org.kde.elisa", "elisa", "multimedia-audio-player", "rhythmbox", "org.gnome.Rhythmbox3", "spotify", "com.spotify.Client", "audacious", "strawberry", "lollypop")),
-    ("obs-studio", "apps", ("com.obsproject.Studio", "obs", "org.kde.kamoso", "kamoso", "org.gnome.Cheese", "cheese", "guvcview")),
-    ("libreoffice-writer", "apps", ("org.libreoffice.LibreOffice.writer", "libreoffice-oasis-text", "abiword", "com.abisource.AbiWord", "wps-office-wps", "onlyoffice-desktopeditors")),
-    ("libreoffice-calc", "apps", ("org.libreoffice.LibreOffice.calc", "libreoffice-oasis-spreadsheet", "gnumeric", "wps-office-et")),
-    ("libreoffice-impress", "apps", ("org.libreoffice.LibreOffice.impress", "libreoffice-oasis-presentation", "wps-office-wpp")),
-    ("okular", "apps", ("org.kde.okular", "evince", "org.gnome.Evince", "org.gnome.Papers", "atril", "xreader", "qpdfview", "pdf-viewer")),
-    ("ark", "apps", ("org.kde.ark", "file-roller", "org.gnome.FileRoller", "engrampa", "peazip", "xarchiver", "accessories-archiver")),
+    ("cider", "apps", ("Cider", "sh.cider.Cider")),
+    ("spotify", "apps", ("spotify-client", "com.spotify.Client")),
+    ("steam", "apps", ("com.valvesoftware.Steam", "steam-native")),
+    ("vscode", "apps", ("code", "visual-studio-code", "com.visualstudio.code", "code-oss", "vscodium", "com.vscodium.codium")),
+    ("sober", "apps", ("org.vinegarhq.Sober",)),
+    ("bionic", "apps", ()),
+    ("obs-studio", "apps", ("com.obsproject.Studio", "obs")),
+    ("libreoffice-writer", "apps", ("org.libreoffice.LibreOffice.writer", "libreoffice-oasis-text")),
+    ("libreoffice-calc", "apps", ("org.libreoffice.LibreOffice.calc", "libreoffice-oasis-spreadsheet")),
+    ("libreoffice-impress", "apps", ("org.libreoffice.LibreOffice.impress", "libreoffice-oasis-presentation")),
+    ("okular", "apps", ("org.kde.okular",)),
+    ("ark", "apps", ("org.kde.ark", "accessories-archiver")),
     ("drive-harddisk", "devices", ("drive-harddisk-root", "drive-harddisk-system", "hdd_unmount")),
     ("drive-removable-media", "devices", ("drive-harddisk-ieee1394", "drive-multidisk", "drive-partition", "drive-multipartition")),
     ("drive-removable-media-usb", "devices", ("drive-harddisk-usb",)),
@@ -2586,9 +2591,31 @@ ARTWORK_ICONS = (
     ("camera-photo", "devices", ("camera-digital", "camera-web", "camera-video")),
     ("phone", "devices", ("smartphone", "phone-apple-iphone", "multimedia-player")),
     ("network-server", "places", ("folder-cloud", "certificate-server")),
-    ("internet-web-browser", "apps", ("web-browser", "browser")),
-    ("accessories-text-editor", "apps", ("org.kde.kwrite", "kwrite", "org.kde.kate", "kate", "text-editor")),
-    ("accessories-calculator", "apps", ("org.kde.kcalc", "kcalc", "org.kde.kalk", "calc")),
+    ("internet-web-browser", "apps", ("web-browser", "browser", "chromium", "chromium-browser", "org.chromium.Chromium", "google-chrome", "com.google.Chrome", "brave-browser", "com.brave.Browser", "epiphany", "org.gnome.Epiphany", "vivaldi", "zen-browser")),
+    ("accessories-text-editor", "apps", ("org.kde.kwrite", "kwrite", "org.kde.kate", "kate", "text-editor", "org.gnome.TextEditor", "gedit", "org.gnome.gedit", "org.xfce.mousepad", "mousepad", "leafpad", "featherpad", "pluma")),
+    ("accessories-calculator", "apps", ("org.kde.kcalc", "kcalc", "org.kde.kalk", "calc", "org.gnome.Calculator", "gnome-calculator", "galculator", "qalculate")),
+    ("utilities-system-monitor", "apps", ("org.kde.plasma-systemmonitor", "ksysguard", "org.gnome.SystemMonitor", "gnome-system-monitor", "htop", "btop", "org.kde.kjournaldbrowser", "hwinfo", "kinfocenter", "org.kde.kinfocenter")),
+    ("kdeconnect", "apps", ("org.kde.kdeconnect", "org.kde.kdeconnect.app", "org.kde.kdeconnect.sms", "org.kde.kdeconnect.nonplasma", "gsconnect")),
+    ("kolourpaint", "apps", ("org.kde.kolourpaint", "gimp", "org.gimp.GIMP", "krita", "org.kde.krita", "pinta", "inkscape", "org.inkscape.Inkscape", "libreoffice-draw", "org.libreoffice.LibreOffice.draw", "mypaint")),
+    ("transmission", "apps", ("transmission-gtk", "transmission-qt", "com.transmissionbt.Transmission", "org.qbittorrent.qBittorrent", "qbittorrent", "org.kde.ktorrent", "ktorrent", "deluge", "fragments")),
+    ("partitionmanager", "apps", ("org.kde.partitionmanager", "gparted", "gnome-disks", "org.gnome.DiskUtility", "disks", "org.fedoraproject.MediaWriter", "mediawriter")),
+    ("filelight", "apps", ("org.kde.filelight", "baobab", "org.gnome.baobab", "qdirstat", "gdmap")),
+    ("geany", "apps", ("org.geany.Geany",)),
+    ("lmstudio", "apps", ("ai.lmstudio.LMStudio", "lm-studio", "ollama")),
+    ("skanpage", "apps", ("org.kde.skanpage", "skanlite", "org.kde.skanlite", "simple-scan", "org.gnome.SimpleScan", "scanner", "xsane")),
+    ("kleopatra", "apps", ("org.kde.kleopatra", "org.kde.kwatchgnupg", "gnupg", "gpa")),
+    ("text-x-generic", "mimetypes", ("text-plain", "application-x-zerosize", "text-x-readme", "text-x-log")),
+    ("application-pdf", "mimetypes", ("x-office-document-pdf", "application-x-pdf")),
+    ("image-x-generic", "mimetypes", ("image-png", "image-jpeg", "image-webp", "image-gif", "image-bmp", "image-tiff")),
+    ("image-svg+xml", "mimetypes", ("application-illustrator", "image-x-eps", "x-office-drawing")),
+    ("audio-x-generic", "mimetypes", ("audio-mpeg", "audio-mp3", "audio-flac", "audio-x-wav", "audio-ogg", "audio-mp4")),
+    ("video-x-generic", "mimetypes", ("video-mp4", "video-x-matroska", "video-webm", "video-x-msvideo", "video-quicktime")),
+    ("package-x-generic", "mimetypes", ("application-x-rpm", "application-x-deb", "application-vnd.flatpak", "application-x-appimage")),
+    ("application-x-archive", "mimetypes", ("application-zip", "application-x-compressed-tar", "application-x-bzip-compressed-tar", "application-x-xz-compressed-tar", "application-x-7z-compressed", "application-vnd.rar")),
+    ("text-html", "mimetypes", ("application-xhtml+xml", "text-xml", "application-xml")),
+    ("text-x-script", "mimetypes", ("application-x-shellscript", "text-x-makefile", "application-x-executable-script")),
+    ("text-x-python", "mimetypes", ("application-x-python-bytecode",)),
+    ("text-x-csrc", "mimetypes", ("text-x-c++src", "text-x-chdr", "text-x-rust", "text-javascript", "application-json", "text-markdown", "text-css")),
 )
 
 
@@ -2621,6 +2648,62 @@ def _emit_artwork(size_specs):
                 if not os.path.lexists(dst):
                     os.symlink(f"{canon}.png", dst)
     return dirs_out
+
+
+def _emit_accepted_papirus(size_specs):
+    """Emit any auto-glassified Papirus icons accepted via tools/papirus_curator.py
+    (artwork/papirus-accepted-svgs/<cat>/<name>.svg), without overriding hand-crafted ARTWORK_ICONS."""
+    acc_root = os.path.join(ROOT, "artwork", "papirus-accepted-svgs")
+    state_json = os.path.join(ROOT, "artwork", "papirus-curation.json")
+    os.makedirs(acc_root, exist_ok=True)
+
+    handcrafted = {(canon, cat) for canon, cat, _ in ARTWORK_ICONS}
+    # Load alias map if Papirus cache is available
+    alias_lookup = {}
+    if os.path.isfile(state_json):
+        try:
+            import glassify_papirus as gp
+            if os.path.isdir(gp.PAPIRUS_DIR):
+                for it in gp.scan_entire_papirus():
+                    alias_lookup[(it["category"], it["name"])] = it["aliases"]
+        except Exception:
+            pass
+
+    accepted_entries = []
+    for cat in sorted(os.listdir(acc_root)):
+        cat_d = os.path.join(acc_root, cat)
+        if not os.path.isdir(cat_d):
+            continue
+        for fn in sorted(os.listdir(cat_d)):
+            if not fn.endswith(".svg"):
+                continue
+            stem = fn[:-4]
+            if (stem, cat) in handcrafted:
+                continue
+            accepted_entries.append((stem, cat, os.path.join(cat_d, fn), alias_lookup.get((cat, stem), ())))
+
+    dirs_out = []
+    for sz_dir, sz, scale_f, kind, extra in size_specs:
+        # Pre-register core colour directories in index.theme so live-accepted icons in any category resolve immediately!
+        for base_cat in ("places", "apps", "devices", "mimetypes", "categories", "status", "emblems", "emotes"):
+            rel_base = f"{sz_dir}/{base_cat}"
+            if (rel_base, base_cat, sz, kind, extra) not in dirs_out:
+                os.makedirs(os.path.join(OUT, rel_base), exist_ok=True)
+                dirs_out.append((rel_base, base_cat, sz, kind, extra))
+        for stem, cat, svg_p, aliases in accepted_entries:
+            rel = f"{sz_dir}/{cat}"
+            if (rel, cat, sz, kind, extra) not in dirs_out:
+                dirs_out.append((rel, cat, sz, kind, extra))
+            d = os.path.join(OUT, rel)
+            os.makedirs(d, exist_ok=True)
+            dst_png = os.path.join(d, f"{stem}.png")
+            if not os.path.lexists(dst_png):
+                render_artwork_png(svg_p, sz * scale_f).write_to_png(dst_png)
+            for al in aliases:
+                al_dst = os.path.join(d, f"{al}.png")
+                if not os.path.lexists(al_dst):
+                    os.symlink(f"{stem}.png", al_dst)
+    return dirs_out, len(accepted_entries)
 
 
 def build():
@@ -2667,6 +2750,12 @@ def build():
         summary.append(f"{cat}:{len(items)}(+{n_al})")
     all_color_dirs.extend(_emit_artwork(RICHER_SIZES))
     summary.append(f"artwork:{len(ARTWORK_ICONS)}(+{sum(len(a) for *_, a in ARTWORK_ICONS)})")
+    pap_dirs, n_pap = _emit_accepted_papirus(RICHER_SIZES)
+    for pd in pap_dirs:
+        if pd not in all_color_dirs:
+            all_color_dirs.append(pd)
+    if n_pap:
+        summary.append(f"papirus_accepted:{n_pap}")
 
     # 2. Symbolic & panel menu-extra SVGs
     sym_icons = build_symbolic_icons()
