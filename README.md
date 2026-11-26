@@ -193,7 +193,6 @@ gtk4-broadwayd :8 & GDK_BACKEND=broadway BROADWAY_DISPLAY=:8 python3 tools/gtk_g
 * **Dock triangles:** a Plasma frame can't centre a single shape. The triangle sits in a stretched bottom edge between wide, transparent corners. It's sized for the default 44 px panel; on thicker panels it gets wider.
 * **GTK tabs** can't be centred, because GTK's CSS has no `margin: auto`. They stay left-aligned over the blue accent bar.
 * **libadwaita apps** (most GNOME apps) ignore GTK themes; only plain GTK 3 and GTK 4 apps pick up Pinstripe.
-* **Plasma sliders** use the progress-bar groove (Plasma draws both from one SVG), so the slider track is light grey rather than Aqua's dark one.
 
 ## License
 

@@ -74,13 +74,14 @@ def gel(p, rect, g, radius, shadow=True, lens_inset=None, lens_h=0.42):
     p.setBrush(body)
     p.drawRoundedRect(inner, max(0, radius - 1), max(0, radius - 1))
     inset = lens_inset if lens_inset is not None else min(inner.height() * 0.3, inner.width() * 0.18)
-    lens = QRectF(inner.left() + inset, inner.top() + 0.5, inner.width() - 2 * inset, inner.height() * lens_h)
-    lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
-    for pos, c in g["lens"]:
-        lg.setColorAt(pos, qc(c))
-    p.setBrush(lg)
-    lr = min(lens.height(), radius) * 0.95
-    p.drawRoundedRect(lens, lr, lr)
+    if lens_h > 0 and g.get("lens"):
+        lens = QRectF(inner.left() + inset, inner.top() + 0.5, inner.width() - 2 * inset, inner.height() * lens_h)
+        lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
+        for pos, c in g["lens"]:
+            lg.setColorAt(pos, qc(c))
+        p.setBrush(lg)
+        lr = min(lens.height(), radius) * 0.95
+        p.drawRoundedRect(lens, lr, lr)
     p.restore()
 
 
@@ -253,8 +254,53 @@ def tooltip(p, r):
 
 
 def button(g):
+    """Glassy Aqua cushion button (HIG Figures 7-14, 7-15): top specular lens, cool silver/blue
+    dip, curved side shading and upward bottom reflection above a crisp dark bottom rim."""
     def paint(p, r):
-        gel(p, r.adjusted(0.5, 0.5, -0.5, -2.5), g, 5.0, lens_inset=3)
+        rr = r.adjusted(0.5, 0.5, -0.5, -2.5)
+        rad = 4.5
+        p.save()
+        p.setRenderHint(QPainter.Antialiasing)
+        p.setPen(Qt.NoPen)
+        for dy, ex, a in ((2.0, 0.3, 16), (1.0, 0.0, 38)):
+            p.setBrush(QColor(0, 0, 0, a))
+            p.drawRoundedRect(rr.translated(0, dy).adjusted(-ex, 0, ex, 0), rad + ex, rad + ex)
+        clip = QPainterPath()
+        clip.addRoundedRect(rr, rad, rad)
+        body = QLinearGradient(rr.topLeft(), rr.bottomLeft())
+        for pos, c in g["body"]:
+            body.setColorAt(pos, qc(c))
+        p.setBrush(body)
+        p.drawPath(clip)
+        p.save()
+        p.setClipPath(clip)
+        sides = QLinearGradient(rr.topLeft(), rr.topRight())
+        edge = QColor(150, 158, 174, 58) if g is BEVEL_CLEAR else QColor(20, 60, 150, 58)
+        mid = QColor(edge.red(), edge.green(), edge.blue(), 0)
+        e = min(0.18, 6.0 / max(1.0, rr.width()))
+        sides.setColorAt(0.0, edge); sides.setColorAt(e, mid); sides.setColorAt(1.0 - e, mid); sides.setColorAt(1.0, edge)
+        p.setBrush(sides)
+        p.drawRect(rr)
+        glow = QRadialGradient(QPointF(rr.center().x(), rr.bottom()), max(rr.width() * 0.58, rr.height() * 0.45))
+        glow.setColorAt(0.0, QColor(255, 255, 255, 225) if g is BEVEL_CLEAR else QColor(180, 242, 255, 180))
+        glow.setColorAt(1.0, QColor(255, 255, 255, 0))
+        p.setBrush(glow)
+        p.drawRect(QRectF(rr.left(), rr.center().y(), rr.width(), rr.height() * 0.5))
+        lens_h = max(5.0, min(10.0, rr.height() * 0.34))
+        lens = QRectF(rr.left() + 2.5, rr.top() + 0.8, rr.width() - 5.0, lens_h)
+        lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
+        for pos, c in g["lens"]:
+            lg.setColorAt(pos, qc(c))
+        p.setBrush(lg)
+        p.drawRoundedRect(lens, min(lens_h * 0.5, rad - 1), min(lens_h * 0.5, rad - 1))
+        p.restore()
+        rim = QLinearGradient(rr.topLeft(), rr.bottomLeft())
+        rim.setColorAt(0.0, qc(g["rim"][0]))
+        rim.setColorAt(1.0, qc(g["rim"][1]))
+        p.setPen(QPen(QBrush(rim), 1.0))
+        p.setBrush(Qt.NoBrush)
+        p.drawPath(clip)
+        p.restore()
     return paint
 
 
@@ -426,33 +472,107 @@ def meter(g, horizontal, radius=3):
 TRACK = dict(rim=((130, 130, 134), (170, 170, 174)),
              body=[(0.0, (206, 206, 210)), (0.45, (214, 214, 218)), (0.55, (226, 226, 230)), (1.0, (250, 250, 252))],
              lens=[(0.0, (248, 248, 250)), (1.0, (230, 230, 234))])
-TAB_SELECTED = dict(rim=((0, 87, 174), (40, 110, 190)),
-                    body=[(0.0, (120, 184, 236)), (0.45, (86, 178, 235)), (0.70, (124, 207, 255)), (1.0, (172, 240, 255))],
-                    lens=[(0.0, (170, 210, 238)), (0.5, (150, 199, 231)), (1.0, (160, 205, 236))])
+# 16px large progress bar fill rows measured from HIG Figure 7-27 (no separate white lens)
+PROGRESS_ROWS = [(90, 135, 212), (130, 175, 229), (143, 187, 234), (144, 186, 236), (131, 178, 232),
+                 (110, 165, 229), (85, 150, 223), (74, 145, 227), (82, 156, 241), (95, 170, 251),
+                 (104, 180, 255), (116, 192, 254), (125, 202, 255), (131, 204, 255), (143, 196, 236)]
+PROGRESS = dict(rim=((47, 85, 150), (90, 140, 200)),
+                body=[(i / 14.0, c) for i, c in enumerate(PROGRESS_ROWS)],
+                lens=[])
+BEVEL_CLEAR = dict(rim=((152, 154, 160), (82, 84, 90)),
+                   body=[(0.00, (236, 238, 243)), (0.26, (228, 231, 238)), (0.32, (216, 220, 228)),
+                         (0.62, (226, 229, 235)), (0.86, (244, 246, 249)), (1.00, (255, 255, 255))],
+                   lens=[(0.00, (255, 255, 255)), (0.58, (250, 251, 254)), (1.00, (242, 245, 250))])
+TAB_SELECTED = dict(rim=((21, 43, 108), (0, 87, 174)),
+                    body=[(0.00, (136, 176, 226)), (0.24, (114, 158, 212)), (0.55, (148, 192, 238)),
+                          (0.82, (182, 224, 255)), (0.95, (206, 246, 255)), (1.00, (178, 222, 244))],
+                    lens=[(0.00, (198, 224, 248)), (0.50, (176, 208, 240)), (1.00, (152, 192, 232))])
+TAB_CLEAR = dict(rim=((118, 118, 122), (140, 140, 144)),
+                 body=[(0.00, (214, 215, 218)), (0.26, (194, 196, 200)), (0.60, (214, 216, 220)),
+                       (0.88, (242, 244, 246)), (1.00, (252, 253, 255))],
+                 lens=[(0.00, (250, 250, 252)), (0.50, (236, 237, 240)), (1.00, (220, 222, 226))])
+ACCENT_ROWS = [(0, 87, 174), (162, 215, 240), (168, 209, 238), (81, 176, 234), (121, 204, 255), (172, 239, 255)]
+ACCENT_SHADOW = [(98, 98, 98, 255), (147, 147, 147, 255), (226, 226, 226, 200)]
 
 
-def tab(side):
+def slider_groove(p, r):
+    """6px dark recessed slider capsule (HIG Figure 7-18); Aqua sliders have no highlight fill."""
+    rr = r.adjusted(0.5, 0.5, -0.5, -0.5)
+    rad = min(rr.width(), rr.height()) / 2
+    g = QLinearGradient(rr.topLeft(), rr.bottomLeft())
+    g.setColorAt(0.0, QColor(96, 96, 100))
+    g.setColorAt(0.45, QColor(140, 140, 144))
+    g.setColorAt(1.0, QColor(200, 200, 204))
+    p.setPen(QPen(QColor(84, 84, 88), 1.0))
+    p.setBrush(g)
+    p.drawRoundedRect(rr, rad, rad)
+
+
+def tab_accent_bar(p, r):
+    p.setRenderHint(QPainter.Antialiasing, False)
+    for i, c in enumerate(ACCENT_ROWS):
+        p.fillRect(QRectF(r.left(), r.top() + i, r.width(), 1), qc(c))
+    for i, c in enumerate(ACCENT_SHADOW):
+        p.fillRect(QRectF(r.left(), r.top() + 6 + i, r.width(), 1), QColor(*c))
+
+
+def tab(side, g=TAB_SELECTED):
     def paint(p, r):
-        rr = r.adjusted(0.5, 0.5, -0.5, -0.5)
+        # flush on the pane side so an active tab covers row 0 (#0057ae) of the accent strip 100%
+        if side == "north":
+            rr = r.adjusted(0.5, 0.5, -0.5, 0.0)
+        elif side == "south":
+            rr = r.adjusted(0.5, 0.0, -0.5, -0.5)
+        elif side == "west":
+            rr = r.adjusted(0.5, 0.5, 0.0, -0.5)
+        else:
+            rr = r.adjusted(0.0, 0.5, -0.5, -0.5)
         rad = 4.5
-        path = QPainterPath()
+        rim_path = QPainterPath()
         L, T, R, B = rr.left(), rr.top(), rr.right(), rr.bottom()
         if side == "north":
-            path.moveTo(L, B); path.lineTo(L, T + rad); path.quadTo(L, T, L + rad, T); path.lineTo(R - rad, T); path.quadTo(R, T, R, T + rad); path.lineTo(R, B)
+            rim_path.moveTo(L, B); rim_path.lineTo(L, T + rad); rim_path.quadTo(L, T, L + rad, T); rim_path.lineTo(R - rad, T); rim_path.quadTo(R, T, R, T + rad); rim_path.lineTo(R, B)
         elif side == "south":
-            path.moveTo(L, T); path.lineTo(L, B - rad); path.quadTo(L, B, L + rad, B); path.lineTo(R - rad, B); path.quadTo(R, B, R, B - rad); path.lineTo(R, T)
+            rim_path.moveTo(L, T); rim_path.lineTo(L, B - rad); rim_path.quadTo(L, B, L + rad, B); rim_path.lineTo(R - rad, B); rim_path.quadTo(R, B, R, B - rad); rim_path.lineTo(R, T)
         elif side == "west":
-            path.moveTo(R, T); path.lineTo(L + rad, T); path.quadTo(L, T, L, T + rad); path.lineTo(L, B - rad); path.quadTo(L, B, L + rad, B); path.lineTo(R, B)
+            rim_path.moveTo(R, T); rim_path.lineTo(L + rad, T); rim_path.quadTo(L, T, L, T + rad); rim_path.lineTo(L, B - rad); path_ok = True; rim_path.quadTo(L, B, L + rad, B); rim_path.lineTo(R, B)
         else:
-            path.moveTo(L, T); path.lineTo(R - rad, T); path.quadTo(R, T, R, T + rad); path.lineTo(R, B - rad); path.quadTo(R, B, R - rad, B); path.lineTo(L, B)
-        path.closeSubpath()
+            rim_path.moveTo(L, T); rim_path.lineTo(R - rad, T); rim_path.quadTo(R, T, R, T + rad); rim_path.lineTo(R, B - rad); rim_path.quadTo(R, B, R - rad, B); rim_path.lineTo(L, B)
+        fill_path = QPainterPath(rim_path)
+        fill_path.closeSubpath()
         vertical = side in ("west", "east")
+        rev = side in ("south", "east")
         body = QLinearGradient(rr.topLeft(), rr.topRight() if vertical else rr.bottomLeft())
-        for pos, c in TAB_SELECTED["body"]:
-            body.setColorAt(pos, qc(c))
-        p.setPen(QPen(qc(TAB_SELECTED["rim"][0]), 1.0))
+        for pos, c in g["body"]:
+            body.setColorAt(1.0 - pos if rev else pos, qc(c))
+        p.setPen(Qt.NoPen)
         p.setBrush(body)
-        p.drawPath(path)
+        p.drawPath(fill_path)
+        if g.get("lens"):
+            p.save()
+            p.setClipPath(fill_path)
+            th = rr.width() if vertical else rr.height()
+            lt = min(th * 0.32, 7.5)
+            if side == "north":
+                lens = QRectF(L + 2.5, T + 1.0, rr.width() - 5.0, lt)
+            elif side == "south":
+                lens = QRectF(L + 2.5, B - 1.0 - lt, rr.width() - 5.0, lt)
+            elif side == "west":
+                lens = QRectF(L + 1.0, T + 2.5, lt, rr.height() - 5.0)
+            else:
+                lens = QRectF(R - 1.0 - lt, T + 2.5, lt, rr.height() - 5.0)
+            lg = QLinearGradient(lens.topLeft(), lens.topRight() if vertical else lens.bottomLeft())
+            for pos, c in g["lens"]:
+                lg.setColorAt(1.0 - pos if rev else pos, qc(c))
+            p.setBrush(lg)
+            p.drawRoundedRect(lens, lt * 0.45, lt * 0.45)
+            p.restore()
+        rim = QLinearGradient(rr.topLeft(), rr.topRight() if vertical else rr.bottomLeft())
+        rim.setColorAt(0.0, qc(g["rim"][1 if rev else 0]))
+        rim.setColorAt(1.0, qc(g["rim"][0 if rev else 1]))
+        p.setPen(QPen(QBrush(rim), 1.0))
+        p.setBrush(Qt.NoBrush)
+        p.drawPath(rim_path)
     return paint
 
 
@@ -528,10 +648,10 @@ def build():
     s.add_frame("shadow", Frame(40, 40, 14, 14, 14, 14, shadow_frame(6, 2, 45)))
     s.write(os.path.join(OUT, "widgets", "tooltip.svg"))
 
-    # buttons: clear gel, coloured while pressed
+    # buttons: glassy clear cushion, coloured while pressed
     s = Svg()
-    for prefix, g in (("normal", CLEAR), ("pressed", BLUE)):
-        s.add_frame(prefix, Frame(40, 26, 7, 7, 7, 9, button(g)),
+    for prefix, g in (("normal", BEVEL_CLEAR), ("pressed", BLUE)):
+        s.add_frame(prefix, Frame(40, 26, 8, 8, 8, 9, button(g)),
                     [("hint-stretch-borders", 1), ("hint-top-margin", (1, 4)), ("hint-bottom-margin", (1, 6)),
                      ("hint-left-margin", (10, 1)), ("hint-right-margin", (10, 1))])
     s.add_frame("focus", Frame(26, 26, 7, 7, 7, 7, focus_ring))
@@ -568,9 +688,13 @@ def build():
     s.add_frame("mouseover-slider", Frame(15, 40, 7, 8, 7, 8, thumb(8)), [("hint-stretch-borders", 1)])
     s.write(os.path.join(OUT, "widgets", "scrollbar.svg"))
 
-    # slider handles: the round 15px Aqua thumb
+    # sliders: 6px dark recessed groove (no blue highlight fill) and the round 15px Aqua thumb
     s = Svg()
     s.add_rect("hint-handle-size", 17, 17)
+    groove_hints = [("hint-stretch-borders", 1), ("hint-top-margin", (1, 3)), ("hint-bottom-margin", (1, 3)),
+                    ("hint-left-margin", (3, 1)), ("hint-right-margin", (3, 1))]
+    s.add_frame("groove", Frame(12, 6, 3, 2, 3, 2, slider_groove), groove_hints)
+    s.add_frame("groove-highlight", Frame(12, 6, 3, 2, 3, 2, transparent), groove_hints)
     for o in ("horizontal", "vertical"):
         s.add_element(f"{o}-slider-handle", 17, 17, round_gel(BLUE, 15))
         s.add_element(f"{o}-slider-hover", 17, 17, round_gel(BLUE, 15))
@@ -578,22 +702,24 @@ def build():
         s.add_element(f"{o}-slider-shadow", 21, 21, soft_shadow(21))
     s.write(os.path.join(OUT, "widgets", "slider.svg"))
 
-    # progress bars and slider grooves: light gel track, blue gel fill
+    # progress bars (HIG Figure 7-27): 16px height, near-square ends (radius 2), measured fill rows
     for name, horizontal in (("bar_meter_horizontal", True), ("bar_meter_vertical", False)):
         s = Svg()
-        s.add_rect("hint-bar-size", 12, 12)
-        fw, fh = (30, 12) if horizontal else (12, 30)
-        s.add_frame("bar-inactive", Frame(fw, fh, 4, 4, 4, 4, meter(TRACK, horizontal)), [("hint-stretch-borders", 1)])
-        s.add_frame("bar-active", Frame(fw, fh, 4, 4, 4, 4, meter(BLUE, horizontal)), [("hint-stretch-borders", 1)])
+        s.add_rect("hint-bar-size", 16, 16)
+        fw, fh = (30, 16) if horizontal else (16, 30)
+        s.add_frame("bar-inactive", Frame(fw, fh, 4, 4, 4, 4, meter(TRACK, horizontal, radius=2)), [("hint-stretch-borders", 1)])
+        s.add_frame("bar-active", Frame(fw, fh, 4, 4, 4, 4, meter(PROGRESS, horizontal, radius=2)), [("hint-stretch-borders", 1)])
         s.write(os.path.join(OUT, "widgets", name + ".svg"))
 
-    # tab bars: the selected tab is the light Aqua tab gel, rounded away from the pane
+    # tab bars: the selected tab morphs seamlessly into the 6-row Aqua accent bar (open pane edge)
     s = Svg()
     for side in ("north", "south", "west", "east"):
-        w, h = (40, 23) if side in ("north", "south") else (23, 40)
-        s.add_frame(f"{side}-active-tab", Frame(w, h, 6, 6, 6, 6, tab(side)),
+        w, h = (40, 24) if side in ("north", "south") else (24, 40)
+        s.add_frame(f"{side}-active-tab", Frame(w, h, 6, 6, 6, 6, tab(side, TAB_SELECTED)),
                     [("hint-stretch-borders", 1), ("hint-top-margin", (1, 4)), ("hint-bottom-margin", (1, 4)),
                      ("hint-left-margin", (12, 1)), ("hint-right-margin", (12, 1))])
+    s.add_frame("north-tab", Frame(40, 23, 6, 6, 6, 6, tab("north", TAB_CLEAR)), [("hint-stretch-borders", 1)])
+    s.add_frame("north-tab-bar", Frame(32, 9, 2, 2, 2, 2, tab_accent_bar), [("hint-stretch-borders", 1)])
     s.write(os.path.join(OUT, "widgets", "tabbar.svg"))
 
     # radio buttons and check marks

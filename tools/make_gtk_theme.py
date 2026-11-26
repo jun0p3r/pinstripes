@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 import make_plasma_theme as mp  # noqa: E402
 from PySide6.QtCore import QPointF, QRectF, Qt  # noqa: E402
-from PySide6.QtGui import (QColor, QGuiApplication, QImage, QLinearGradient, QPainter,  # noqa: E402
+from PySide6.QtGui import (QBrush, QColor, QGuiApplication, QImage, QLinearGradient, QPainter,  # noqa: E402
                            QPainterPath, QPen, QRadialGradient)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -32,9 +32,7 @@ PRESSED = dict(rim=mp.BLUE["rim"], body=[(p, tuple(int(v * 0.85) for v in c)) fo
 POPUP_BODY = dict(rim=((102, 102, 106), (142, 142, 146)),
                   body=[(0.0, (232, 232, 234)), (0.45, (226, 226, 229)), (0.55, (222, 223, 226)), (0.85, (240, 240, 242)), (1.0, (252, 252, 253))],
                   lens=[(0.0, (255, 255, 255)), (1.0, (244, 244, 246))])
-TAB_CLEAR = dict(rim=((118, 118, 120), (140, 140, 142)),
-                 body=[(0.0, (214, 214, 216)), (0.45, (198, 198, 200)), (0.70, (206, 206, 208)), (1.0, (226, 226, 228))],
-                 lens=[(0.0, (232, 232, 234)), (0.5, (224, 224, 226)), (1.0, (214, 214, 216))])
+TAB_CLEAR = mp.TAB_CLEAR
 
 
 def save(name, w, h, paint):
@@ -145,40 +143,40 @@ def popup(cap_gel):
 
 def tab(g):
     def paint(p, r):
-        rr = r.adjusted(0.5, 0.5, -0.5, 0)
-        path = QPainterPath()
+        # extend fill all the way to r.bottom() so pixel row H-1 is 100% opaque when overlapping
+        # row 0 (#0057ae) of the accent strip
+        rr = QRectF(0.5, 0.5, r.width() - 1.0, r.height() - 0.5)
         rad = 4.5
-        path.moveTo(rr.left(), rr.bottom())
-        path.lineTo(rr.left(), rr.top() + rad)
-        path.quadTo(rr.left(), rr.top(), rr.left() + rad, rr.top())
-        path.lineTo(rr.right() - rad, rr.top())
-        path.quadTo(rr.right(), rr.top(), rr.right(), rr.top() + rad)
-        path.lineTo(rr.right(), rr.bottom())
-        path.closeSubpath()
-        body = QLinearGradient(rr.topLeft(), rr.bottomLeft())
+        rim_path = QPainterPath()
+        rim_path.moveTo(rr.left(), r.bottom())
+        rim_path.lineTo(rr.left(), rr.top() + rad)
+        rim_path.quadTo(rr.left(), rr.top(), rr.left() + rad, rr.top())
+        rim_path.lineTo(rr.right() - rad, rr.top())
+        rim_path.quadTo(rr.right(), rr.top(), rr.right(), rr.top() + rad)
+        rim_path.lineTo(rr.right(), r.bottom())
+        fill_path = QPainterPath(rim_path)
+        fill_path.closeSubpath()
+        body = QLinearGradient(rr.topLeft(), QPointF(rr.left(), r.bottom()))
         for pos, c in g["body"]:
             body.setColorAt(pos, mp.qc(c))
         p.setBrush(body)
         p.setPen(Qt.NoPen)
-        p.drawPath(path)
-        # lens over the top half, inset from the corners
-        lens = QRectF(rr.left() + 3, rr.top() + 1, rr.width() - 6, rr.height() * 0.42)
+        p.drawPath(fill_path)
+        # lens over the top ~30%, inset from the corners
+        lt = min(rr.height() * 0.32, 7.5)
+        lens = QRectF(rr.left() + 2.5, rr.top() + 1.0, rr.width() - 5.0, lt)
         lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
         for pos, c in g["lens"]:
             lg.setColorAt(pos, mp.qc(c))
         p.setBrush(lg)
-        p.drawRoundedRect(lens, 3, 3)
-        # rim on the sides and top only
-        rim = QPainterPath()
-        rim.moveTo(rr.left(), rr.bottom() + 0.5)
-        rim.lineTo(rr.left(), rr.top() + rad)
-        rim.quadTo(rr.left(), rr.top(), rr.left() + rad, rr.top())
-        rim.lineTo(rr.right() - rad, rr.top())
-        rim.quadTo(rr.right(), rr.top(), rr.right(), rr.top() + rad)
-        rim.lineTo(rr.right(), rr.bottom() + 0.5)
+        p.drawRoundedRect(lens, lt * 0.45, lt * 0.45)
+        # rim on the sides and top only (open at the bottom so it merges into the accent strip)
+        rim = QLinearGradient(rr.topLeft(), QPointF(rr.left(), r.bottom()))
+        rim.setColorAt(0.0, mp.qc(g["rim"][0]))
+        rim.setColorAt(1.0, mp.qc(g["rim"][1]))
         p.setBrush(Qt.NoBrush)
-        p.setPen(QPen(mp.qc(g["rim"][0]), 1.0))
-        p.drawPath(rim)
+        p.setPen(QPen(QBrush(rim), 1.0))
+        p.drawPath(rim_path)
     return paint
 
 
@@ -270,6 +268,18 @@ def progress(g):
     return paint
 
 
+def expander(opened, color):
+    """Disclosure triangle (HIG Figure 7-34): flat mid-grey (or white when selected), no outline."""
+    def paint(p, r):
+        c = r.center()
+        pts = [(-4.0, -2.2), (4.0, -2.2), (0.0, 3.2)] if opened else [(-2.2, -4.0), (3.2, 0.0), (-2.2, 4.0)]
+        p.setRenderHint(QPainter.Antialiasing, True)
+        p.setPen(Qt.NoPen)
+        p.setBrush(QColor(*color))
+        p.drawPolygon([QPointF(c.x() + x, c.y() + y) for x, y in pts])
+    return paint
+
+
 def arrow(direction):
     def paint(p, r):
         c = r.center()
@@ -285,9 +295,16 @@ def arrow(direction):
 def make_assets():
     for d in ("up", "down", "left", "right"):
         save(f"arrow-{d}", 9, 9, arrow(d))
+    for opened, st in ((False, "closed"), (True, "open")):
+        save(f"expander-{st}", 12, 12, expander(opened, (122, 122, 124)))
+        save(f"expander-{st}-selected", 12, 12, expander(opened, (255, 255, 255)))
     graphite_blue = dict(rim=tuple(GRAPHITE(c) for c in mp.BLUE["rim"]),
                          body=[(p_, GRAPHITE(c)) for p_, c in mp.BLUE["body"]],
                          lens=[(p_, GRAPHITE(c)) for p_, c in mp.BLUE["lens"]])
+    progress_backdrop = dict(
+        rim=((120, 120, 124), (156, 156, 160)),
+        body=[(p_, tuple(int(g * 0.65 + 225 * 0.35) for g in GRAPHITE(c))) for p_, c in mp.PROGRESS["body"]],
+        lens=[])
     save("button", 32, 22, capsule(mp.CLEAR))
     save("button-default", 32, 22, capsule(mp.BLUE))
     save("button-pressed", 32, 22, capsule(PRESSED))
@@ -300,8 +317,11 @@ def make_assets():
         save(f"{kind}-pressed", 18, 18, indicator(PRESSED, radio, "off"))
     save("popup", 48, 22, popup(mp.BLUE))
     save("popup-backdrop", 48, 22, popup(mp.CLEAR))
-    save("tab-active", 40, 23, tab(mp.TAB_SELECTED))
-    save("tab-active-backdrop", 40, 23, tab(graphite_blue | {"body": [(p_, GRAPHITE(c)) for p_, c in mp.TAB_SELECTED["body"]]}))
+    tab_backdrop = dict(rim=tuple(GRAPHITE(c) for c in mp.TAB_SELECTED["rim"]),
+                        body=[(p_, GRAPHITE(c)) for p_, c in mp.TAB_SELECTED["body"]],
+                        lens=[(p_, GRAPHITE(c)) for p_, c in mp.TAB_SELECTED["lens"]])
+    save("tab-active", 40, 24, tab(mp.TAB_SELECTED))
+    save("tab-active-backdrop", 40, 24, tab(tab_backdrop))
     save("tab", 40, 23, tab(TAB_CLEAR))
     save("thumb-v", 15, 40, thumb(True, True))
     save("thumb-h", 40, 15, thumb(False, True))
@@ -309,8 +329,8 @@ def make_assets():
     save("thumb-h-backdrop", 40, 15, thumb(False, False))
     save("knob", 17, 17, knob(mp.BLUE))
     save("knob-backdrop", 17, 17, knob(mp.CLEAR))
-    save("progress", 30, 16, progress(mp.BLUE))
-    save("progress-backdrop", 30, 16, progress(graphite_blue))
+    save("progress", 30, 16, progress(mp.PROGRESS))
+    save("progress-backdrop", 30, 16, progress(progress_backdrop))
     save("trough", 30, 16, progress(mp.TRACK))
     for k, name in enumerate(("close", "minimize", "maximize")):
         for state in ("normal", "hover", "backdrop"):
@@ -318,7 +338,7 @@ def make_assets():
     for name, (w, h, axis, a, b) in {
         "button": (32, 22, "h", 14, 14), "button-default": (32, 22, "h", 14, 14), "button-pressed": (32, 22, "h", 14, 14),
         "popup": (48, 22, "h", 9, 29), "popup-backdrop": (48, 22, "h", 9, 29),
-        "tab": (40, 23, "h", 12, 12), "tab-active": (40, 23, "h", 12, 12), "tab-active-backdrop": (40, 23, "h", 12, 12),
+        "tab": (40, 23, "h", 12, 12), "tab-active": (40, 24, "h", 12, 12), "tab-active-backdrop": (40, 24, "h", 12, 12),
         "progress": (30, 16, "h", 4, 4), "progress-backdrop": (30, 16, "h", 4, 4), "trough": (30, 16, "h", 4, 4),
         "thumb-v": (15, 40, "v", 7, 8), "thumb-v-backdrop": (15, 40, "v", 7, 8),
         "thumb-h": (40, 15, "h", 7, 8), "thumb-h-backdrop": (40, 15, "h", 7, 8),
@@ -348,6 +368,9 @@ SELECTION_LAYOUT = ("background-size: 100% 11px, 100% 8px, 100% 4px; background-
 ACCENT = ("linear-gradient(to bottom, #0057ae 0px, #0057ae 1px, #a2d7f0 1px, #a2d7f0 2px, #a8d1ee 2px, #a8d1ee 3px, "
           "#51b0ea 3px, #51b0ea 4px, #79ccff 4px, #79ccff 5px, #acefff 5px, #acefff 6px, #626262 6px, #626262 7px, "
           "#939393 7px, #939393 8px, rgba(226,226,226,0.9) 8px, rgba(226,226,226,0.9) 9px)")
+ACCENT_BACKDROP = ("linear-gradient(to bottom, #4b5563 0px, #4b5563 1px, #c0c8d2 1px, #c0c8d2 2px, #bfc6d0 2px, #bfc6d0 3px, "
+                   "#96a2b2 3px, #96a2b2 4px, #b2bcc9 4px, #b2bcc9 5px, #d2dbe6 5px, #d2dbe6 6px, #626262 6px, #626262 7px, "
+                   "#939393 7px, #939393 8px, rgba(226,226,226,0.9) 8px, rgba(226,226,226,0.9) 9px)")
 
 
 def common_css(v):
@@ -416,11 +439,74 @@ button {{
 button:active, button:checked {{
   {three("button-pressed")}
 }}
-button.suggested-action, button.default, button.default:focus {{
+button:disabled {{ opacity: 0.55; color: #555555; }}
+button.destructive-action {{ {three("button")} color: #a01010; }}
+
+/* glassy bevel buttons (HIG Figures 7-14, 7-15): curved glass cushion with a top specular lens,
+   cool silver mid-tone dip, bottom white reflection and dark bottom rim; smoked glass when toggled */
+button.image-button,
+button.bevel,
+.linked > button {{
+  min-height: 20px;
+  min-width: 20px;
+  padding: 4px 6px;
+  border-image: none;
+  border: 1px solid #888a90;
+  border-top-color: #989aa0;
+  border-bottom-color: #52545a;
+  border-radius: 4.5px;
+  background-image:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.96) 0%, rgba(250, 251, 254, 0.84) 58%, rgba(242, 245, 250, 0.56) 100%),
+    radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.50) 52%, rgba(255, 255, 255, 0.0) 82%),
+    linear-gradient(to right, rgba(150, 158, 174, 0.23) 0px, rgba(150, 158, 174, 0.0) 6px, rgba(150, 158, 174, 0.0) calc(100% - 6px), rgba(150, 158, 174, 0.23) 100%),
+    linear-gradient(to bottom, #ecedf2 0%, #e4e7ee 26%, #d8dce4 32%, #e2e5eb 62%, #f4f5f8 86%, #ffffff 100%);
+  background-size: calc(100% - 5px) 30%, 100% 45%, 100% 100%, 100% 100%;
+  background-position: center 1px, center bottom, left top, left top;
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.90), 0 1px 1.5px rgba(0, 0, 0, 0.18);
+  animation: none;
+}}
+button.image-button:active,
+button.image-button:checked,
+button.bevel:active,
+button.bevel:checked,
+.linked > button:active,
+.linked > button:checked {{
+  border-color: #62646a;
+  border-top-color: #686a70;
+  border-bottom-color: #4a4c52;
+  background-image:
+    linear-gradient(to bottom, rgba(240, 244, 250, 0.84) 0%, rgba(216, 220, 228, 0.58) 60%, rgba(198, 202, 210, 0.34) 100%),
+    radial-gradient(ellipse at 50% 100%, rgba(238, 242, 250, 0.62) 0%, rgba(238, 242, 250, 0.24) 52%, rgba(238, 242, 250, 0.0) 82%),
+    linear-gradient(to right, rgba(86, 92, 106, 0.24) 0px, rgba(86, 92, 106, 0.0) 6px, rgba(86, 92, 106, 0.0) calc(100% - 6px), rgba(86, 92, 106, 0.24) 100%),
+    linear-gradient(to bottom, #c0c3ca 0%, #b8bcc4 26%, #a6aab2 32%, #acb0b8 65%, #c0c4cb 88%, #d0d4da 100%);
+  background-size: calc(100% - 5px) 30%, 100% 45%, 100% 100%, 100% 100%;
+  background-position: center 1px, center bottom, left top, left top;
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+  background-clip: padding-box;
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.45), 0 1px 1px rgba(0, 0, 0, 0.14);
+}}
+button.bevel label,
+button.image-button.text-button:not(.flat) label {{
+  font-size: 77%;
+}}
+
+button.suggested-action, button.default, button.default:focus, .linked > button.suggested-action {{
+  padding: 0 13px;
+  border-width: 0;
+  border-radius: 0;
+  box-shadow: none;
   {three("button-default")}
   animation: pinstripe-pulse 1.7s ease-in-out infinite;
 }}
-button.suggested-action:backdrop, button.default:backdrop {{
+button.suggested-action:backdrop, button.default:backdrop, .linked > button.suggested-action:backdrop {{
+  padding: 0 13px;
+  border-width: 0;
+  border-radius: 0;
+  box-shadow: none;
   {three("button")}
   animation: none;
 }}
@@ -429,10 +515,16 @@ button.suggested-action:backdrop, button.default:backdrop {{
   50% {{ opacity: 0.78; }}
   100% {{ opacity: 1.0; }}
 }}
-button:disabled {{ opacity: 0.55; color: #555555; }}
-button.destructive-action {{ {three("button")} color: #a01010; }}
 
-/* flat and toolbar buttons: no frame in Aqua, darken while pressed */
+/* flat and toolbar buttons: no frame in Aqua, darken while pressed; small system font labels */
+toolbar, .toolbar {{
+  background: none;
+  border-bottom: 1px solid #a3a3a3;
+  padding: 4px 6px;
+}}
+toolbar button label, .toolbar button label {{
+  font-size: 84.6%;
+}}
 button.flat, headerbar button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize), toolbar button, .toolbar button,
 button.image-button.flat, popover button.flat, button.circular.flat {{
   border-image: none;
@@ -440,12 +532,13 @@ button.image-button.flat, popover button.flat, button.circular.flat {{
   padding: 3px 6px;
   border-radius: 4px;
   background: transparent;
+  box-shadow: none;
   animation: none;
 }}
 button.flat > *, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize) > *, toolbar button > *, .toolbar button > * {{ margin: 0; }}
 button.flat:hover, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):hover {{ background-color: rgba(0, 0, 0, 0.06); }}
 button.flat:active, button.flat:checked, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):active, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):checked,
-toolbar button:active, toolbar button:checked {{ background-color: rgba(0, 0, 0, 0.18); }}
+toolbar button:active, toolbar button:checked, .toolbar button:active, .toolbar button:checked {{ background-color: rgba(0, 0, 0, 0.18); }}
 
 /* ---------------- check boxes and radio buttons: 18x18 including the shadow */
 {check} {{
@@ -516,14 +609,108 @@ treeview.view header button, columnview > header > button {{
   border-image: none;
   border-width: 0 1px 1px 0;
   border-style: solid;
-  border-color: #a8a8ac #b4b4b8 #96969a #b4b4b8;
+  border-color: #a8a8ac #96969a #96969a #b4b4b8;
   padding: 1px 6px;
   min-height: 16px;
+  font-size: 84.6%;
+  font-weight: normal;
+  color: #000000;
   background-image: linear-gradient(to bottom, #ffffff 0%, #f2f2f2 50%, #eaeaec 51%, #f6f6f8 100%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-origin: padding-box;
+  background-clip: padding-box;
+  box-shadow: none;
   animation: none;
 }}
+treeview.view header button label, columnview > header > button label {{
+  font-size: 100%;
+  font-weight: normal;
+  color: #000000;
+}}
+treeview.view header button.sorted, columnview > header > button.sorted {{
+  border-color: #0057ae #286ebe #286ebe #286ebe;
+  background-image: linear-gradient(to bottom, #aad2ee 0%, #96c7e7 22%, #a0cdec 42%, #56b2eb 45%, #7ccfff 70%, #acf0ff 100%);
+}}
 treeview.view header button > *, columnview > header > button > * {{ margin: 0; }}
-frame > border, .frame, scrolledwindow > undershoot, viewport.frame {{ border: 1px solid #969696; border-top-color: #76767a; }}
+{"treeview.view header button sort-indicator, columnview > header > button sort-indicator { min-width: 9px; min-height: 9px; }" if v == 4 else "treeview.view header button arrow { min-width: 9px; min-height: 9px; }"}
+{"treeview.view header button sort-indicator.descending, columnview > header > button sort-indicator.descending" if v == 4 else "treeview.view header button arrow.down"} {{ -gtk-icon-source: {scaled("arrow-down")}; }}
+{"treeview.view header button sort-indicator.ascending, columnview > header > button sort-indicator.ascending" if v == 4 else "treeview.view header button arrow.up"} {{ -gtk-icon-source: {scaled("arrow-up")}; }}
+
+/* disclosure triangles (HIG Figure 7-34): flat mid-grey without outline, white on selected rows */
+treeview.view.expander {{
+  min-width: 12px;
+  min-height: 12px;
+  color: #7a7a7c;
+  -gtk-icon-source: {scaled("expander-closed")};
+  {"-gtk-icon-transform: none;" if v == 3 else ""}
+}}
+treeview.view.expander:checked {{ -gtk-icon-source: {scaled("expander-open")}; }}
+treeview.view.expander:selected {{ -gtk-icon-source: {scaled("expander-closed-selected")}; color: #ffffff; }}
+treeview.view.expander:checked:selected {{ -gtk-icon-source: {scaled("expander-open-selected")}; color: #ffffff; }}
+treeview.view.expander:selected:backdrop {{ -gtk-icon-source: {scaled("expander-closed")}; color: #7a7a7c; }}
+treeview.view.expander:checked:selected:backdrop {{ -gtk-icon-source: {scaled("expander-open")}; color: #7a7a7c; }}
+{"expander-widget > box > title > expander, treeexpander > expander" if v == 4 else "expander arrow, expander > title > arrow"} {{
+  min-width: 12px;
+  min-height: 12px;
+  -gtk-icon-source: {scaled("expander-closed")};
+  {"-gtk-icon-transform: none;" if v == 3 else ""}
+}}
+{"expander-widget > box > title > expander:checked, treeexpander > expander:checked" if v == 4 else "expander arrow:checked, expander > title > arrow:checked"} {{
+  -gtk-icon-source: {scaled("expander-open")};
+}}
+
+/* list and scroll frames vs group boxes (HIG Figures 8-2 to 8-4) */
+scrolledwindow.frame, scrolledwindow > border, viewport.frame {{
+  border: 1px solid #96969a;
+  border-top-color: #76767a;
+  border-radius: 0;
+}}
+frame > label {{
+  font-size: 84.6%;
+  font-weight: normal;
+  color: #000000;
+  padding: 0 4px;
+  margin: 0 6px;
+}}
+{"""frame {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 12px 12px 12px;
+  background-image:
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.24) 0px, rgba(0, 0, 0, 0.24) 1px, rgba(255, 255, 255, 0.78) 1px, rgba(255, 255, 255, 0.78) 2px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.78) 0px, rgba(255, 255, 255, 0.78) 1px, rgba(0, 0, 0, 0.24) 1px, rgba(0, 0, 0, 0.24) 2px),
+    linear-gradient(to right, rgba(0, 0, 0, 0.24) 0px, rgba(0, 0, 0, 0.24) 1px, rgba(255, 255, 255, 0.78) 1px, rgba(255, 255, 255, 0.78) 2px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.78) 0px, rgba(255, 255, 255, 0.78) 1px, rgba(0, 0, 0, 0.24) 1px, rgba(0, 0, 0, 0.24) 2px);
+  background-position: left 8px, left bottom, left 8px, right 8px;
+  background-size: 100% 2px, 100% 2px, 2px calc(100% - 8px), 2px calc(100% - 8px);
+  background-repeat: no-repeat;
+}
+frame > label {
+  margin: 0 0 6px -4px;
+  padding: 0 4px;
+  background-color: #eeeeee;
+  background-image: """ + STRIPES + """;
+}
+frame.flat {
+  background: none;
+  padding: 0;
+}""" if v == 4 else """frame {
+  background: none;
+  border: none;
+}
+frame > border {
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  border-radius: 0;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.78);
+  padding: 10px 12px 12px 12px;
+}
+frame.flat > border {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}"""}
 
 /* ---------------- scroll bars: 15px white cylinder, gel thumb, arrows together */
 scrollbar {{
@@ -580,7 +767,7 @@ scrollbar button.right {{ -gtk-icon-source: {scaled("arrow-right")}; }}
 }""" if v == 3 else ""}
 
 /* spin buttons: Aqua little arrows rather than big +/- buttons */
-spinbutton:not(.vertical) button, spinbutton > button {{
+spinbutton:not(.vertical) button, spinbutton > button, spinbutton > button.image-button {{
   min-width: 15px; min-height: 18px;
   padding: 0;
   border-image: none;
@@ -588,6 +775,7 @@ spinbutton:not(.vertical) button, spinbutton > button {{
   border-style: solid;
   border-color: #b4b4b8;
   border-radius: 0;
+  box-shadow: none;
   background-image: linear-gradient(to bottom, #fdfdfe, #e4e6ea 45%, #d6dade 50%, #f6f7f9);
   animation: none;
   color: #222226;
@@ -650,6 +838,9 @@ notebook > header.top {{
   background-position: bottom;
   background-repeat: no-repeat;
 }}
+notebook > header.top:backdrop {{
+  background-image: {ACCENT_BACKDROP};
+}}
 notebook > header tab {{
   min-height: 23px;
   padding: 0 11px;
@@ -660,8 +851,20 @@ notebook > header tab {{
   {three("tab")}
   color: #000000;
 }}
-notebook > header tab:checked {{ {three("tab-active")} }}
-notebook > header tab:checked:backdrop {{ {three("tab-active-backdrop")} }}
+/* extend 1px down over row 0 (#0057ae) of the accent strip so the selected tab morphs into it;
+   keep padding-bottom 0 so the content-box middle slice reaches the bottom pixel row too */
+notebook > header tab:checked {{
+  min-height: 24px;
+  margin: 0 -1px -1px 0;
+  padding: 0 11px;
+  {three("tab-active")}
+}}
+notebook > header tab:checked:backdrop {{
+  min-height: 24px;
+  margin: 0 -1px -1px 0;
+  padding: 0 11px;
+  {three("tab-active-backdrop")}
+}}
 notebook > stack:not(:only-child) {{
   background-color: rgba(0, 0, 0, 0.03);
   background-image: linear-gradient(to bottom, rgba(0,0,0,0.16), rgba(0,0,0,0) 6px);
@@ -707,23 +910,26 @@ combobox button.combo, dropdown > button, button.dropdown, combobox > box > butt
   padding: 0 28px 0 8px;
   border-style: solid;
   border-width: 0;
+  border-radius: 0;
+  box-shadow: none;
   {three("popup")}
   animation: none;
 }}
 combobox button.combo:backdrop, dropdown > button:backdrop {{ {three("popup-backdrop")} }}
 combobox arrow, dropdown arrow {{ -gtk-icon-source: none; min-width: 0; min-height: 0; }}
 
-/* ---------------- tooltips: Aqua's pale yellow */
+/* ---------------- tooltips (help tags, HIG Figure 14-1): pale yellow, 11pt small system font */
 tooltip, tooltip.background {{
   background-color: rgba(255, 255, 199, 0.96);
   background-image: none;
-  border: 1px solid rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.38);
   border-radius: 0;
   color: #000000;
-  padding: 2px 5px;
+  font-size: 84.6%;
+  padding: 2px 6px;
   box-shadow: none;
 }}
-tooltip * {{ color: #000000; }}
+tooltip * {{ color: #000000; padding: 0; margin: 0; }}
 
 /* ---------------- switches: a little gel track */
 switch {{
@@ -750,14 +956,14 @@ headerbar, .titlebar {{
   box-shadow: none;
   color: #000000;
 }}
-headerbar:backdrop, .titlebar:backdrop {{ color: #787878; }}
+headerbar:backdrop, .titlebar:backdrop {{ color: #8b8b8b; }}
 headerbar .title, .titlebar .title {{ font-weight: normal; }}
-{titlebuttons} {{
-  min-width: 16px; min-height: 16px;
-  padding: 0; margin: 0 2px;
+{titlebuttons}, {titlebuttons}.image-button {{
+  min-width: 15px; min-height: 15px;
+  padding: 0; margin: 0 3.5px;
   border: none; border-image: none;
   background-color: transparent;
-  background-size: 16px 16px;
+  background-size: 15px 15px;
   background-repeat: no-repeat;
   background-position: center;
   color: transparent;

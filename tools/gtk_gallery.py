@@ -99,15 +99,23 @@ def build():
     nb.append_page(Gtk.Label(label="Second page"), Gtk.Label(label="Tab 2"))
     add(body, nb)
 
-    # list with selection and a scroll bar
-    store = Gtk.ListStore(str, str)
-    for n in ("Applications", "Documents", "Library", "Movies", "Music", "Pictures", "Public", "Sites", "Desktop", "Downloads"):
-        store.append([n, "Today, 7:17 PM"])
+    # list with disclosure triangles, small-font headings, selection and a scroll bar
+    store = Gtk.TreeStore(str, str)
+    for n in ("Applications", "Documents", "Library", "Movies", "Music", "Pictures", "Public", "Sites"):
+        it = store.append(None, [n, "Today, 7:17 PM"])
+        store.append(it, ["Item", "Yesterday"])
     tree = Gtk.TreeView(model=store)
     for i, t in enumerate(("Name", "Date Modified")):
         col = Gtk.TreeViewColumn(t, Gtk.CellRendererText(), text=i)
         col.set_expand(i == 0)
+        if i == 0:
+            col.set_sort_indicator(True)
+            col.set_sort_order(Gtk.SortType.ASCENDING)
         tree.append_column(col)
+        if i == 0:
+            hb = col.get_button()
+            hb.get_style_context().add_class("sorted") if VERSION == "3" else hb.add_css_class("sorted")
+    tree.expand_row(Gtk.TreePath.new_from_string("1"), False)
     tree.get_selection().select_path(Gtk.TreePath.new_from_string("2"))
     sw = Gtk.ScrolledWindow()
     sw.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.ALWAYS)
@@ -119,8 +127,55 @@ def build():
         sw.add(tree)
         sw.set_shadow_type(Gtk.ShadowType.IN)
         sw.set_overlay_scrolling(False)
-    sw.set_size_request(-1, 120)
+    sw.set_size_request(-1, 125)
     add(body, sw)
+
+    # group box (frame with label) and matte bevel buttons (icon above label)
+    lower = Gtk.Box(spacing=12)
+    frame = Gtk.Frame(label="Icon Arrangement")
+    frame.set_hexpand(True)
+    fbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+    if VERSION == "4":
+        g1 = Gtk.CheckButton(label="None")
+        g2 = Gtk.CheckButton(label="Always snap to grid")
+        g2.set_group(g1)
+        g2.set_active(True)
+        frame.set_child(fbox)
+    else:
+        g1 = Gtk.RadioButton(label="None")
+        g2 = Gtk.RadioButton.new_with_label_from_widget(g1, "Always snap to grid")
+        g2.set_active(True)
+        frame.add(fbox)
+    add(fbox, g1)
+    add(fbox, g2)
+    if VERSION == "4":
+        lower.append(frame)
+    else:
+        lower.pack_start(frame, True, True, 0)
+
+    bevels = Gtk.Box(spacing=8)
+    bevels.set_valign(Gtk.Align.CENTER)
+    for idx, (ic, lbl) in enumerate((("printer", "Print"), ("preferences-system", "Settings"))):
+        b = Gtk.ToggleButton()
+        b.set_active(idx == 1)
+        b.set_size_request(58, 57)
+        vb = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+        vb.set_valign(Gtk.Align.CENTER)
+        if VERSION == "4":
+            b.add_css_class("bevel")
+            img = Gtk.Image.new_from_icon_name(ic)
+            img.set_pixel_size(32)
+            b.set_child(vb)
+        else:
+            b.get_style_context().add_class("bevel")
+            img = Gtk.Image.new_from_icon_name(ic, Gtk.IconSize.DND)
+            img.set_pixel_size(32)
+            b.add(vb)
+        add(vb, img)
+        add(vb, Gtk.Label(label=lbl))
+        add(bevels, b)
+    add(lower, bevels)
+    add(body, lower)
 
     buttons = Gtk.Box(spacing=12)
     buttons.set_halign(Gtk.Align.END)
@@ -136,7 +191,7 @@ def build():
 def save_gtk3(widget):
     win = Gtk.OffscreenWindow()
     win.add(widget)
-    win.set_default_size(470, 440)
+    win.set_default_size(470, 520)
     win.show_all()
 
     def grab():
@@ -153,7 +208,7 @@ def save_gtk4(widget):
     win = Gtk.Window()
     win.set_titlebar(HEADER)
     win.set_child(widget)
-    win.set_default_size(470, 440)
+    win.set_default_size(470, 520)
     win.present()
 
     def grab():

@@ -133,53 +133,55 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Current state (update this)
 
-*Last updated: 2026-11-26 by Claude Code (Opus 5.5).*
+*Last updated: 2026-11-26 by Google Antigravity (Gemini 4).*
 
 * Repos: `~/projects/pinstripe-style` (this one) and `~/projects/oxygen-traffic-lights` (window
   decoration). Both have local commits only; nothing is pushed and no remote is set.
-* Installed on the user's machine:
-  * Widget style plugin: `/usr/lib64/qt6/plugins/styles/pinstripe.so`, **one build behind**:
-    the progress-bar gel, flat disclosure triangles, menu shortcut column, KWindowShadow drop
-    shadows, matte bevel buttons, group boxes and alerts are built in `build-system/` but not
-    installed yet. To install (user runs it, needs sudo):
-    `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so`
-    then restart apps.
-  * Plasma style, GTK theme, icons, colour schemes, kstyle themerc: `~/.local/share/...`
-    (current; reinstall with `cmake --install build` after regenerating). After installing the
-    Plasma style switch to another style and back; after icons, remove
-    `~/.cache/icon-cache.kcache`.
-  * Decoration: `/usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so`
-    (current, with the pinstriped title bar).
-* Recently matched to the HIG: group boxes (Fig. 8-2..8-4), alerts (6-2), small system and
-  label fonts, list rows (7-32), menus (chapter 4) with the 10.2 shortcut column, bevel buttons
-  (7-14), sorted header (7-34), disclosure triangles (7-34), 16 px progress bar with measured
-  fill rows (7-27), Plasma busy spinner, menu/tooltip drop shadows.
+* Installed on the user's machine (**built, awaiting install**):
+  * Widget style plugin (`build-system/bin/styles/pinstripe.so`), Plasma style, GTK theme,
+    colour schemes (`build/`), and window decoration
+    (`../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so`) all have new
+    commits ready to install:
+    * User-local themes/colours: `cmake --install build` (then switch Plasma style away and back
+      to reload cached SVGs).
+    * System-wide Qt style + KWin decoration (user runs, needs sudo):
+      `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so && sudo install -Dm755 ../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so /usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so && dbus-send --session --type=method_call --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure`
+      then restart apps.
+* Recently matched to the HIG:
+  * **Glassy bevel buttons** (Figures 7-14, 7-15): curved glass cushions with top specular lens,
+    cool silver mid-tone dip, side pillow shading, upward bottom reflection and dark `#52545a`
+    bottom rim (smoked glass with lens when pressed/toggled) across Qt, Plasma and GTK.
+  * **Selected tabs morphing into the accent strip** (Figures 7-23, 8-2): selected tabs extend
+    1 px over row 0 (`#0057ae`) of the 6-row blue strip with no bottom rim so the icy-cyan tab
+    base flows seamlessly into `#a2d7f0..#acefff` in Qt (all 4 sides + standalone `QTabBar`),
+    Plasma (`tabbar.svg`) and GTK 3 / GTK 4.
+  * **Progress & sliders**: fixed a lens double-band artifact in `GelKind::Progress`; Plasma
+    `bar_meter_*` updated to 16 px with the 15 measured rows and `slider.svg` given its own 6 px
+    dark recessed `groove` (no longer sharing the progress track).
+  * **GTK 3 & GTK 4 parity**: 16 px progress rows, flat grey disclosure triangles (white on
+    selected rows), etched group boxes (`frame` with title on the border in 11 pt small font),
+    small-font list headings with blue sorted header, 11 pt help tags and borderless toolbars.
+  * **Toolbars, help tags & title bar**: Qt 32 px Finder-style toolbars with `#a3a3a3` bottom
+    divider, 6 px / 2 px help-tag padding (`PM_ToolTipLabelFrameWidth = 1`), and 22 px title bar
+    in `../oxygen-traffic-lights` with 13 px traffic lights 9 px in at a 22 px pitch and
+    `#8b8b8b` (`139, 139, 139`) inactive title ink.
 * Known limits (not bugs to fix): QML/Kirigami pages can't show pinstripes; GTK tabs can't be
   centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes.
 
 ### Backlog (update this; highest value first)
 
-1. **Install the latest widget style build** (command above) and check on the live desktop:
-   menus should show drop shadows; group boxes, bevel buttons and progress bars as in
-   `docs/screenshots/`. Ask the user for a screenshot if you can't take one.
-2. **Plasma progress bar / slider groove** (`bar_meter_*` in `tools/make_plasma_theme.py`): use
-   the measured progress rows (see `GelKind::Progress` in `style/gel.cpp`) and 16 px height for
-   progress; the slider groove shares the SVG, so check sliders after.
-3. **GTK parity with this round**: progress fill rows, flat grey disclosure triangles
-   (treeview expander), matte bevel buttons (`button.image-button` / toolbar buttons with
-   frames), group boxes are `frame` with a label: etched line, title on the border, small
-   font; list headings in the small font.
-4. **Help tags (tooltips)**: compare with HIG/10.2 artwork (pale yellow, black text, 11 pt);
-   check padding and the shadow in the live session.
-5. **Toolbars**: HIG chapter 7 "Toolbars" and chapter 11 icon guidance; Finder-style
-   icon-above-label toolbars with no frames, small system font labels (labels done in Qt).
-6. **Window title bar** (`../oxygen-traffic-lights`): compare height, title font (13 pt) and
-   the traffic-light spacing with HIG Figure 5-x window anatomy; inactive title text colour.
-7. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
-   can be found; currently a 1.7 s cosine between full colour and a paler gel.
-8. **Sheets and drawers** (HIG chapter 5): Qt has no direct equivalent; skip unless the user
+1. **Install the latest builds** (commands above) and verify on the live desktop: menu/tooltip
+   drop shadows, 22 px title bar, glassy bevel buttons, seamless tab-to-strip join, Plasma
+   sliders/progress and GTK apps. Ask the user for a live screenshot to inspect.
+2. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
+   can be found; currently a 1.7 s cosine between full colour and a paler gel in Qt (and
+   opacity pulse in GTK).
+3. **Small control variants** (HIG chapter 8, p. 160): check whether Qt `Qt::WA_MacSmallSize` /
+   `QSizePolicy` small controls (10 px small progress bar, 11 pt small push/pop-up buttons) show
+   up in any KDE apps and are worth styling.
+4. **Sheets and drawers** (HIG chapter 5): Qt has no direct equivalent; skip unless the user
    asks.
-9. Keep `docs/preview.html` and the README screenshots current after each round.
+5. Keep `docs/preview.html` and `docs/screenshots/` current after each round.
 
 ### Session log (append one line per session, newest last)
 
@@ -188,3 +190,8 @@ Claude again) relies on them to resume without re-deriving anything.
 * 2026-11-26 Claude Code: HIG rounds 1-3 (group boxes, alerts, fonts, menus, shadows, bevel
   buttons, progress, disclosure triangles, spinner); AGENTS.md handoff. Stopped at ~91 % of
   the 5-hour usage limit.
+* 2026-11-26 Antigravity (Gemini 4): glassy bevel buttons and seamless selected-tab-to-strip
+  join across Qt, Plasma and GTK; Plasma 16 px progress + 6 px dark slider groove; GTK 3/4 HIG
+  parity (progress rows, expanders, group boxes, sorted small-font headers); Finder toolbars,
+  help-tag padding, 22 px title bar + 13 px traffic lights in `oxygen-traffic-lights`; refreshed
+  all previews.

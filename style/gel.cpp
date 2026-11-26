@@ -110,21 +110,31 @@ Gel gel(GelKind kind, Appearance appearance)
     case GelKind::Clear:
         return clearGel();
     case GelKind::TabSelected: {
-        // sampled column of the selected "Fonts" tab
+        // sampled column of the selected "Mouse" / "Appearance" tab (HIG Figures 7-23, 8-2):
+        // sky-blue top lens, dip at ~24%, brightening to icy cyan where it merges into the accent strip
         Gel g;
-        g.rimTop = QColor(0, 87, 174);
-        g.rimBottom = QColor(40, 110, 190);
-        g.body = stops({{0.0, QColor(120, 184, 236)}, {0.45, QColor(86, 178, 235)}, {0.70, QColor(124, 207, 255)}, {1.0, QColor(172, 240, 255)}});
-        g.lens = stops({{0.0, QColor(170, 210, 238)}, {0.5, QColor(150, 199, 231)}, {1.0, QColor(160, 205, 236)}});
+        g.rimTop = QColor(21, 43, 108);
+        g.rimBottom = QColor(0, 87, 174);
+        g.body = stops({{0.00, QColor(136, 176, 226)},
+                        {0.24, QColor(114, 158, 212)},
+                        {0.55, QColor(148, 192, 238)},
+                        {0.82, QColor(182, 224, 255)},
+                        {0.95, QColor(206, 246, 255)},
+                        {1.00, QColor(178, 222, 244)}});
+        g.lens = stops({{0.00, QColor(198, 224, 248)}, {0.50, QColor(176, 208, 240)}, {1.00, QColor(152, 192, 232)}});
         return tint(g, appearance);
     }
     case GelKind::TabClear: {
-        // sampled column of the unselected "Appearance" tab
+        // sampled column of the unselected "Trackpad" / "Settings" tab (HIG Figures 7-23, 8-2)
         Gel g;
-        g.rimTop = QColor(118, 118, 120);
-        g.rimBottom = QColor(140, 140, 142);
-        g.body = stops({{0.0, QColor(214, 214, 216)}, {0.45, QColor(198, 198, 200)}, {0.70, QColor(206, 206, 208)}, {1.0, QColor(226, 226, 228)}});
-        g.lens = stops({{0.0, QColor(232, 232, 234)}, {0.5, QColor(224, 224, 226)}, {1.0, QColor(214, 214, 216)}});
+        g.rimTop = QColor(118, 118, 122);
+        g.rimBottom = QColor(140, 140, 144);
+        g.body = stops({{0.00, QColor(214, 215, 218)},
+                        {0.26, QColor(194, 196, 200)},
+                        {0.60, QColor(214, 216, 220)},
+                        {0.88, QColor(242, 244, 246)},
+                        {1.00, QColor(252, 253, 255)}});
+        g.lens = stops({{0.00, QColor(250, 250, 252)}, {0.50, QColor(236, 237, 240)}, {1.00, QColor(220, 222, 226)}});
         return g;
     }
     case GelKind::Progress: {
@@ -138,7 +148,6 @@ Gel gel(GelKind kind, Appearance appearance)
                                         {104, 180, 255}, {116, 192, 254}, {125, 202, 255}, {131, 204, 255}, {143, 196, 236}};
         for (int i = 0; i < 15; ++i)
             g.body.append({i / 14.0, QColor(rows[i][0], rows[i][1], rows[i][2])});
-        g.lens = g.body;
         return tint(g, appearance);
     }
     case GelKind::Thumb: {
@@ -228,7 +237,7 @@ void paintGel(QPainter *p, const QRectF &rect, const Gel &g, const GelOptions &o
     }
 
     // lens: inset from the end caps, rounded at its ends, sharp lower edge
-    {
+    if (o.lensHeight > 0 && !g.lens.isEmpty()) {
         const qreal len = vertical ? inner.height() : inner.width();
         const qreal th = vertical ? inner.width() : inner.height();
         const qreal lensTh = th * o.lensHeight;

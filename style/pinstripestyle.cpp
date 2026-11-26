@@ -222,39 +222,94 @@ void paintTitleBar(QPainter *p, const QRect &r, bool active)
     p->restore();
 }
 
-// Aqua bevel button (HIG Figure 7-14): matte, not gel. A soft white-to-light-grey face, a fine
-// grey border that is darker at the bottom, small rounded corners, a faint shadow; pressed or
-// toggled on, the face turns a darker grey.
-void paintBevel(QPainter *p, const QRectF &rect, bool down, qreal radius = 3.0)
+// Aqua bevel button (HIG Figures 7-14, 7-15): a curved glass cushion with a crisp top specular
+// lens, cool silver mid-tone dip, bright white bottom reflection, and dark charcoal bottom rim.
+// Pressed or toggled on, it becomes a smoked-grey glass cushion that keeps its lens and glow.
+void paintBevel(QPainter *p, const QRectF &rect, bool down, qreal radius = 4.5)
 {
     p->save();
     p->setRenderHint(QPainter::Antialiasing, true);
     const QRectF r = rect.adjusted(0.5, 0.5, -0.5, -1.5);
     p->setPen(Qt::NoPen);
-    p->setBrush(QColor(0, 0, 0, 28));
+    p->setBrush(QColor(0, 0, 0, 16));
+    p->drawRoundedRect(r.translated(0, 2.0).adjusted(-0.3, 0, 0.3, 0), radius + 0.3, radius + 0.3);
+    p->setBrush(QColor(0, 0, 0, 38));
     p->drawRoundedRect(r.translated(0, 1.0), radius, radius);
+
     QLinearGradient face(r.topLeft(), r.bottomLeft());
     if (down) {
-        face.setColorAt(0.0, QColor(196, 196, 198));
-        face.setColorAt(1.0, QColor(214, 214, 216));
+        face.setColorAt(0.00, QColor(192, 195, 202));
+        face.setColorAt(0.26, QColor(184, 188, 196));
+        face.setColorAt(0.32, QColor(166, 170, 178));
+        face.setColorAt(0.65, QColor(172, 176, 184));
+        face.setColorAt(0.88, QColor(192, 196, 203));
+        face.setColorAt(1.00, QColor(208, 212, 218));
     } else {
-        face.setColorAt(0.0, QColor(252, 252, 252));
-        face.setColorAt(0.5, QColor(242, 242, 243));
-        face.setColorAt(1.0, QColor(229, 229, 231));
+        face.setColorAt(0.00, QColor(236, 238, 243));
+        face.setColorAt(0.26, QColor(228, 231, 238));
+        face.setColorAt(0.32, QColor(216, 220, 228));
+        face.setColorAt(0.62, QColor(226, 229, 235));
+        face.setColorAt(0.86, QColor(244, 246, 249));
+        face.setColorAt(1.00, QColor(255, 255, 255));
     }
-    QLinearGradient rim(r.topLeft(), r.bottomLeft());
-    rim.setColorAt(0.0, QColor(150, 150, 152));
-    rim.setColorAt(1.0, QColor(118, 118, 120));
-    p->setPen(QPen(QBrush(rim), 1.0));
+    QPainterPath clip;
+    clip.addRoundedRect(r, radius, radius);
     p->setBrush(face);
-    p->drawRoundedRect(r, radius, radius);
-    if (!down) {
-        p->setPen(QColor(255, 255, 255, 200));
-        p->drawLine(QPointF(r.left() + radius, r.top() + 1), QPointF(r.right() - radius, r.top() + 1));
-    } else {
-        p->setPen(QColor(0, 0, 0, 40));
-        p->drawLine(QPointF(r.left() + radius, r.top() + 1), QPointF(r.right() - radius, r.top() + 1));
+    p->drawPath(clip);
+
+    p->save();
+    p->setClipPath(clip, Qt::IntersectClip);
+    // curved glass pillow shading along the left and right edges
+    {
+        QLinearGradient sides(r.topLeft(), r.topRight());
+        const QColor edge = down ? QColor(86, 92, 106, 62) : QColor(150, 158, 174, 58);
+        const QColor mid(edge.red(), edge.green(), edge.blue(), 0);
+        const qreal w = qMax<qreal>(1.0, r.width());
+        const qreal e = qMin<qreal>(0.18, 6.0 / w);
+        sides.setColorAt(0.0, edge);
+        sides.setColorAt(e, mid);
+        sides.setColorAt(1.0 - e, mid);
+        sides.setColorAt(1.0, edge);
+        p->setBrush(sides);
+        p->drawRect(r);
     }
+    // upward bounce reflection at the bottom of the glass cushion
+    {
+        QRadialGradient glow(QPointF(r.center().x(), r.bottom()), qMax(r.width() * 0.58, r.height() * 0.45));
+        glow.setColorAt(0.0, down ? QColor(238, 242, 250, 155) : QColor(255, 255, 255, 235));
+        glow.setColorAt(0.55, down ? QColor(238, 242, 250, 55) : QColor(255, 255, 255, 110));
+        glow.setColorAt(1.0, QColor(255, 255, 255, 0));
+        p->setBrush(glow);
+        p->drawRect(QRectF(r.left(), r.center().y(), r.width(), r.height() * 0.5));
+    }
+    // rounded top specular lens with a crisp lower edge
+    {
+        const qreal lensH = qBound<qreal>(5.0, r.height() * 0.30, 11.0);
+        const qreal inset = qMin<qreal>(2.5, r.width() * 0.12);
+        const QRectF lens(r.left() + inset, r.top() + 0.8, r.width() - 2 * inset, lensH);
+        QLinearGradient lg(lens.topLeft(), lens.bottomLeft());
+        if (down) {
+            lg.setColorAt(0.0, QColor(240, 244, 250, 215));
+            lg.setColorAt(0.6, QColor(216, 220, 228, 155));
+            lg.setColorAt(1.0, QColor(198, 202, 210, 95));
+        } else {
+            lg.setColorAt(0.0, QColor(255, 255, 255, 248));
+            lg.setColorAt(0.58, QColor(250, 251, 254, 215));
+            lg.setColorAt(1.0, QColor(242, 245, 250, 165));
+        }
+        p->setBrush(lg);
+        const qreal lr = qMin(lensH * 0.5, qMax<qreal>(1.5, radius - 1.0));
+        p->drawRoundedRect(lens, lr, lr);
+    }
+    p->restore();
+
+    QLinearGradient rim(r.topLeft(), r.bottomLeft());
+    rim.setColorAt(0.0, down ? QColor(104, 106, 112) : QColor(152, 154, 160));
+    rim.setColorAt(0.8, down ? QColor(88, 90, 96) : QColor(124, 126, 132));
+    rim.setColorAt(1.0, down ? QColor(74, 76, 82) : QColor(82, 84, 90));
+    p->setPen(QPen(QBrush(rim), 1.0));
+    p->setBrush(Qt::NoBrush);
+    p->drawPath(clip);
     p->restore();
 }
 }
@@ -317,9 +372,11 @@ void Style::polish(QWidget *w)
     // menus, help tags and pop-up lists cast the soft Aqua drop shadow
     if (qobject_cast<QMenu *>(w) || w->inherits("QTipLabel") || w->inherits("QComboBoxPrivateContainer"))
         w->installEventFilter(this);
-    // help tags use the small system font (HIG chapter 10)
-    if (w->inherits("QTipLabel"))
+    // help tags use the small system font (HIG chapter 10) and 6px horizontal padding (Figure 14-1)
+    if (w->inherits("QTipLabel")) {
         w->setFont(smallFont(w->font()));
+        w->setContentsMargins(4, 0, 4, 0);
+    }
     // alerts: message in the emphasized system font, informative text in the small system font
     if (auto *label = qobject_cast<QLabel *>(w)) {
         if (label->objectName() == QLatin1String("qt_msgbox_label")) {
@@ -469,11 +526,12 @@ void Style::paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &r,
 
     p->setClipPath(path, Qt::IntersectClip);
     const qreal th = vertical ? r.width() : r.height();
-    QRectF lens = vertical ? QRectF(r.left() + 1, r.top() + 3, th * 0.42, r.height() - 6) : QRectF(r.left() + 3, r.top() + 1, r.width() - 6, th * 0.42);
+    const qreal lensTh = qMin<qreal>(th * 0.32, 7.5);
+    QRectF lens = vertical ? QRectF(r.left() + 1, r.top() + 2.5, lensTh, r.height() - 5) : QRectF(r.left() + 2.5, r.top() + 1, r.width() - 5, lensTh);
     QLinearGradient lg(lens.topLeft(), vertical ? lens.topRight() : lens.bottomLeft());
     lg.setStops(g.lens);
     p->setBrush(lg);
-    const qreal lr = th * 0.3;
+    const qreal lr = lensTh * 0.45;
     p->drawRoundedRect(lens, lr, lr);
     p->setClipping(false);
 
@@ -767,8 +825,35 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
         p->restore();
         return;
     }
-    case PE_FrameTabBarBase:
+    case PE_FrameTabBarBase: {
+        // standalone QTabBar (not inside a QTabWidget): draw the 6-row Aqua accent bar along its base
+        if (w && qobject_cast<const QTabWidget *>(w->parentWidget()))
+            return;
+        const auto *tbb = qstyleoption_cast<const QStyleOptionTabBarBase *>(opt);
+        if (!tbb)
+            return;
+        const Side side = tabSide(tbb->shape);
+        static const QColor blueRows[6] = {QColor(0, 87, 174), QColor(162, 215, 240), QColor(168, 209, 238), QColor(81, 176, 234), QColor(121, 204, 255), QColor(172, 239, 255)};
+        const bool active = windowActive(opt);
+        p->save();
+        for (int i = 0; i < 6 && i < (vertical(side) ? opt->rect.width() : opt->rect.height()); ++i) {
+            QColor c = blueRows[i];
+            if (!active)
+                c = graphite(c).lighter(115);
+            else if (m_appearance == Appearance::Graphite)
+                c = graphite(c);
+            QRect rr;
+            switch (side) {
+            case Side::North: rr = QRect(opt->rect.left(), opt->rect.top() + i, opt->rect.width(), 1); break;
+            case Side::South: rr = QRect(opt->rect.left(), opt->rect.bottom() - i, opt->rect.width(), 1); break;
+            case Side::West: rr = QRect(opt->rect.left() + i, opt->rect.top(), 1, opt->rect.height()); break;
+            case Side::East: rr = QRect(opt->rect.right() - i, opt->rect.top(), 1, opt->rect.height()); break;
+            }
+            p->fillRect(rr, c);
+        }
+        p->restore();
         return;
+    }
 
     case PE_PanelMenu:
     case PE_FrameMenu: {
@@ -919,8 +1004,26 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             break;
         const Side side = tabSide(t->shape);
         const bool selected = t->state & State_Selected;
-        const QRectF r = QRectF(t->rect).adjusted(0.5, 0.5, -0.5, -0.5);
-        // rounded corners on the side away from the pane
+        // PM_TabBarBaseOverlap is 1 so the selected tab extends over row 0 (#0057ae) of the accent
+        // strip and morphs seamlessly into rows 1..5; unselected tabs step back 1px so the #0057ae
+        // top rim runs continuously beneath them (HIG Figures 7-23, 8-2).
+        QRect tr = t->rect;
+        if (!selected) {
+            switch (side) {
+            case Side::North: tr.adjust(0, 0, 0, -1); break;
+            case Side::South: tr.adjust(0, 1, 0, 0); break;
+            case Side::West: tr.adjust(0, 0, -1, 0); break;
+            case Side::East: tr.adjust(1, 0, 0, 0); break;
+            }
+        }
+        QRectF r(tr);
+        switch (side) {
+        case Side::North: r.adjust(0.5, 0.5, -0.5, 0.0); break;
+        case Side::South: r.adjust(0.5, 0.0, -0.5, -0.5); break;
+        case Side::West: r.adjust(0.5, 0.5, 0.0, -0.5); break;
+        case Side::East: r.adjust(0.0, 0.5, -0.5, -0.5); break;
+        }
+        // rounded corners on the side away from the pane; open on the pane side
         QPainterPath path;
         const qreal rad = 4.5;
         switch (side) {
@@ -964,6 +1067,43 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             g = windowActive(opt) ? gel(GelKind::TabSelected, m_appearance) : gel(GelKind::TabSelected, Appearance::Graphite);
         else if (t->state & State_Sunken)
             g = gel(GelKind::Pressed, m_appearance);
+        if (side == Side::South || side == Side::East) {
+            // keep the lens on the outer edge and the cyan merge at the accent-bar edge
+            QGradientStops revBody, revLens;
+            for (int i = g.body.size() - 1; i >= 0; --i)
+                revBody.append({1.0 - g.body[i].first, g.body[i].second});
+            for (int i = g.lens.size() - 1; i >= 0; --i)
+                revLens.append({1.0 - g.lens[i].first, g.lens[i].second});
+            g.body = revBody;
+            g.lens = revLens;
+            qSwap(g.rimTop, g.rimBottom);
+            p->save();
+            p->setRenderHint(QPainter::Antialiasing, true);
+            p->setPen(Qt::NoPen);
+            const bool vert = vertical(side);
+            QLinearGradient body(r.topLeft(), vert ? r.topRight() : r.bottomLeft());
+            body.setStops(g.body);
+            p->setBrush(body);
+            p->drawPath(path);
+            p->setClipPath(path, Qt::IntersectClip);
+            const qreal th = vert ? r.width() : r.height();
+            const qreal lensTh = qMin<qreal>(th * 0.32, 7.5);
+            const QRectF lens = vert ? QRectF(r.right() - 1 - lensTh, r.top() + 2.5, lensTh, r.height() - 5)
+                                     : QRectF(r.left() + 2.5, r.bottom() - 1 - lensTh, r.width() - 5, lensTh);
+            QLinearGradient lg(lens.topLeft(), vert ? lens.topRight() : lens.bottomLeft());
+            lg.setStops(g.lens);
+            p->setBrush(lg);
+            p->drawRoundedRect(lens, lensTh * 0.45, lensTh * 0.45);
+            p->setClipping(false);
+            QLinearGradient rim(r.topLeft(), vert ? r.topRight() : r.bottomLeft());
+            rim.setColorAt(0, g.rimTop);
+            rim.setColorAt(1, g.rimBottom);
+            p->setBrush(Qt::NoBrush);
+            p->setPen(QPen(QBrush(rim), 1.0));
+            p->drawPath(rimPath);
+            p->restore();
+            return;
+        }
         paintGelPath(p, path, r, g, vertical(side) ? Qt::Vertical : Qt::Horizontal, false, &rimPath);
         return;
     }
@@ -1231,8 +1371,18 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         break;
     }
 
-    case CE_ToolBar:
+    case CE_ToolBar: {
+        // Finder/Mail top toolbars sit on the window pinstripes with a 1px #a3a3a3 divider below
+        // (sampled from HIG Figures 7-16 and 11-19)
+        const auto *tb = qstyleoption_cast<const QStyleOptionToolBar *>(opt);
+        if (tb && (tb->state & State_Horizontal) && tb->toolBarArea == Qt::TopToolBarArea) {
+            p->save();
+            p->setPen(windowActive(opt) ? QColor(163, 163, 163) : QColor(190, 190, 190));
+            p->drawLine(tb->rect.bottomLeft(), tb->rect.bottomRight());
+            p->restore();
+        }
         return;
+    }
 
     case CE_DockWidgetTitle: {
         // like a 10.2 utility window: a short pinstriped title bar, small centred title
@@ -1242,10 +1392,8 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         paintTitleBar(p, d->rect, windowActive(opt));
         if (!d->title.isEmpty()) {
             p->save();
-            QFont f = p->font();
-            f.setPointSizeF(f.pointSizeF() * 0.9);
-            p->setFont(f);
-            p->setPen(windowActive(opt) ? Ink : QColor(120, 120, 120));
+            p->setFont(smallFont(p->font()));
+            p->setPen(windowActive(opt) ? Ink : QColor(139, 139, 139));
             p->drawText(d->rect, Qt::AlignCenter, p->fontMetrics().elidedText(d->title, Qt::ElideRight, d->rect.width() - 50));
             p->restore();
         }
@@ -1661,7 +1809,7 @@ void Style::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt
             }
             const QRect label = subControlRect(cc, t, SC_TitleBarLabel, w);
             p->save();
-            p->setPen(active ? Ink : QColor(120, 120, 120));
+            p->setPen(active ? Ink : QColor(139, 139, 139));
             p->drawText(label, Qt::AlignCenter, p->fontMetrics().elidedText(t->text, Qt::ElideRight, label.width()));
             p->restore();
             return;
@@ -1952,10 +2100,19 @@ int Style::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QWidget *w
     case PM_TabBarTabVSpace:
         return 6;
     case PM_TabBarBaseOverlap:
+        return 1;
     case PM_TabBarBaseHeight:
-        return 0;
+        return 6;
     case PM_TabBarTabOverlap:
         return 1;
+    case PM_ToolTipLabelFrameWidth:
+        return 1;
+    case PM_ToolBarIconSize:
+        return 32; // HIG chapter 11: 32x32 recommended for toolbar icons
+    case PM_ToolBarItemSpacing:
+        return 6;
+    case PM_ToolBarItemMargin:
+        return 2;
     case PM_DefaultFrameWidth:
         if (qobject_cast<const QLineEdit *>(w) || qobject_cast<const QAbstractSpinBox *>(w))
             return 3;
@@ -2068,6 +2225,22 @@ QSize Style::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QS
         QSize s = QProxyStyle::sizeFromContents(ct, opt, size, w);
         return {s.width() + 4, qMax(s.height(), 17)};
     }
+    case CT_ToolButton: {
+        const auto *t = qstyleoption_cast<const QStyleOptionToolButton *>(opt);
+        if (t && !t->text.isEmpty() && t->toolButtonStyle == Qt::ToolButtonTextUnderIcon) {
+            const bool autoRaise = t->state & State_AutoRaise;
+            const QFontMetrics fm(autoRaise ? smallFont(t->font) : labelFont(t->font));
+            const int iw = t->icon.isNull() ? 0 : t->iconSize.width();
+            const int ih = t->icon.isNull() ? 0 : t->iconSize.height();
+            const int padH = autoRaise ? 10 : 12;
+            const int padV = autoRaise ? 8 : 12; // HIG: >= 5px around bevel button icon
+            return {qMax(iw, fm.horizontalAdvance(t->text)) + padH, ih + 2 + fm.height() + padV};
+        }
+        QSize s = QProxyStyle::sizeFromContents(ct, opt, size, w);
+        if (t && !(t->state & State_AutoRaise) && !t->icon.isNull())
+            s = s.expandedTo(t->iconSize + QSize(10, 12));
+        return s;
+    }
     default:
         break;
     }
@@ -2131,7 +2304,7 @@ int Style::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *w, QS
     case SH_ItemView_ShowDecorationSelected:
         return true;
     case SH_ToolTipLabel_Opacity:
-        return 242;
+        return 245;
     case SH_UnderlineShortcut:
         return false;
     case SH_TabBar_PreferNoArrows:

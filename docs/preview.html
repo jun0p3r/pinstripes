@@ -68,7 +68,7 @@ code { font-family: var(--mono); font-size: 0.88em; }
       <li><b>Push buttons:</b> 20 px high, 14 px end caps, 69 px for OK and Cancel; only the default button is blue and it pulses.</li>
       <li><b>Check boxes and radio buttons:</b> 18 × 18 including the shadow.</li>
       <li><b>Pop-up menus:</b> 20 px, text 9 px from the left edge, double-arrow cap.</li>
-      <li><b>Tabs:</b> 23 px, 12 px text inset, centred over the 6-row accent bar (#0057ae, #a2d7f0, #a8d1ee, #51b0ea, #79ccff, #acefff) and its grey shadow.</li>
+      <li><b>Tabs:</b> 23 px, 12 px text inset, centred over the 6-row accent bar (#0057ae, #a2d7f0, #a8d1ee, #51b0ea, #79ccff, #acefff) and its grey shadow; the selected tab morphs seamlessly into the blue strip without a dividing rim (Qt, Plasma and GTK). <span class="new">New</span></li>
       <li><b>Text fields:</b> 22 px with a 3 px inner shadow and the blue focus ring.</li>
       <li><b>Scroll bars:</b> 15 px white cylinder, thumb columns measured from the real thumb.</li>
     </ul>
@@ -84,7 +84,7 @@ code { font-family: var(--mono); font-size: 0.88em; }
       <li><b>Group box:</b> a fine etched line with square corners on the window stripes; the title sits on the top border in the small system font; nothing within 16 px of the border (HIG Figures 8-2 to 8-4).</li>
       <li><b>Flat group:</b> title followed by an etched separator 2 px to its right, as the HIG recommends instead of nested boxes.</li>
       <li><b>Alert:</b> 64 px application icon, message in the emphasized (bold) system font, informative text in the small system font, default button on the right (Figure 6-2).</li>
-      <li><b>Bevel buttons:</b> matte, not gel: a white-to-light-grey face, a fine grey border darker at the bottom, a grey face when pressed or toggled on, labels in the 10 pt label font (Figure 7-14). <span class="new">New</span></li>
+      <li><b>Bevel buttons:</b> curved glass cushions with a crisp top specular lens, cool silver mid-tone dip, upward bottom reflection and dark bottom rim; smoked glass when pressed or toggled on, labels in the 10 pt label font (Figures 7-14, 7-15). <span class="new">New</span></li>
     </ul>
   </section>
 
@@ -112,24 +112,30 @@ code { font-family: var(--mono); font-size: 0.88em; }
   </section>
 
   <section>
-    <h2>Docks, MDI windows and side tabs</h2>
-    <div class="shot"><img src="img/docks-mdi.png" alt="Dock widget title, MDI windows with traffic lights, bottom and left tabs"></div>
-  </section>
-
-  <section>
-    <h2>Window decoration</h2>
-    <div class="shot"><img src="img/titlebar.png" alt="Oxygen Traffic Lights title bars, active and inactive"></div>
+    <h2>Toolbars, docks, MDI windows and side tabs <span class="new">New</span></h2>
+    <div class="shot"><img src="img/docks-mdi.png" alt="Finder-style toolbar, dock widget title, MDI windows with traffic lights, bottom and left tabs"></div>
     <ul class="spec">
-      <li><b>Title bar:</b> the window pinstripe darkening towards the bottom, a dark line under it, traffic-light gels whose glyphs appear on hover; inactive windows show hollow grey lights.</li>
+      <li><b>Toolbars:</b> 32 × 32 icons above 11 pt small system font labels with no button frames, dotted separators and a 1 px #a3a3a3 bottom divider on the window pinstripes (HIG chapters 7 &amp; 11). <span class="new">New</span></li>
     </ul>
   </section>
 
   <section>
-    <h2>GTK 3 and GTK 4</h2>
+    <h2>Window decoration <span class="new">New</span></h2>
+    <div class="shot"><img src="img/titlebar.png" alt="Oxygen Traffic Lights title bars, active and inactive"></div>
+    <ul class="spec">
+      <li><b>Title bar:</b> 22 px high, 13 px traffic-light gels 9 px in at a 22 px pitch whose glyphs appear on hover; window pinstripes darkening towards a #7f7f7f divider, black active title and #8b8b8b inactive title (Figures 5-10, 7-16). <span class="new">New</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>GTK 3 and GTK 4 <span class="new">New</span></h2>
     <div class="pair">
       <figure><img src="img/gtk3-gallery.png" alt="GTK 3 widget gallery"><figcaption>GTK 3</figcaption></figure>
       <figure><img src="img/gtk4-gallery.png" alt="GTK 4 widget gallery"><figcaption>GTK 4</figcaption></figure>
     </div>
+    <ul class="spec">
+      <li><b>Parity:</b> 16 px progress fill rows, selected tabs morphing into the accent strip, glassy bevel buttons, flat disclosure triangles (white on selection), etched group boxes and small-font list headings and help tags. <span class="new">New</span></li>
+    </ul>
   </section>
 
   <section>

@@ -242,32 +242,39 @@ def main():
     dialog.paint(p, tp.adjusted(-12, -10, 12, 16), "shadow")
     dialog.paint(p, tp)
     x0, y0 = tp.left() + 14, tp.top() + 12
-    # tabs
+    # tabs centred over the 6-row blue accent strip; the active tab overlaps row 0 (#0057ae) so it morphs into the strip
     p.setFont(font)
-    tx = x0 + 40
-    for i, label in enumerate(("Devices", "Applications")):
-        tw = p.fontMetrics().horizontalAdvance(label) + 24
-        r = QRectF(tx, y0, tw, 23)
+    tab_ws = [p.fontMetrics().horizontalAdvance(lbl) + 24 for lbl in ("Devices", "Applications")]
+    tx = tp.left() + (tp.width() - (sum(tab_ws) - 1)) / 2
+    tabbar.paint(p, QRectF(tp.left() + 8, y0 + 23, tp.width() - 16, 9), "north-tab-bar")
+    sel_r = None
+    for i, (label, tw) in enumerate(zip(("Devices", "Applications"), tab_ws)):
         if i == 0:
-            tabbar.paint(p, r, "north-active-tab")
-        p.setPen(Qt.black)
-        p.drawText(r, Qt.AlignCenter, label)
-        tx += tw
-    y = y0 + 34
+            sel_r = QRectF(tx, y0, tw, 24)
+        else:
+            r = QRectF(tx, y0, tw, 23)
+            tabbar.paint(p, r, "north-tab")
+            p.setPen(Qt.black)
+            p.drawText(r, Qt.AlignCenter, label)
+        tx += tw - 1
+    tabbar.paint(p, sel_r, "north-active-tab")
+    p.setPen(Qt.black)
+    p.drawText(QRectF(sel_r.left(), sel_r.top(), sel_r.width(), 23), Qt.AlignCenter, "Devices")
+    y = y0 + 38
     p.drawText(QRectF(x0, y, 200, 18), Qt.AlignVCenter, "Speakers")
     y += 22
-    groove = QRectF(x0, y + 4, 200, 12)
-    meter.paint(p, groove, "bar-inactive")
-    meter.paint(p, QRectF(groove.left(), groove.top(), 140, 12), "bar-active")
+    groove = QRectF(x0, y + 7, 200, 6)
+    slider.paint(p, groove, "groove")
+    slider.paint(p, QRectF(groove.left(), groove.top(), 140, 6), "groove-highlight")
     slider.element(p, "horizontal-slider-shadow", QRectF(groove.left() + 140 - 10, groove.center().y() - 10, 21, 21))
     slider.element(p, "horizontal-slider-handle", QRectF(groove.left() + 140 - 8, groove.center().y() - 8.5, 17, 17))
     p.drawText(QRectF(groove.right() + 10, y, 50, 20), Qt.AlignVCenter, "70%")
-    y += 32
+    y += 30
     p.drawText(QRectF(x0, y, 200, 18), Qt.AlignVCenter, "Battery")
-    y += 22
-    meter.paint(p, QRectF(x0, y, 200, 12), "bar-inactive")
-    meter.paint(p, QRectF(x0, y, 92, 12), "bar-active")
-    y += 24
+    y += 20
+    meter.paint(p, QRectF(x0, y, 200, 16), "bar-inactive")
+    meter.paint(p, QRectF(x0, y, 92, 16), "bar-active")
+    y += 26
     for i, label in enumerate(("Analog stereo", "HDMI output")):
         radio.element(p, "shadow", QRectF(x0 - 2, y - 2, 22, 22))
         radio.element(p, "checked" if i == 0 else "normal", QRectF(x0, y, 18, 18))
@@ -304,7 +311,7 @@ def main():
             tip.paint(p, t.adjusted(-6, -5, 6, 8), "shadow")
             tip.paint(p, t)
             p.setPen(Qt.black)
-            p.setFont(font)
+            p.setFont(small)
             p.drawText(t, Qt.AlignCenter, "Konsole")
         x += iw + gap
     p.end()

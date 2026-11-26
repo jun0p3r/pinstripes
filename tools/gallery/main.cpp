@@ -40,6 +40,7 @@
 #include <QTabWidget>
 #include <QTextEdit>
 #include <QTimer>
+#include <QToolBar>
 #include <QTreeWidget>
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -195,7 +196,18 @@ static QWidget *dockMdiWindow()
     list->setCurrentRow(2);
     dock->setWidget(list);
     mw->addDockWidget(Qt::LeftDockWidgetArea, dock);
-    mw->resize(620, 340);
+
+    // Finder-style toolbar (HIG chapter 7 & 11): 32px icons above small-font labels, no frames
+    auto *tb = mw->addToolBar(QStringLiteral("Toolbar"));
+    tb->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    tb->addAction(QIcon::fromTheme(QStringLiteral("go-previous")), QStringLiteral("Back"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("go-next")), QStringLiteral("Forward"));
+    tb->addSeparator();
+    tb->addAction(QIcon::fromTheme(QStringLiteral("computer")), QStringLiteral("Computer"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("user-home")), QStringLiteral("Home"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("bookmarks")), QStringLiteral("Favorites"));
+    tb->addAction(QIcon::fromTheme(QStringLiteral("applications-other")), QStringLiteral("Applications"));
+    mw->resize(620, 400);
     return mw;
 }
 
