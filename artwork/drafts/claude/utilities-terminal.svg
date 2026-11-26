@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
+<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
+  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
+  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
+<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
+<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="brush" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
+  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
+  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
+  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
+</filter>
+<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
+  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
+</pattern>
+<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
+  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
+</pattern>
+<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
+  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
+  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
+</linearGradient>
+<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
+  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
+  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
+</linearGradient>
+<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+
+<linearGradient id="plat" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#e4e4e6"/><stop offset="0.12" stop-color="#cbcbcd"/><stop offset="0.85" stop-color="#c6c6c8"/><stop offset="1" stop-color="#d8d8da"/>
+</linearGradient>
+<linearGradient id="recess" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#8b9299"/><stop offset="0.6" stop-color="#c9ced3"/><stop offset="1" stop-color="#f7f8f9"/>
+</linearGradient>
+<linearGradient id="scr" x1="0" y1="0" x2="1" y2="1">
+  <stop offset="0" stop-color="#4c5458"/><stop offset="0.7" stop-color="#44474d"/><stop offset="1" stop-color="#2a2c30"/>
+</linearGradient>
+<linearGradient id="scrGloss" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0.16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="glass"><rect x="22" y="20" width="84" height="68" rx="3"/></clipPath>
+</defs>
+<g filter="url(#drop)">
+  <rect x="8" y="9" width="112" height="106" rx="11" fill="url(#plat)"/>
+  <rect x="8" y="9" width="112" height="106" rx="11" fill="url(#pin)"/>
+  <rect x="8.5" y="9.5" width="111" height="105" rx="10.5" fill="none" stroke="#fff" stroke-width="1.2"/>
+  <rect x="8.5" y="9.5" width="111" height="105" rx="10.5" fill="none" stroke="#8d949b" stroke-opacity="0.35"/>
+  <rect x="17" y="15" width="94" height="78" rx="6" fill="url(#recess)"/>
+  <rect x="20" y="18" width="88" height="72" rx="4" fill="#31363b" filter="url(#b1)"/>
+  <rect x="22" y="20" width="84" height="68" rx="3" fill="url(#scr)"/>
+  <g clip-path="url(#glass)">
+    <text x="27" y="34" font-family="Luxi Mono, DejaVu Sans Mono, monospace" font-size="13" font-weight="bold" fill="#f4f5f6">&gt;_</text>
+    <rect x="22" y="20" width="84" height="34" fill="url(#scrGloss)"/>
+    <path d="M60 20h30L60 88H30z" fill="#fff" opacity="0.07"/>
+    <rect x="22" y="20" width="84" height="68" fill="none" stroke="#000" stroke-opacity="0.4" stroke-width="3" filter="url(#b2)"/>
+  </g>
+  <path d="M64.00 98.00L64.71 98.05L65.18 98.97L65.74 99.18L66.70 98.79L67.27 99.22L67.17 100.25L67.53 100.73L68.55 100.92L68.80 101.59L68.16 102.40L68.20 103.00L68.95 103.71L68.80 104.41L67.82 104.74L67.53 105.27L67.78 106.27L67.27 106.78L66.27 106.53L65.74 106.82L65.41 107.80L64.71 107.95L64.00 107.20L63.40 107.16L62.59 107.80L61.92 107.55L61.73 106.53L61.25 106.17L60.22 106.27L59.79 105.70L60.18 104.74L59.97 104.18L59.05 103.71L59.00 103.00L59.84 102.40L59.97 101.82L59.45 100.92L59.79 100.30L60.83 100.25L61.25 99.83L61.30 98.79L61.92 98.45L62.82 98.97L63.40 98.84zM67.20 103a3.20 3.20 0 1 0 -6.40 0a3.20 3.20 0 1 0 6.40 0zM62.58 101.10h0.80v1.52l1.42 -1.52h1.04l-1.75 1.80l1.86 1.99h-1.06l-1.52 -1.63v1.63h-0.80z" fill="#ffffff" fill-rule="evenodd" transform="translate(0 0.8)"/>
+  <path d="M64.00 98.00L64.71 98.05L65.18 98.97L65.74 99.18L66.70 98.79L67.27 99.22L67.17 100.25L67.53 100.73L68.55 100.92L68.80 101.59L68.16 102.40L68.20 103.00L68.95 103.71L68.80 104.41L67.82 104.74L67.53 105.27L67.78 106.27L67.27 106.78L66.27 106.53L65.74 106.82L65.41 107.80L64.71 107.95L64.00 107.20L63.40 107.16L62.59 107.80L61.92 107.55L61.73 106.53L61.25 106.17L60.22 106.27L59.79 105.70L60.18 104.74L59.97 104.18L59.05 103.71L59.00 103.00L59.84 102.40L59.97 101.82L59.45 100.92L59.79 100.30L60.83 100.25L61.25 99.83L61.30 98.79L61.92 98.45L62.82 98.97L63.40 98.84zM67.20 103a3.20 3.20 0 1 0 -6.40 0a3.20 3.20 0 1 0 6.40 0zM62.58 101.10h0.80v1.52l1.42 -1.52h1.04l-1.75 1.80l1.86 1.99h-1.06l-1.52 -1.63v1.63h-0.80z" fill="#a3a9af" fill-rule="evenodd"/>
+</g></svg>

@@ -28,8 +28,10 @@ Oxygen Pinstripe has three layers:
 
 * **Hand-drawn photo-illustrative icons** for the icons you see most: folder, home, downloads,
   trash, file manager, terminal, settings, hard disk, web browser, text editor and calculator.
-  They're drawn as SVG by `tools/draw_aqua_icons.py` (sources in `artwork/aqua-icons/`) to match
-  the icons in Apple's June 2002 HIG chapter 11, measured from its figures: light from directly
+  They're hand-written SVG in `artwork/aqua-icons/`, mostly by Google Antigravity (Gemini; its
+  notes are in `artwork/aqua-icons/NOTES-antigravity.md`), with Claude's drafts from
+  `tools/draw_aqua_icons.py` in `artwork/drafts/claude/`. They match the icons in Apple's June 2002
+  HIG chapter 11, measured from its figures: light from directly
   above, no hard outlines, platinum and white plastics, chrome, crisp paper, soft shadows. The
   KDE logo stands in where Apple used its own. `docs/mockups/aqua-remix/` has the side-by-side
   with Apple's figures.

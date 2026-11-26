@@ -145,7 +145,12 @@ Claude again) relies on them to resume without re-deriving anything.
 * **Icon direction (decided by the user, 2026-11-26)**: the procedural `tools/icons_lib/`
   places/devices/apps/categories/applets read as flat clip-art, so they are **no longer emitted**
   (the modules stay in the repo, unused). `Oxygen Pinstripe` now has three layers:
-  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, written by `tools/draw_aqua_icons.py`,
+  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, curated by hand. Since 2026-11-26 ten of
+    the eleven are Antigravity's (the user's pick, as the starting point for a full set; its notes:
+    `artwork/aqua-icons/NOTES-antigravity.md`). `system-file-manager` is Claude's, because
+    Antigravity's was Apple's Finder face, a trademark that must not ship. Claude's generator
+    `tools/draw_aqua_icons.py` now writes drafts to `artwork/drafts/claude/` only. Originally
+    written by `tools/draw_aqua_icons.py`,
     rendered to PNG by `make_icons.py` via librsvg with KDE aliases in `ARTWORK_ICONS`): folder,
     user-home, folder-download, user-trash, system-file-manager, utilities-terminal,
     systemsettings, drive-harddisk, internet-web-browser, accessories-text-editor,
@@ -194,7 +199,9 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Backlog (update this; highest value first)
 
-1. **Extend the hand-drawn set** where Crystal and the hand-drawn icons clash. Next: the folder
+1. **Grow the hand-drawn set into a full icon set**, starting from Antigravity's 11 (the user's
+   pick). Draw the file manager without Apple's Finder face. Then extend it where Crystal and the
+   hand-drawn icons clash. Next: the folder
    family (`folder-documents`, `-music`, `-pictures`, `-videos`, `-desktop`, `-public`,
    `-templates`, coloured folders) as the Jaguar folder with a stamped glyph, and
    `user-trash-full`. Add each to `tools/draw_aqua_icons.py` + `ARTWORK_ICONS`, compare against
@@ -240,3 +247,6 @@ Claude again) relies on them to resume without re-deriving anything.
 * 2026-11-26 Claude Code (Opus 5.5): thinner symbolics (`thin()`), lighter toolbar action icons
   (`SoftPainter`), checked against Jaguar screenshots from guidebookgallery.org (menu bar volume
   extra, Finder and Mail toolbars).
+* 2026-11-26 Claude Code (Opus 5.5): panel tray glyphs in the 10.2 menu-extra style (outlines,
+  hairlines, weather/Caps Lock/power-profile sets); adopted Antigravity's 10 hand-drawn icons as
+  the base of `artwork/aqua-icons/` (kept Claude's file manager instead of the Finder face).

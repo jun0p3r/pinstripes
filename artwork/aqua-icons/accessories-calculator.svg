@@ -1,72 +1,176 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
-<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
-<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
-<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
-<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
-<filter id="brush" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
-  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
-  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
-  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
-</filter>
-<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
-</pattern>
-<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
-</pattern>
-<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-</linearGradient>
-<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
-  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
-  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
-</linearGradient>
-<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
-  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
-  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
-</linearGradient>
-<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-</radialGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Soft straight-on accessory shadow (HIG Fig. 11-9 right / i-009.png) -->
+    <filter id="calcShadow" x="-20%" y="-15%" width="140%" height="135%">
+      <feGaussianBlur stdDeviation="2.8"/>
+    </filter>
+    <filter id="keyShadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feGaussianBlur stdDeviation="0.75"/>
+    </filter>
 
-<linearGradient id="cBody" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e9ec"/>
-</linearGradient>
-<linearGradient id="cHead" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#f7f8f9"/><stop offset="1" stop-color="#d9dde1"/>
-</linearGradient>
-<linearGradient id="lcd" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#c9cdd1"/><stop offset="1" stop-color="#eef0f2"/>
-</linearGradient>
-<linearGradient id="key" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.7" stop-color="#f1f3f5"/><stop offset="1" stop-color="#d0d5da"/>
-</linearGradient>
-</defs>
-<g filter="url(#drop)">
-  <rect x="12" y="8" width="104" height="114" rx="5" fill="url(#cBody)"/>
-  <rect x="12" y="8" width="104" height="14" rx="5" fill="url(#cHead)"/>
-  <rect x="12" y="8" width="104" height="14" rx="5" fill="url(#pinH)"/>
-  <path d="M12 22h104" stroke="#a9afb5" stroke-opacity="0.6"/><path d="M12 23h104" stroke="#fff"/>
-  <rect x="12.5" y="8.5" width="103" height="113" rx="4.5" fill="none" stroke="#959ca3" stroke-opacity="0.5"/>
-  <rect x="19" y="26" width="90" height="14" rx="2.5" fill="#9aa0a6"/>
-  <rect x="20" y="27" width="88" height="12" rx="2" fill="url(#lcd)"/>
-  <rect x="20" y="27" width="88" height="3" rx="1.5" fill="#000" fill-opacity="0.18" filter="url(#b05)"/>
-  <rect x="20.5" y="27.5" width="87" height="11" rx="1.6" fill="none" stroke="#7d848b" stroke-opacity="0.6"/>
-  <text x="104" y="36" font-family="Luxi Sans, DejaVu Sans" font-size="8" text-anchor="end" fill="#22272c">123456.89</text>
-  <rect x="20" y="45.2" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="20" y="44.0" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="20.5" y="44.5" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M22 56.0h15" stroke="#a8adb2"/><path d="M22 44.9h15" stroke="#fff"/><text x="29.5" y="52.4" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">C</text><rect x="43" y="45.2" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="43" y="44.0" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="43.5" y="44.5" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M45 56.0h15" stroke="#a8adb2"/><path d="M45 44.9h15" stroke="#fff"/><text x="52.5" y="52.4" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">%</text><rect x="66" y="45.2" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="66" y="44.0" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="66.5" y="44.5" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M68 56.0h15" stroke="#a8adb2"/><path d="M68 44.9h15" stroke="#fff"/><text x="75.5" y="52.4" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">/</text><rect x="89" y="45.2" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="89" y="44.0" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="89.5" y="44.5" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M91 56.0h15" stroke="#a8adb2"/><path d="M91 44.9h15" stroke="#fff"/><text x="98.5" y="52.4" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">*</text><rect x="20" y="60.800000000000004" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="20" y="59.6" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="20.5" y="60.1" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M22 71.6h15" stroke="#a8adb2"/><path d="M22 60.5h15" stroke="#fff"/><text x="29.5" y="68.0" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">7</text><rect x="43" y="60.800000000000004" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="43" y="59.6" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="43.5" y="60.1" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M45 71.6h15" stroke="#a8adb2"/><path d="M45 60.5h15" stroke="#fff"/><text x="52.5" y="68.0" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">8</text><rect x="66" y="60.800000000000004" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="66" y="59.6" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="66.5" y="60.1" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M68 71.6h15" stroke="#a8adb2"/><path d="M68 60.5h15" stroke="#fff"/><text x="75.5" y="68.0" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">9</text><rect x="89" y="60.800000000000004" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="89" y="59.6" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="89.5" y="60.1" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M91 71.6h15" stroke="#a8adb2"/><path d="M91 60.5h15" stroke="#fff"/><text x="98.5" y="68.0" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">-</text><rect x="20" y="76.4" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="20" y="75.2" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="20.5" y="75.7" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M22 87.2h15" stroke="#a8adb2"/><path d="M22 76.10000000000001h15" stroke="#fff"/><text x="29.5" y="83.6" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">4</text><rect x="43" y="76.4" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="43" y="75.2" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="43.5" y="75.7" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M45 87.2h15" stroke="#a8adb2"/><path d="M45 76.10000000000001h15" stroke="#fff"/><text x="52.5" y="83.6" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">5</text><rect x="66" y="76.4" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="66" y="75.2" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="66.5" y="75.7" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M68 87.2h15" stroke="#a8adb2"/><path d="M68 76.10000000000001h15" stroke="#fff"/><text x="75.5" y="83.6" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">6</text><rect x="89" y="76.4" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="89" y="75.2" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="89.5" y="75.7" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M91 87.2h15" stroke="#a8adb2"/><path d="M91 76.10000000000001h15" stroke="#fff"/><text x="98.5" y="83.6" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">+</text><rect x="20" y="92.00000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="20" y="90.80000000000001" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="20.5" y="91.30000000000001" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M22 102.80000000000001h15" stroke="#a8adb2"/><path d="M22 91.70000000000002h15" stroke="#fff"/><text x="29.5" y="99.2" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">1</text><rect x="43" y="92.00000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="43" y="90.80000000000001" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="43.5" y="91.30000000000001" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M45 102.80000000000001h15" stroke="#a8adb2"/><path d="M45 91.70000000000002h15" stroke="#fff"/><text x="52.5" y="99.2" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">2</text><rect x="66" y="92.00000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="66" y="90.80000000000001" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="66.5" y="91.30000000000001" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M68 102.80000000000001h15" stroke="#a8adb2"/><path d="M68 91.70000000000002h15" stroke="#fff"/><text x="75.5" y="99.2" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">3</text><rect x="89" y="92.00000000000001" width="19" height="28.0" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="89" y="90.80000000000001" width="19" height="28.0" rx="2.5" fill="url(#key)"/><rect x="89.5" y="91.30000000000001" width="18" height="27.0" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M91 118.4h15" stroke="#a8adb2"/><path d="M91 91.70000000000002h15" stroke="#fff"/><text x="98.5" y="107.0" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">=</text><rect x="20" y="107.60000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="20" y="106.4" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="20.5" y="106.9" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M22 118.4h15" stroke="#a8adb2"/><path d="M22 107.30000000000001h15" stroke="#fff"/><text x="29.5" y="114.8" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">0</text><rect x="43" y="107.60000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="43" y="106.4" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="43.5" y="106.9" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M45 118.4h15" stroke="#a8adb2"/><path d="M45 107.30000000000001h15" stroke="#fff"/><text x="52.5" y="114.8" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">.</text><rect x="66" y="107.60000000000001" width="19" height="12.4" rx="2.5" fill="#000" fill-opacity="0.22" filter="url(#b05)"/><rect x="66" y="106.4" width="19" height="12.4" rx="2.5" fill="url(#key)"/><rect x="66.5" y="106.9" width="18" height="11.4" rx="2" fill="none" stroke="#9aa1a8" stroke-opacity="0.45"/><path d="M68 118.4h15" stroke="#a8adb2"/><path d="M68 107.30000000000001h15" stroke="#fff"/><text x="75.5" y="114.8" font-family="Luxi Sans, DejaVu Sans" font-size="6" text-anchor="middle" fill="#3a4047">±</text>
-</g></svg>
+    <!-- Moulded bright-white curved top cap (sampled i-009.png y=10..23) -->
+    <linearGradient id="topCap" x1="64" y1="10" x2="64" y2="23.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f9f9fa"/>
+      <stop offset="0.88" stop-color="#ececee"/>
+      <stop offset="1.00" stop-color="#dcdce0"/>
+    </linearGradient>
+
+    <!-- Satin platinum lower body -->
+    <linearGradient id="calcBody" x1="64" y1="24" x2="64" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f5f5f6"/>
+      <stop offset="0.45" stop-color="#ededef"/>
+      <stop offset="0.92" stop-color="#e3e3e6"/>
+      <stop offset="0.97" stop-color="#d2d2d6"/>
+      <stop offset="1.00" stop-color="#b2b2b7"/>
+    </linearGradient>
+
+    <!-- Subtle vertical brushed satin grain on lower body -->
+    <pattern id="satinVert" width="4" height="12" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="1" height="12" fill="#ffffff" fill-opacity="0.24"/>
+      <rect x="2" y="0" width="0.8" height="12" fill="#7a7a82" fill-opacity="0.05"/>
+    </pattern>
+
+    <!-- Recessed cool pale LCD window -->
+    <linearGradient id="lcdGlass" x1="64" y1="30" x2="64" y2="45.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#d6dbd6"/>
+      <stop offset="0.22" stop-color="#e3e7e3"/>
+      <stop offset="0.85" stop-color="#eff2ef"/>
+      <stop offset="1.00" stop-color="#f5f7f5"/>
+    </linearGradient>
+
+    <!-- Crisp bright-white sculpted chicklet button cap (sampled i-009.png) -->
+    <linearGradient id="keyCap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.42" stop-color="#f8f8f9"/>
+      <stop offset="0.88" stop-color="#eaeaeC"/>
+      <stop offset="1.00" stop-color="#dcdce0"/>
+    </linearGradient>
+
+    <!-- Reusable standard 15 x 9.8 chicklet key -->
+    <g id="stdKey">
+      <rect x="0" y="0.9" width="15.0" height="9.8" rx="2.4" fill="#000000" fill-opacity="0.22" filter="url(#keyShadow)"/>
+      <rect x="0" y="0" width="15.0" height="9.8" rx="2.4" fill="url(#keyCap)" stroke="#9a9aa0" stroke-width="0.7"/>
+      <path d="M 1.4,8.2 L 1.4,2.2 C 1.4,1.4 2.0,1.0 2.8,1.0 L 12.2,1.0 C 13.0,1.0 13.6,1.4 13.6,2.2"
+            fill="none" stroke="#ffffff" stroke-width="0.95" stroke-linecap="round"/>
+    </g>
+
+    <!-- Reusable 2-row tall `=` chicklet key (15 x 22.0) -->
+    <g id="tallKey">
+      <rect x="0" y="0.9" width="15.0" height="22.0" rx="2.4" fill="#000000" fill-opacity="0.22" filter="url(#keyShadow)"/>
+      <rect x="0" y="0" width="15.0" height="22.0" rx="2.4" fill="url(#keyCap)" stroke="#9a9aa0" stroke-width="0.7"/>
+      <path d="M 1.4,20.2 L 1.4,2.2 C 1.4,1.4 2.0,1.0 2.8,1.0 L 12.2,1.0 C 13.0,1.0 13.6,1.4 13.6,2.2"
+            fill="none" stroke="#ffffff" stroke-width="0.95" stroke-linecap="round"/>
+    </g>
+
+    <clipPath id="clipCalc">
+      <rect x="22.0" y="10.0" width="84.0" height="108.0" rx="4.6"/>
+    </clipPath>
+  </defs>
+
+  <!-- Soft overhead drop shadow -->
+  <rect x="23.0" y="13.2" width="83.0" height="106.8" rx="4.8" fill="#000000" fill-opacity="0.28" filter="url(#calcShadow)"/>
+
+  <!-- Calculator Body -->
+  <g clip-path="url(#clipCalc)">
+    <!-- Lower satin platinum housing -->
+    <rect x="22.0" y="23.0" width="84.0" height="95.0" fill="url(#calcBody)"/>
+    <rect x="22.0" y="23.0" width="84.0" height="95.0" fill="url(#satinVert)"/>
+
+    <!-- Moulded bright-white curved top cap -->
+    <rect x="22.0" y="10.0" width="84.0" height="13.5" fill="url(#topCap)"/>
+    <!-- Subtle curved pillow sheen near sides of white top cap -->
+    <path d="M 22.0,10.0 L 26.5,10.0 L 26.5,23.5 L 22.0,23.5 Z" fill="#dcdce0" fill-opacity="0.35"/>
+    <path d="M 101.5,10.0 L 106.0,10.0 L 106.0,23.5 L 101.5,23.5 Z" fill="#c8c8ce" fill-opacity="0.35"/>
+
+    <!-- Horizontal seam between white cap & satin body -->
+    <line x1="22.0" y1="23.4" x2="106.0" y2="23.4" stroke="#96969c" stroke-width="0.95"/>
+    <line x1="22.0" y1="24.4" x2="106.0" y2="24.4" stroke="#ffffff" stroke-width="1.1"/>
+
+    <!-- Inner specular white left/top rim highlight -->
+    <path d="M 23.2,116.0 L 23.2,14.5 C 23.2,12.2 24.8,11.1 27.0,11.1 L 101.0,11.1 C 103.2,11.1 104.8,12.2 104.8,14.5 L 104.8,116.0"
+          fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.88"/>
+  </g>
+
+  <!-- Crisp metallic hairline edge (no heavy dark outline) -->
+  <rect x="22.0" y="10.0" width="84.0" height="108.0" rx="4.6" fill="none" stroke="#8b8b92" stroke-width="0.85"/>
+
+  <!-- Recessed LCD Display Window (x=29..99, y=30..45.5) -->
+  <rect x="29.0" y="30.0" width="70.0" height="15.5" rx="1.6" fill="url(#lcdGlass)"/>
+  <!-- Inner top/left recess shadow + bottom/right white outer bezel lip -->
+  <path d="M 29.5,45.0 L 29.5,30.5 L 98.5,30.5" fill="none" stroke="#8a8e8a" stroke-width="1.1"/>
+  <rect x="29.8" y="30.8" width="68.4" height="1.8" fill="#b4bab4" fill-opacity="0.45"/>
+  <path d="M 29.2,46.2 L 99.2,46.2 L 99.2,30.2" fill="none" stroke="#ffffff" stroke-width="1.15"/>
+  <rect x="29.0" y="30.0" width="70.0" height="15.5" rx="1.6" fill="none" stroke="#8e918e" stroke-width="0.7"/>
+
+  <!-- Crisp right-aligned LCD readout: 123456.89 (sampled i-009.png) -->
+  <text x="95.8" y="41.8" text-anchor="end" font-family="Luxi Sans, Lucida Grande, DejaVu Sans, sans-serif"
+        font-size="11.2" font-weight="600" letter-spacing="0.2" fill="#1e221e">123456.89</text>
+
+  <!-- 4 x 5 Sculpted White Chicklet Keypad -->
+  <!-- Columns: x = 29.0, 47.3, 65.7, 84.0 | Rows: y = 51.2, 63.4, 75.6, 87.8, 100.0 -->
+  <g>
+    <!-- Row 1: C  %  /  * -->
+    <use href="#stdKey" x="29.0" y="51.2"/>
+    <use href="#stdKey" x="47.3" y="51.2"/>
+    <use href="#stdKey" x="65.7" y="51.2"/>
+    <use href="#stdKey" x="84.0" y="51.2"/>
+
+    <!-- Row 2: 7  8  9  - -->
+    <use href="#stdKey" x="29.0" y="63.4"/>
+    <use href="#stdKey" x="47.3" y="63.4"/>
+    <use href="#stdKey" x="65.7" y="63.4"/>
+    <use href="#stdKey" x="84.0" y="63.4"/>
+
+    <!-- Row 3: 4  5  6  + -->
+    <use href="#stdKey" x="29.0" y="75.6"/>
+    <use href="#stdKey" x="47.3" y="75.6"/>
+    <use href="#stdKey" x="65.7" y="75.6"/>
+    <use href="#stdKey" x="84.0" y="75.6"/>
+
+    <!-- Row 4: 1  2  3  and tall = -->
+    <use href="#stdKey" x="29.0" y="87.8"/>
+    <use href="#stdKey" x="47.3" y="87.8"/>
+    <use href="#stdKey" x="65.7" y="87.8"/>
+    <use href="#tallKey" x="84.0" y="87.8"/>
+
+    <!-- Row 5: 0  .  +- -->
+    <use href="#stdKey" x="29.0" y="100.0"/>
+    <use href="#stdKey" x="47.3" y="100.0"/>
+    <use href="#stdKey" x="65.7" y="100.0"/>
+  </g>
+
+  <!-- Crisp dark key legends -->
+  <g font-family="Luxi Sans, Lucida Grande, DejaVu Sans, sans-serif" font-size="6.8" font-weight="700"
+     fill="#1c1d20" text-anchor="middle">
+    <!-- Row 1 -->
+    <text x="36.5" y="58.4">C</text>
+    <text x="54.8" y="58.3" font-size="6.2">%</text>
+    <text x="73.2" y="58.4">/</text>
+    <text x="91.5" y="60.3" font-size="8.2">*</text>
+
+    <!-- Row 2 -->
+    <text x="36.5" y="70.6">7</text>
+    <text x="54.8" y="70.6">8</text>
+    <text x="73.2" y="70.6">9</text>
+    <text x="91.5" y="70.4" font-size="8.0">&#x2212;</text>
+
+    <!-- Row 3 -->
+    <text x="36.5" y="82.8">4</text>
+    <text x="54.8" y="82.8">5</text>
+    <text x="73.2" y="82.8">6</text>
+    <text x="91.5" y="82.7" font-size="7.8">+</text>
+
+    <!-- Row 4 -->
+    <text x="36.5" y="95.0">1</text>
+    <text x="54.8" y="95.0">2</text>
+    <text x="73.2" y="95.0">3</text>
+    <!-- Tall = centered across rows 4 & 5 -->
+    <text x="91.5" y="101.2" font-size="8.0">=</text>
+
+    <!-- Row 5 -->
+    <text x="36.5" y="107.2">0</text>
+    <text x="54.8" y="107.2" font-size="8.2">.</text>
+    <text x="73.2" y="107.0" font-size="6.8">&#x00B1;</text>
+  </g>
+</svg>

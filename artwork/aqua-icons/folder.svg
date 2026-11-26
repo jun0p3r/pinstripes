@@ -1,83 +1,120 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
-<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
-<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
-<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
-<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
-<filter id="brush" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
-  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
-  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
-  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
-</filter>
-<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
-</pattern>
-<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
-</pattern>
-<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-</linearGradient>
-<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
-  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
-  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
-</linearGradient>
-<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
-  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
-  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
-</linearGradient>
-<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-</radialGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Soft overhead floor shadow (HIG Fig. 11-20 / 11-22) -->
+    <filter id="floorBlur" x="-30%" y="-40%" width="160%" height="190%">
+      <feGaussianBlur stdDeviation="4.8"/>
+    </filter>
+    <filter id="tightBlur" x="-20%" y="-30%" width="140%" height="160%">
+      <feGaussianBlur stdDeviation="1.9"/>
+    </filter>
+    <filter id="innerSoft" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
 
-<linearGradient id="fBack" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#8cc3f3"/><stop offset="1" stop-color="#3f86d6"/>
-</linearGradient>
-<linearGradient id="fIn" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#2d69b7"/><stop offset="1" stop-color="#4e93dd"/>
-</linearGradient>
-<linearGradient id="fFront" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#d8edff"/><stop offset="0.05" stop-color="#a9d4fb"/>
-  <stop offset="0.55" stop-color="#6eb2f0"/><stop offset="1" stop-color="#4c98e6"/>
-</linearGradient>
-<linearGradient id="fEdge" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#1f5fb0" stop-opacity="0.35"/><stop offset="0.06" stop-color="#1f5fb0" stop-opacity="0"/>
-  <stop offset="0.94" stop-color="#1f5fb0" stop-opacity="0"/><stop offset="1" stop-color="#1f5fb0" stop-opacity="0.35"/>
-</linearGradient>
-<radialGradient id="fGlow" cx="0.5" cy="1" r="0.7">
-  <stop offset="0" stop-color="#c9efff" stop-opacity="0.8"/><stop offset="1" stop-color="#c9efff" stop-opacity="0"/>
-</radialGradient>
-<linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eceff3"/>
-</linearGradient>
-</defs>
-<ellipse cx="64" cy="118" rx="60" ry="5" fill="url(#floor)" opacity="0.7"/>
-<g filter="url(#drop)">
-  <path d="M9 24a4 4 0 0 1 4-4h29a4 4 0 0 1 3.3 1.8l4.6 6.4a2.5 2.5 0 0 0 2 1H115a4 4 0 0 1 4 4V112H9z" fill="url(#fBack)"/>
-  <path d="M9 24a4 4 0 0 1 4-4h29a4 4 0 0 1 3.3 1.8l4.6 6.4a2.5 2.5 0 0 0 2 1H115a4 4 0 0 1 4 4V112H9z" fill="none" stroke="#2a64b4" stroke-opacity="0.45"/>
-  <path d="M13 21h29M52 30h63" stroke="#fff" stroke-opacity="0.8"/>
-  <rect x="11" y="34" width="106" height="16" rx="2" fill="url(#fIn)"/>
-  
-  <path d="M9 47a3 3 0 0 1 3-3h104a3 3 0 0 1 3 3L119 112a4 4 0 0 1-4 4H13a4 4 0 0 1-4-4z" fill="url(#fFront)"/>
-  <path d="M9 47a3 3 0 0 1 3-3h104a3 3 0 0 1 3 3L119 112a4 4 0 0 1-4 4H13a4 4 0 0 1-4-4z" fill="url(#fGlow)"/>
-  <path d="M9 47a3 3 0 0 1 3-3h104a3 3 0 0 1 3 3L119 112a4 4 0 0 1-4 4H13a4 4 0 0 1-4-4z" fill="url(#fEdge)"/>
-  <path d="M10 46h108l-0.6 30.2c-34 3-72 3-106 0z" fill="url(#gloss)" opacity="0.38"/>
-  <path d="M9 47a3 3 0 0 1 3-3h104a3 3 0 0 1 3 3L119 112a4 4 0 0 1-4 4H13a4 4 0 0 1-4-4z" fill="none" stroke="#2a64b4" stroke-opacity="0.45"/>
-  <path d="M11 44.8h106" stroke="#fff" stroke-width="1.4" stroke-linecap="round"/>
-  <path d="M12 115.4h104" stroke="#2a6fc4" stroke-opacity="0.5"/>
-</g>
+    <!-- Rear leaf sky-blue translucent Aqua acrylic (sampled hig_key_zooms.png & all-107-073.png) -->
+    <linearGradient id="backLeaf" x1="20" y1="16" x2="30" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f2faff"/>
+      <stop offset="0.16" stop-color="#cce8ff"/>
+      <stop offset="0.52" stop-color="#8ac2f4"/>
+      <stop offset="0.86" stop-color="#5d9be0"/>
+      <stop offset="1.00" stop-color="#4c88cf"/>
+    </linearGradient>
+    <linearGradient id="backEdge" x1="16" y1="16" x2="108" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#7ca6d4"/>
+      <stop offset="0.5" stop-color="#5384ba"/>
+      <stop offset="1.0" stop-color="#3c6ca4"/>
+    </linearGradient>
+
+    <!-- Interior pocket shadow cast by front leaf onto back leaf & paper -->
+    <linearGradient id="pocketShadow" x1="64" y1="28" x2="64" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#153c70" stop-opacity="0.0"/>
+      <stop offset="0.55" stop-color="#103466" stop-opacity="0.24"/>
+      <stop offset="1.0" stop-color="#0a264d" stop-opacity="0.48"/>
+    </linearGradient>
+
+    <!-- Crisp white paper lining / insert nestled inside folder -->
+    <linearGradient id="innerPaper" x1="64" y1="26" x2="64" y2="90" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#f2f8ff"/>
+      <stop offset="1.0" stop-color="#cbe0f5"/>
+    </linearGradient>
+
+    <!-- Front translucent candy sky-blue Aqua acrylic (sampled 10.2 folders) -->
+    <linearGradient id="frontAqua" x1="36" y1="32" x2="76" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f2ffff"/>
+      <stop offset="0.13" stop-color="#ccf2ff"/>
+      <stop offset="0.38" stop-color="#87c8fc"/>
+      <stop offset="0.68" stop-color="#4e98f0"/>
+      <stop offset="0.88" stop-color="#3f85de"/>
+      <stop offset="1.00" stop-color="#84ccff"/>
+    </linearGradient>
+
+    <!-- Radial bottom-centre internal Aqua bounce light -->
+    <radialGradient id="aquaGlow" cx="62" cy="105" r="46" fx="62" fy="107" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#d4f7ff" stop-opacity="0.78"/>
+      <stop offset="0.55" stop-color="#7ecaff" stop-opacity="0.28"/>
+      <stop offset="1.0" stop-color="#428ce2" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <!-- Top glassy specular sheen across upper front cover -->
+    <linearGradient id="frontGlass" x1="58" y1="32" x2="62" y2="72" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.80"/>
+      <stop offset="0.35" stop-color="#ffffff" stop-opacity="0.34"/>
+      <stop offset="0.85" stop-color="#ffffff" stop-opacity="0.05"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <!-- Fine 2.5px 10.2 Aqua pinstripes inside front & rear acrylic leaves -->
+    <pattern id="aquaStripes" width="8" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(-4.2)">
+      <rect width="8" height="1.1" y="0" fill="#ffffff" fill-opacity="0.19"/>
+      <rect width="8" height="0.9" y="1.3" fill="#124e96" fill-opacity="0.06"/>
+    </pattern>
+
+    <path id="frontShape" d="M 19.5,43.0 C 19.5,39.4 22.0,37.2 25.6,36.9 L 107.5,31.0 C 111.2,30.7 113.6,32.9 113.1,36.6 L 105.4,101.4 C 105.0,104.4 102.8,106.3 99.6,106.6 L 23.0,112.4 C 20.1,112.6 18.4,110.8 18.5,107.8 Z"/>
+    <clipPath id="clipFront">
+      <use href="#frontShape"/>
+    </clipPath>
+  </defs>
+
+  <!-- Diffuse ambient floor shadow + tight contact shadow along bottom hinge -->
+  <ellipse cx="62" cy="111" rx="49" ry="7.5" fill="#000a1c" fill-opacity="0.28" filter="url(#floorBlur)" transform="rotate(-4 62 111)"/>
+  <path d="M 19,109 L 105,102.5 L 103,106.5 L 21,113 Z" fill="#001028" fill-opacity="0.46" filter="url(#tightBlur)"/>
+
+  <!-- Rear folder leaf with 10.2 sculpted rounded top-left tab -->
+  <path d="M 17.5,108.5 L 16.5,25.5 C 16.5,20.8 19.6,17.8 24.2,17.5 L 46.5,16.2 C 50.6,16.0 53.2,18.0 55.4,22.4 L 57.0,25.5 L 99.8,22.8 C 104.2,22.5 106.8,25.0 106.6,29.4 L 104.8,102.2 C 104.7,104.8 102.8,106.2 100.0,106.5 L 21.8,112.2 C 19.0,112.4 17.6,110.9 17.5,108.5 Z"
+        fill="url(#backLeaf)" stroke="url(#backEdge)" stroke-width="0.9"/>
+
+  <!-- Specular white highlight along top rim of rear tab & back edge -->
+  <path d="M 18.0,26.0 C 18.0,21.8 20.6,19.1 24.6,18.9 L 46.2,17.6 C 49.8,17.4 52.0,19.0 54.1,23.2 L 55.8,26.8 L 99.6,24.1 C 102.8,23.9 104.9,25.5 105.2,28.2"
+        fill="none" stroke="#ffffff" stroke-width="1.35" stroke-linecap="round" opacity="0.90"/>
+
+  <!-- Left spine thickness bevel (platinum-blue 3D edge) -->
+  <path d="M 17.2,25.5 L 19.4,25.5 L 20.6,111.5 L 18.0,110.8 Z" fill="#ffffff" fill-opacity="0.52"/>
+
+  <!-- Crisp white document sheet nestled inside pocket -->
+  <path d="M 24.5,31.5 L 99.5,26.6 L 100.2,92.0 L 24.2,98.0 Z" fill="url(#innerPaper)"/>
+  <path d="M 24.5,31.5 L 99.5,26.6" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+  <path d="M 24.5,30.8 L 99.8,25.9 L 100.2,58.0 L 24.2,63.0 Z" fill="url(#pocketShadow)"/>
+
+  <!-- Soft shadow cast by front flap back onto the paper -->
+  <path d="M 19.5,41.0 L 109.0,34.5 L 105.0,103.0 L 19.0,109.5 Z" fill="#09244a" fill-opacity="0.24" filter="url(#tightBlur)"/>
+
+  <!-- Front translucent sky-blue Aqua cover -->
+  <use href="#frontShape" fill="url(#frontAqua)"/>
+
+  <g clip-path="url(#clipFront)">
+    <!-- Fine internal pinstripes + cyan bottom glow + curved upper glass reflection -->
+    <rect x="14" y="28" width="104" height="90" fill="url(#aquaStripes)"/>
+    <rect x="14" y="28" width="104" height="90" fill="url(#aquaGlow)"/>
+    <path d="M 16,35 L 116,29 L 114,65 C 84,59 48,64 17,74 Z" fill="url(#frontGlass)"/>
+
+    <!-- Soft 3D cushion shading along left, right & bottom inner edges -->
+    <path d="M 18,36 L 18,113 L 106,107 L 114,30" fill="none" stroke="#164e94" stroke-width="2.4" stroke-opacity="0.30" filter="url(#innerSoft)"/>
+    <!-- Crisp glossy white top bevel lip on the front acrylic edge -->
+    <path d="M 20.5,42.0 C 21.0,39.4 23.0,38.3 26.2,38.1 L 107.2,32.2 C 110.0,32.0 111.8,33.3 111.9,35.6"
+          fill="none" stroke="#ffffff" stroke-width="1.7" stroke-linecap="round" opacity="0.92"/>
+  </g>
+
+  <!-- Delicate translucent acrylic edge (no dark cartoon outline) -->
+  <use href="#frontShape" fill="none" stroke="#3168ab" stroke-width="0.85" stroke-opacity="0.75"/>
 </svg>

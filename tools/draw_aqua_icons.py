@@ -10,7 +10,9 @@ import math
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, "artwork", "aqua-icons")
+# Drafts only: the shipped sources in artwork/aqua-icons/ are curated by hand (most are
+# Antigravity's; system-file-manager is copied from here). Copy a draft over when it wins.
+OUT = os.path.join(ROOT, "artwork", "drafts", "claude")
 os.makedirs(OUT, exist_ok=True)
 
 BASE = """

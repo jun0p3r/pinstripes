@@ -1,78 +1,218 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
-<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
-<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
-<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
-<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
-<filter id="brush" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
-  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
-  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
-  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
-</filter>
-<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
-</pattern>
-<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
-</pattern>
-<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-</linearGradient>
-<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
-  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
-  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
-</linearGradient>
-<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
-  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
-  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
-</linearGradient>
-<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-</radialGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Floor shadow beneath 10.2 chrome wire-mesh wastebasket (sampled i-002.png rightmost) -->
+    <filter id="floorBlur" x="-35%" y="-45%" width="170%" height="200%">
+      <feGaussianBlur stdDeviation="5.0"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
 
-<linearGradient id="tBody" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#7d858d"/><stop offset="0.15" stop-color="#c3c9cf"/>
-  <stop offset="0.35" stop-color="#f6f7f9"/><stop offset="0.55" stop-color="#d0d5da"/>
-  <stop offset="0.85" stop-color="#9ba3ab"/><stop offset="1" stop-color="#737b83"/>
-</linearGradient>
-<linearGradient id="tTop" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d4d9de"/>
-</linearGradient>
-<linearGradient id="tShade" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#000" stop-opacity="0.22"/><stop offset="0.25" stop-color="#000" stop-opacity="0"/>
-  <stop offset="0.85" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="0.12"/>
-</linearGradient>
-<clipPath id="tClip"><path d="M26 36L35 111a29 6 0 0 0 58 0L102 36z"/></clipPath>
-</defs>
-<ellipse cx="64" cy="117" rx="34" ry="4" fill="url(#floor)" opacity="1.0"/>
-<g filter="url(#soft)">
-  <path d="M26 36L35 111a29 6 0 0 0 58 0L102 36z" fill="url(#tBody)"/>
-  <g clip-path="url(#tClip)">
-    <rect x="20" y="30" width="88" height="90" fill="url(#tBody)" filter="url(#brush)" opacity="0.6"/>
-    <path d="M28.4 40L36.3 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="2.3" filter="url(#b05)"/><path d="M27.5 40L35.6 116" stroke="#fff" stroke-opacity="0.75" stroke-width="0.4"/><path d="M31.3 40L38.5 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="3.0" filter="url(#b05)"/><path d="M30.4 40L37.8 116" stroke="#fff" stroke-opacity="0.75" stroke-width="0.8"/><path d="M36.8 40L42.8 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="3.6" filter="url(#b05)"/><path d="M35.9 40L42.1 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.1"/><path d="M44.5 40L48.9 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="4.1" filter="url(#b05)"/><path d="M43.6 40L48.2 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.3"/><path d="M53.9 40L56.1 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="4.4" filter="url(#b05)"/><path d="M53.0 40L55.4 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.5"/><path d="M64.0 40L64.0 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="4.5" filter="url(#b05)"/><path d="M63.1 40L63.3 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.6"/><path d="M74.1 40L71.9 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="4.4" filter="url(#b05)"/><path d="M73.2 40L71.2 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.5"/><path d="M83.5 40L79.1 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="4.1" filter="url(#b05)"/><path d="M82.6 40L78.4 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.3"/><path d="M91.2 40L85.2 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="3.6" filter="url(#b05)"/><path d="M90.3 40L84.5 116" stroke="#fff" stroke-opacity="0.75" stroke-width="1.1"/><path d="M96.7 40L89.5 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="3.0" filter="url(#b05)"/><path d="M95.8 40L88.8 116" stroke="#fff" stroke-opacity="0.75" stroke-width="0.8"/><path d="M99.6 40L91.7 116" stroke="#4d555d" stroke-opacity="0.28" stroke-width="2.3" filter="url(#b05)"/><path d="M98.7 40L91.0 116" stroke="#fff" stroke-opacity="0.75" stroke-width="0.4"/>
-    <rect x="20" y="30" width="88" height="90" fill="url(#tShade)"/>
-    <rect x="20" y="34" width="88" height="10" fill="#000" fill-opacity="0.28" filter="url(#b2)"/>
-    <path d="M44 38L49 118" stroke="#fff" stroke-width="7" stroke-opacity="0.7" filter="url(#b1)"/>
+    <!-- Spun chrome environment reflection across base & rim (sampled i-002.png y=65:
+         #e8e7ef -> #646470 -> #7b7b85 -> #f0f0fa -> #ffffff -> #52525a -> #d6d5da) -->
+    <linearGradient id="chromeEnv" x1="21" y1="64" x2="107" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#cfd0d8"/>
+      <stop offset="0.11" stop-color="#ffffff"/>
+      <stop offset="0.24" stop-color="#686874"/>
+      <stop offset="0.38" stop-color="#8b8b96"/>
+      <stop offset="0.56" stop-color="#f5f5fc"/>
+      <stop offset="0.68" stop-color="#ffffff"/>
+      <stop offset="0.82" stop-color="#4e4e58"/>
+      <stop offset="0.93" stop-color="#b8b8c2"/>
+      <stop offset="1.00" stop-color="#dedee6"/>
+    </linearGradient>
+
+    <!-- Interior rim chrome reflection (inverted phase across back of bowl) -->
+    <linearGradient id="rimInner" x1="21" y1="22" x2="107" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#686870"/>
+      <stop offset="0.22" stop-color="#cfd0d8"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="0.68" stop-color="#80808a"/>
+      <stop offset="0.86" stop-color="#dcdce4"/>
+      <stop offset="1.00" stop-color="#585862"/>
+    </linearGradient>
+
+    <!-- Interior back-mouth shadow & sheen inside top opening (y=13..34) -->
+    <linearGradient id="mouthInterior" x1="22" y1="23" x2="106" y2="23" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#3c3c44" stop-opacity="0.62"/>
+      <stop offset="0.28" stop-color="#9e9ea8" stop-opacity="0.45"/>
+      <stop offset="0.52" stop-color="#dcdce6" stop-opacity="0.48"/>
+      <stop offset="0.78" stop-color="#666670" stop-opacity="0.50"/>
+      <stop offset="1.00" stop-color="#34343c" stop-opacity="0.65"/>
+    </linearGradient>
+
+    <!-- Translucent cylindrical metallic sheen across the wire-mesh body -->
+    <linearGradient id="meshSheen" x1="22" y1="60" x2="106" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#35353c" stop-opacity="0.58"/>
+      <stop offset="0.16" stop-color="#e8e8f0" stop-opacity="0.34"/>
+      <stop offset="0.35" stop-color="#55555e" stop-opacity="0.26"/>
+      <stop offset="0.62" stop-color="#ffffff" stop-opacity="0.42"/>
+      <stop offset="0.84" stop-color="#3e3e46" stop-opacity="0.38"/>
+      <stop offset="1.00" stop-color="#28282e" stop-opacity="0.62"/>
+    </linearGradient>
+
+    <!-- Front wire highlight gradient (bright silver centre, dark grazing edges) -->
+    <linearGradient id="frontWire" x1="22" y1="60" x2="106" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#484850"/>
+      <stop offset="0.18" stop-color="#f4f4fa"/>
+      <stop offset="0.40" stop-color="#8c8c96"/>
+      <stop offset="0.64" stop-color="#ffffff"/>
+      <stop offset="0.84" stop-color="#686872"/>
+      <stop offset="1.00" stop-color="#42424a"/>
+    </linearGradient>
+
+    <!-- Fine woven back-wall mesh pattern (seen inside top mouth & through front wires!) -->
+    <pattern id="backMeshPat" width="5.2" height="5.2" patternUnits="userSpaceOnUse">
+      <path d="M 0,0 L 5.2,5.2 M 5.2,0 L 0,5.2" stroke="#2c2c34" stroke-width="0.95" stroke-opacity="0.68"/>
+      <path d="M 0.4,0 L 5.2,4.8 M 4.8,0 L 0,4.8" stroke="#b8b8c4" stroke-width="0.55" stroke-opacity="0.48"/>
+    </pattern>
+
+    <!-- Base interior floor dish -->
+    <radialGradient id="baseDish" cx="64" cy="100" r="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#bebec8"/>
+      <stop offset="0.6" stop-color="#6c6c76"/>
+      <stop offset="1.0" stop-color="#34343c"/>
+    </radialGradient>
+
+    <!-- Full 3D basket silhouette INCLUDING upper elliptical mouth arc (fixes open rim!) -->
+    <path id="basketFull" d="M 22.2,23.5 A 41.8,9.8 0 0 1 105.8,23.5 L 93.2,102.5 C 92.5,107.8 79.8,111.5 64.0,111.5 C 48.2,111.5 35.5,107.8 34.8,102.5 Z"/>
+    <clipPath id="clipBasketFull">
+      <use href="#basketFull"/>
+    </clipPath>
+
+    <!-- Front wall only (below front lip of top rim) -->
+    <path id="basketFront" d="M 22.2,23.5 A 41.8,9.8 0 0 0 105.8,23.5 L 93.2,102.5 C 92.5,107.8 79.8,111.5 64.0,111.5 C 48.2,111.5 35.5,107.8 34.8,102.5 Z"/>
+    <clipPath id="clipBasketFront">
+      <use href="#basketFront"/>
+    </clipPath>
+
+    <!-- Top elliptical opening clip -->
+    <clipPath id="clipMouth">
+      <ellipse cx="64" cy="23.5" rx="41.8" ry="9.8"/>
+    </clipPath>
+  </defs>
+
+  <!-- Diffuse ambient floor shadow + tight metallic base shadow -->
+  <ellipse cx="64" cy="109.5" rx="41" ry="9.0" fill="#000000" fill-opacity="0.28" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="108.5" rx="31" ry="6.2" fill="#000000" fill-opacity="0.46" filter="url(#contactBlur)"/>
+
+  <!-- Interior metal floor pan visible through the empty wire mesh -->
+  <ellipse cx="64" cy="101.2" rx="29.0" ry="6.8" fill="url(#baseDish)"/>
+
+  <!-- 1. Back-wall woven stainless mesh across the entire interior (including inside the top elliptical mouth!) -->
+  <g clip-path="url(#clipBasketFull)">
+    <rect x="20" y="12" width="88" height="102" fill="url(#meshSheen)"/>
+    <rect x="20" y="12" width="88" height="102" fill="url(#backMeshPat)"/>
   </g>
-  <path d="M22 30v6a42 9 0 0 0 84 0v-6z" fill="url(#tBody)"/>
-  <ellipse cx="64" cy="30" rx="42" ry="9" fill="url(#tTop)"/>
-  <ellipse cx="64" cy="30" rx="42" ry="9" fill="none" stroke="#7d858d" stroke-opacity="0.45"/>
-  <ellipse cx="64" cy="29.3" rx="36" ry="6.4" fill="none" stroke="#fff" stroke-width="1.2"/>
-  <ellipse cx="64" cy="31.5" rx="18" ry="3.6" fill="#000" fill-opacity="0.22" filter="url(#b2)"/>
-  <path d="M49 30c0-9 5-11 15-11s15 2 15 11" fill="none" stroke="#6f777f" stroke-width="6" stroke-linecap="round"/>
-  <path d="M49 30c0-9 5-11 15-11s15 2 15 11" fill="none" stroke="url(#chrome)" stroke-width="4.2" stroke-linecap="round"/>
-</g></svg>
+
+  <!-- Subtle interior shadow right under the back rim inside the mouth -->
+  <g clip-path="url(#clipMouth)">
+    <ellipse cx="64" cy="23.5" rx="41.8" ry="9.8" fill="url(#mouthInterior)"/>
+    <ellipse cx="64" cy="26.0" rx="41.5" ry="9.5" fill="none" stroke="#18181e" stroke-width="2.6" stroke-opacity="0.45"/>
+  </g>
+
+  <!-- 2. Front-wall finely woven curved stainless chrome wires (clipped below front rim arc!) -->
+  <g clip-path="url(#clipBasketFront)">
+    <!-- Dark wire under-cores (18 fine strands each direction matching i-002.png!) -->
+    <g fill="none" stroke="#1e1e24" stroke-width="1.45" stroke-opacity="0.80">
+      <path d="M 10,24 Q 32,68 56,108"/>
+      <path d="M 15,24 Q 37,68 61,108"/>
+      <path d="M 20,24 Q 42,68 66,108"/>
+      <path d="M 25,24 Q 47,68 71,108"/>
+      <path d="M 30,24 Q 52,68 76,108"/>
+      <path d="M 35,24 Q 57,68 81,108"/>
+      <path d="M 40,24 Q 62,68 86,108"/>
+      <path d="M 45,24 Q 67,68 91,108"/>
+      <path d="M 50,24 Q 72,68 96,106"/>
+      <path d="M 55,24 Q 77,66 100,100"/>
+      <path d="M 60,24 Q 82,64 103,92"/>
+      <path d="M 65,24 Q 87,60 105,84"/>
+      <path d="M 70,24 Q 91,56 106,75"/>
+      <path d="M 75,24 Q 95,51 107,66"/>
+      <path d="M 81,24 Q 98,46 108,57"/>
+      <path d="M 14,38 Q 31,74 51,108"/>
+      <path d="M 18,52 Q 31,80 46,108"/>
+      <path d="M 22,66 Q 32,88 41,106"/>
+
+      <path d="M 118,24 Q 96,68 72,108"/>
+      <path d="M 113,24 Q 91,68 67,108"/>
+      <path d="M 108,24 Q 86,68 62,108"/>
+      <path d="M 103,24 Q 81,68 57,108"/>
+      <path d="M 98,24 Q 76,68 52,108"/>
+      <path d="M 93,24 Q 71,68 47,108"/>
+      <path d="M 88,24 Q 66,68 42,108"/>
+      <path d="M 83,24 Q 61,68 37,108"/>
+      <path d="M 78,24 Q 56,68 32,106"/>
+      <path d="M 73,24 Q 51,66 28,100"/>
+      <path d="M 68,24 Q 46,64 25,92"/>
+      <path d="M 63,24 Q 41,60 23,84"/>
+      <path d="M 58,24 Q 37,56 22,75"/>
+      <path d="M 53,24 Q 33,51 21,66"/>
+      <path d="M 47,24 Q 30,46 20,57"/>
+      <path d="M 114,38 Q 97,74 77,108"/>
+      <path d="M 110,52 Q 97,80 82,108"/>
+      <path d="M 106,66 Q 96,88 87,106"/>
+    </g>
+
+    <!-- Gleaming chrome wire specular crests -->
+    <g fill="none" stroke="url(#frontWire)" stroke-width="0.92" stroke-opacity="0.96">
+      <path d="M 10,23.5 Q 32,67.5 56,107.5"/>
+      <path d="M 15,23.5 Q 37,67.5 61,107.5"/>
+      <path d="M 20,23.5 Q 42,67.5 66,107.5"/>
+      <path d="M 25,23.5 Q 47,67.5 71,107.5"/>
+      <path d="M 30,23.5 Q 52,67.5 76,107.5"/>
+      <path d="M 35,23.5 Q 57,67.5 81,107.5"/>
+      <path d="M 40,23.5 Q 62,67.5 86,107.5"/>
+      <path d="M 45,23.5 Q 67,67.5 91,107.5"/>
+      <path d="M 50,23.5 Q 72,67.5 96,105.5"/>
+      <path d="M 55,23.5 Q 77,65.5 100,99.5"/>
+      <path d="M 60,23.5 Q 82,63.5 103,91.5"/>
+      <path d="M 65,23.5 Q 87,59.5 105,83.5"/>
+      <path d="M 70,23.5 Q 91,55.5 106,74.5"/>
+      <path d="M 75,23.5 Q 95,50.5 107,65.5"/>
+      <path d="M 81,23.5 Q 98,45.5 108,56.5"/>
+      <path d="M 14,37.5 Q 31,73.5 51,107.5"/>
+      <path d="M 18,51.5 Q 31,79.5 46,107.5"/>
+      <path d="M 22,65.5 Q 32,87.5 41,105.5"/>
+
+      <path d="M 118,23.5 Q 96,67.5 72,107.5"/>
+      <path d="M 113,23.5 Q 91,67.5 67,107.5"/>
+      <path d="M 108,23.5 Q 86,67.5 62,107.5"/>
+      <path d="M 103,23.5 Q 81,67.5 57,107.5"/>
+      <path d="M 98,23.5 Q 76,67.5 52,107.5"/>
+      <path d="M 93,23.5 Q 71,67.5 47,107.5"/>
+      <path d="M 88,23.5 Q 66,67.5 42,107.5"/>
+      <path d="M 83,23.5 Q 61,67.5 37,107.5"/>
+      <path d="M 78,23.5 Q 56,67.5 32,105.5"/>
+      <path d="M 73,23.5 Q 51,65.5 28,99.5"/>
+      <path d="M 68,23.5 Q 46,63.5 25,91.5"/>
+      <path d="M 63,23.5 Q 41,59.5 23,83.5"/>
+      <path d="M 58,23.5 Q 37,55.5 22,74.5"/>
+      <path d="M 53,23.5 Q 33,50.5 21,65.5"/>
+      <path d="M 47,23.5 Q 30,45.5 20,56.5"/>
+      <path d="M 114,37.5 Q 97,73.5 77,107.5"/>
+      <path d="M 110,51.5 Q 97,79.5 82,107.5"/>
+      <path d="M 106,65.5 Q 96,87.5 87,105.5"/>
+    </g>
+
+    <!-- Grazing dark chrome side silhouette rims -->
+    <line x1="22.8" y1="24" x2="35.0" y2="103" stroke="#36363e" stroke-width="1.8" stroke-opacity="0.82"/>
+    <line x1="105.2" y1="24" x2="93.0" y2="103" stroke="#36363e" stroke-width="1.8" stroke-opacity="0.82"/>
+    <line x1="24.2" y1="25" x2="36.2" y2="101" stroke="#ffffff" stroke-width="0.9" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- Solid spun-chrome bottom collar ring (sampled i-002.png y=62..68) -->
+  <path d="M 33.8,96.8 C 34.5,102.2 47.6,105.8 64.0,105.8 C 80.4,105.8 93.5,102.2 94.2,96.8 L 93.2,104.2 C 92.5,109.6 79.8,113.2 64.0,113.2 C 48.2,113.2 35.5,109.6 34.8,104.2 Z"
+        fill="url(#chromeEnv)" stroke="#52525c" stroke-width="0.75"/>
+  <path d="M 34.4,97.2 C 36.2,102.2 48.6,105.6 64.0,105.6 C 79.4,105.6 91.8,102.2 93.6,97.2"
+        fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.88"/>
+
+  <!-- Rolled tubular mirror-chrome top rim: back half + front half -->
+  <ellipse cx="64" cy="23.5" rx="42.5" ry="10.2" fill="none" stroke="#34343c" stroke-width="5.0"/>
+  <ellipse cx="64" cy="23.5" rx="42.5" ry="10.2" fill="none" stroke="url(#rimInner)" stroke-width="3.6"/>
+  <!-- Front lower arc of tubular chrome rim -->
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 0 106.5,23.5" fill="none" stroke="#282830" stroke-width="5.2" stroke-linecap="round"/>
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 0 106.5,23.5" fill="none" stroke="url(#chromeEnv)" stroke-width="3.8" stroke-linecap="round"/>
+  <!-- Overhead specular white gleam along the top crest of both rim halves -->
+  <ellipse cx="64" cy="22.8" rx="42.5" ry="10.0" fill="none" stroke="#ffffff" stroke-width="1.15" opacity="0.94"/>
+</svg>

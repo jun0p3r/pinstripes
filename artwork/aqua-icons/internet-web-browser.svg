@@ -1,72 +1,150 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
-<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
-<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
-<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
-<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
-<filter id="brush" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
-  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
-  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
-  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
-</filter>
-<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
-</pattern>
-<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
-</pattern>
-<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-</linearGradient>
-<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
-  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
-  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
-</linearGradient>
-<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
-  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
-  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
-</linearGradient>
-<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-</radialGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Soft overhead ambient floor shadow + sapphire caustic core (HIG Fig. 11-17 bottom-left) -->
+    <filter id="floorBlur" x="-30%" y="-50%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.4"/>
+    </filter>
+    <filter id="arcGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="2.0"/>
+    </filter>
+    <filter id="nodeBloom" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="2.8"/>
+    </filter>
+    <filter id="softEdge" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
 
-<linearGradient id="gBlue" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#28338a"/><stop offset="0.3" stop-color="#2a5fc0"/>
-  <stop offset="0.6" stop-color="#4a8fd8"/><stop offset="0.85" stop-color="#9fcaf3"/><stop offset="1" stop-color="#bfe0fa"/>
-</linearGradient>
-<radialGradient id="gRim" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0.8" stop-color="#0a1a5a" stop-opacity="0"/><stop offset="1" stop-color="#0a1a5a" stop-opacity="0.55"/>
-</radialGradient>
-<radialGradient id="gWell" cx="0.5" cy="1" r="0.6">
-  <stop offset="0" stop-color="#c8f2ff" stop-opacity="0.9"/><stop offset="1" stop-color="#8fdcff" stop-opacity="0"/>
-</radialGradient>
-<radialGradient id="node" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#bfe6ff" stop-opacity="0"/>
-</radialGradient>
-<clipPath id="ball"><circle cx="64" cy="58" r="48"/></clipPath>
-</defs>
-<ellipse cx="64" cy="114" rx="42" ry="6" fill="url(#floor)" opacity="1.0"/>
-<g filter="url(#soft)">
-  <circle cx="64" cy="58" r="48" fill="url(#gBlue)"/>
-  <g clip-path="url(#ball)">
-    <ellipse cx="64" cy="26.0" rx="35.8" ry="10.0" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/><ellipse cx="64" cy="42.0" rx="45.3" ry="12.7" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/><ellipse cx="64" cy="58.0" rx="48.0" ry="13.4" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/><ellipse cx="64" cy="74.0" rx="45.3" ry="12.7" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/><ellipse cx="64" cy="90.0" rx="35.8" ry="10.0" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3"/><ellipse cx="64" cy="58" rx="14" ry="48" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3" transform="rotate(-14 64 58)"/><ellipse cx="64" cy="58" rx="32" ry="48" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3" transform="rotate(-14 64 58)"/><ellipse cx="64" cy="58" rx="46" ry="48" fill="none" stroke="#fff" stroke-opacity="0.55" stroke-width="1.3" transform="rotate(-14 64 58)"/>
-    <circle cx="44" cy="40" r="4" fill="url(#node)"/><circle cx="78" cy="32" r="4" fill="url(#node)"/><circle cx="96" cy="62" r="4" fill="url(#node)"/><circle cx="58" cy="74" r="4" fill="url(#node)"/><circle cx="34" cy="66" r="4" fill="url(#node)"/><circle cx="72" cy="92" r="4" fill="url(#node)"/><circle cx="90" cy="44" r="4" fill="url(#node)"/>
-    <circle cx="64" cy="58" r="48" fill="url(#gWell)"/>
-    <circle cx="64" cy="58" r="48" fill="url(#gRim)"/>
+    <!-- Sampled 10.2 Network Globe liquid sapphire gradient (i-017.png bottom-left):
+         midnight indigo crown (#030632) -> royal cobalt (#225cc8) -> brilliant cyan-white bottom glow (#f2feff) -->
+    <linearGradient id="sapphireCore" x1="64" y1="13" x2="64" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#02052b"/>
+      <stop offset="0.14" stop-color="#091d6e"/>
+      <stop offset="0.34" stop-color="#194cb4"/>
+      <stop offset="0.58" stop-color="#327ce0"/>
+      <stop offset="0.80" stop-color="#6cbaf8"/>
+      <stop offset="0.93" stop-color="#bcf0ff"/>
+      <stop offset="1.00" stop-color="#f2feff"/>
+    </linearGradient>
+
+    <!-- Intense internal incandescent caustic light at bottom pole -->
+    <radialGradient id="bottomCaustic" cx="64" cy="99" r="42" fx="64" fy="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.96"/>
+      <stop offset="0.26" stop-color="#d6f8ff" stop-opacity="0.82"/>
+      <stop offset="0.58" stop-color="#6cc4ff" stop-opacity="0.40"/>
+      <stop offset="1.00" stop-color="#1c5ad0" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <!-- Deep midnight-cobalt atmospheric vignette around upper rim -->
+    <radialGradient id="crownDepth" cx="64" cy="48" r="50" gradientUnits="userSpaceOnUse">
+      <stop offset="0.58" stop-color="#051452" stop-opacity="0.0"/>
+      <stop offset="0.88" stop-color="#041048" stop-opacity="0.38"/>
+      <stop offset="1.00" stop-color="#02082e" stop-opacity="0.68"/>
+    </radialGradient>
+
+    <!-- Subtle internal sapphire continent tint -->
+    <linearGradient id="continentTint" x1="64" y1="18" x2="64" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#04114a" stop-opacity="0.55"/>
+      <stop offset="0.55" stop-color="#0d358c" stop-opacity="0.34"/>
+      <stop offset="1.00" stop-color="#3a8ae8" stop-opacity="0.18"/>
+    </linearGradient>
+
+    <!-- Crisp curved top Aqua glass lens highlight -->
+    <linearGradient id="topLens" x1="64" y1="14.5" x2="64" y2="49" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="0.32" stop-color="#d8f0ff" stop-opacity="0.34"/>
+      <stop offset="0.78" stop-color="#88c8ff" stop-opacity="0.06"/>
+      <stop offset="1.00" stop-color="#5aa8ff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <circle id="globeCircle" cx="64" cy="60.5" r="47.5"/>
+    <clipPath id="clipGlobe">
+      <use href="#globeCircle"/>
+    </clipPath>
+  </defs>
+
+  <!-- Overhead floor shadow + translucent blue caustic light cast onto floor -->
+  <ellipse cx="64" cy="113.5" rx="35" ry="5.6" fill="#000c26" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="112.8" rx="19" ry="3.2" fill="#3a98ff" fill-opacity="0.25" filter="url(#arcGlow)"/>
+
+  <!-- Liquid Sapphire Glass Sphere -->
+  <use href="#globeCircle" fill="url(#sapphireCore)"/>
+
+  <g clip-path="url(#clipGlobe)">
+    <!-- Subtle translucent Earth continents suspended inside the sapphire glass -->
+    <g fill="url(#continentTint)">
+      <!-- North & Central America -->
+      <path d="M 24,33 C 30,27 42,25 49,29 C 52,33 48,39 45,43 C 41,47 38,51 41,55 C 43,58 46,60 45,63 C 41,62 37,58 34,53 C 29,48 22,41 24,33 Z"/>
+      <!-- South America -->
+      <path d="M 46,64 C 52,64 59,69 60,76 C 61,84 55,94 50,99 C 47,96 46,88 45,81 C 43,74 42,67 46,64 Z"/>
+      <!-- Greenland -->
+      <path d="M 55,20 C 61,18 67,20 66,25 C 64,28 57,28 55,24 Z"/>
+      <!-- Europe & Africa on eastern limb -->
+      <path d="M 75,29 C 82,26 93,28 99,35 C 97,41 90,43 84,45 C 80,46 77,44 75,40 Z"/>
+      <path d="M 76,48 C 85,47 96,52 99,61 C 101,71 95,84 88,91 C 83,88 81,78 79,70 C 75,63 72,53 76,48 Z"/>
+    </g>
+
+    <!-- Incandescent cyan-white internal bottom glow -->
+    <rect x="14" y="12" width="100" height="98" fill="url(#bottomCaustic)"/>
+
+    <!-- Atmospheric spherical depth shading -->
+    <rect x="14" y="12" width="100" height="98" fill="url(#crownDepth)"/>
+
+    <!-- Swooping Luminous Geodesic Network Light Arcs (sampled i-017.png bottom-left) -->
+    <!-- Soft cyan-white bloom layer -->
+    <g fill="none" stroke="#9be8ff" stroke-width="3.0" stroke-opacity="0.58" filter="url(#arcGlow)">
+      <path d="M 14,56 C 36,34 78,29 113,48"/>
+      <path d="M 18,79 C 48,66 84,48 106,27"/>
+      <path d="M 29,26 C 46,56 76,78 108,82"/>
+      <path d="M 54,13 C 42,46 48,82 70,108"/>
+      <path d="M 85,17 C 92,48 80,82 52,106"/>
+      <path d="M 16,44 C 46,58 82,60 112,66"/>
+      <path d="M 30,95 C 56,82 86,84 106,72"/>
+    </g>
+
+    <!-- Crisp glowing white-cyan core geodesic filaments -->
+    <g fill="none" stroke="#f2fdff" stroke-linecap="round">
+      <path d="M 14,56 C 36,34 78,29 113,48" stroke-width="1.35" stroke-opacity="0.90"/>
+      <path d="M 18,79 C 48,66 84,48 106,27" stroke-width="1.45" stroke-opacity="0.92"/>
+      <path d="M 29,26 C 46,56 76,78 108,82" stroke-width="1.45" stroke-opacity="0.92"/>
+      <path d="M 54,13 C 42,46 48,82 70,108" stroke-width="1.25" stroke-opacity="0.85"/>
+      <path d="M 85,17 C 92,48 80,82 52,106" stroke-width="1.25" stroke-opacity="0.85"/>
+      <path d="M 16,44 C 46,58 82,60 112,66" stroke-width="1.15" stroke-opacity="0.78"/>
+      <path d="M 30,95 C 56,82 86,84 106,72" stroke-width="1.20" stroke-opacity="0.82"/>
+    </g>
+
+    <!-- Blooming Star-White Intersection Nodes (signature 10.2 Network Globe detail!) -->
+    <g>
+      <!-- Outer cyan-white halos -->
+      <g fill="#bdf4ff" filter="url(#nodeBloom)">
+        <circle cx="48.2" cy="39.8" r="5.0"/>
+        <circle cx="86.2" cy="39.5" r="4.6"/>
+        <circle cx="46.8" cy="52.8" r="4.8"/>
+        <circle cx="63.5" cy="61.2" r="5.8"/>
+        <circle cx="84.8" cy="59.8" r="4.8"/>
+        <circle cx="49.5" cy="68.5" r="5.2"/>
+        <circle cx="75.8" cy="75.2" r="5.4"/>
+        <circle cx="58.6" cy="86.8" r="5.0"/>
+      </g>
+      <!-- Crisp incandescent white node cores -->
+      <g fill="#ffffff">
+        <circle cx="48.2" cy="39.8" r="2.1"/>
+        <circle cx="86.2" cy="39.5" r="1.9"/>
+        <circle cx="46.8" cy="52.8" r="2.0"/>
+        <circle cx="63.5" cy="61.2" r="2.5"/>
+        <circle cx="84.8" cy="59.8" r="2.0"/>
+        <circle cx="49.5" cy="68.5" r="2.2"/>
+        <circle cx="75.8" cy="75.2" r="2.3"/>
+        <circle cx="58.6" cy="86.8" r="2.1"/>
+      </g>
+    </g>
+
+    <!-- Curved top Aqua glass specular cap -->
+    <ellipse cx="64" cy="30.5" rx="33.5" ry="15.8" fill="url(#topLens)"/>
+
+    <!-- Soft inner glass rim refraction along lower & side edges -->
+    <circle cx="64" cy="60.5" r="46.6" fill="none" stroke="#aee8ff" stroke-width="1.4" stroke-opacity="0.42" filter="url(#softEdge)"/>
   </g>
-  <ellipse cx="64" cy="32" rx="34" ry="20" fill="url(#gloss)" opacity="0.85"/>
-</g></svg>
+
+  <!-- Delicate sapphire glass outer surface tension rim (no dark outline) -->
+  <use href="#globeCircle" fill="none" stroke="#18479e" stroke-width="0.8" stroke-opacity="0.58"/>
+</svg>

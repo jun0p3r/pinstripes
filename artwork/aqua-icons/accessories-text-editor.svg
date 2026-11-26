@@ -1,81 +1,246 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
-<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
-  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
-  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
-</filter>
-<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
-<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
-<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
-<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
-<filter id="brush" x="0" y="0" width="100%" height="100%">
-  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
-  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
-  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
-  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
-  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
-</filter>
-<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
-</pattern>
-<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
-  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
-</pattern>
-<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
-</linearGradient>
-<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
-  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
-  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
-</linearGradient>
-<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
-  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
-  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
-  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
-</linearGradient>
-<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
-  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
-</radialGradient>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Soft desk & inter-object cast shadows (HIG Fig. 11-5 / i-005.png TextEdit) -->
+    <filter id="paperShadow" x="-25%" y="-20%" width="155%" height="155%">
+      <feGaussianBlur stdDeviation="2.9"/>
+    </filter>
+    <filter id="penShadow" x="-35%" y="-20%" width="180%" height="155%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
 
-<linearGradient id="yel" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#f6e27a"/><stop offset="1" stop-color="#e5c23a"/>
-</linearGradient>
-<linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#f1f3f6"/>
-</linearGradient>
-<pattern id="rules" width="128" height="6" patternUnits="userSpaceOnUse" y="1">
-  <rect y="5.4" width="128" height="0.6" fill="#7ab0e6" fill-opacity="0.7"/>
-</pattern>
-<linearGradient id="barrel" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#5d646b"/><stop offset="0.25" stop-color="#ffffff"/><stop offset="0.45" stop-color="#c9ced3"/>
-  <stop offset="0.6" stop-color="#6e767e"/><stop offset="0.8" stop-color="#d8dce0"/><stop offset="1" stop-color="#7c848c"/>
-</linearGradient>
-<linearGradient id="grip" x1="0" y1="0" x2="0" y2="1">
-  <stop offset="0" stop-color="#3a3f44"/><stop offset="0.3" stop-color="#9ba2a9"/><stop offset="0.6" stop-color="#1e2226"/>
-  <stop offset="1" stop-color="#4d545a"/>
-</linearGradient>
-</defs>
-<ellipse cx="62" cy="116" rx="50" ry="5" fill="url(#floor)" opacity="0.8"/>
-<g filter="url(#drop)">
-  <g transform="rotate(-8 56 64)"><rect x="18" y="16" width="70" height="92" fill="url(#yel)"/></g>
-  <g transform="rotate(3 62 62)">
-    <rect x="24" y="12" width="76" height="98" fill="url(#pg)" stroke="#c2c6cb" stroke-width="0.8"/>
-    <rect x="24" y="20" width="76" height="90" fill="url(#rules)"/>
-    <path d="M24 12.5h76" stroke="#fff"/>
-    <text x="30" y="25" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">Dear Jay,</text><text x="30" y="37" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">Maybe you already know I might</text><text x="30" y="43" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">have this story to tell you. It is</text><text x="30" y="49" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">about the light that comes from</text><text x="30" y="55" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">above and the paper on the desk,</text><text x="30" y="61" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">and how the pen rests across it</text><text x="30" y="67" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">while the words dry slowly.</text><text x="30" y="79" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">Best,</text><text x="30" y="85" font-family="Luxi Sans, DejaVu Sans" font-size="4.1" fill="#2a3037">Pinstripe</text>
+    <!-- Canary-yellow legal pad sheet underneath (sampled i-005.png) -->
+    <linearGradient id="yellowPad" x1="18" y1="30" x2="78" y2="115" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fff484"/>
+      <stop offset="0.50" stop-color="#f3da5c"/>
+      <stop offset="1.00" stop-color="#dec03e"/>
+    </linearGradient>
+
+    <!-- Crisp white ruled letter sheet on top (sampled i-005.png) -->
+    <linearGradient id="whiteSheet" x1="20" y1="12" x2="88" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f9fafc"/>
+      <stop offset="0.88" stop-color="#edf0f5"/>
+      <stop offset="1.00" stop-color="#dfe4ec"/>
+    </linearGradient>
+
+    <!-- Photorealistic cylindrical mirror-chrome barrel (sampled i-005.png pen) -->
+    <linearGradient id="chromeBarrel" x1="-5.8" y1="0" x2="5.8" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#2c3038"/>
+      <stop offset="0.14" stop-color="#b4bac4"/>
+      <stop offset="0.32" stop-color="#ffffff"/>
+      <stop offset="0.49" stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#5e646e"/>
+      <stop offset="0.76" stop-color="#1e2229"/>
+      <stop offset="0.90" stop-color="#d4dae4"/>
+      <stop offset="1.00" stop-color="#2d323a"/>
+    </linearGradient>
+
+    <!-- Upper chrome collar with deeper studio horizon contrast -->
+    <linearGradient id="chromeCollar" x1="-5.8" y1="0" x2="5.8" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#22262d"/>
+      <stop offset="0.22" stop-color="#e4e8f0"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#383d46"/>
+      <stop offset="0.82" stop-color="#111419"/>
+      <stop offset="0.94" stop-color="#c2c8d2"/>
+      <stop offset="1.00" stop-color="#23272f"/>
+    </linearGradient>
+
+    <!-- Top clicker plunger chrome -->
+    <linearGradient id="chromeClicker" x1="-3.8" y1="0" x2="3.8" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#323740"/>
+      <stop offset="0.28" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#ebeff6"/>
+      <stop offset="0.78" stop-color="#262a32"/>
+      <stop offset="1.00" stop-color="#8e949e"/>
+    </linearGradient>
+
+    <!-- Pocket clip metallic bevel -->
+    <linearGradient id="chromeClip" x1="-9.5" y1="36" x2="-5.2" y2="68" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.48" stop-color="#eef2f7"/>
+      <stop offset="0.82" stop-color="#9ca3ae"/>
+      <stop offset="1.00" stop-color="#585e68"/>
+    </linearGradient>
+
+    <!-- Clip for white letter sheet -->
+    <clipPath id="clipWhiteSheet">
+      <rect x="19.0" y="13.0" width="74.0" height="92.0" rx="0.8"/>
+    </clipPath>
+    <!-- Clip for yellow pad sheet -->
+    <clipPath id="clipYellowSheet">
+      <rect x="17.0" y="25.0" width="70.0" height="88.0" rx="0.8"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. Bottom Canary-Yellow Pad Sheet (rotated -27 deg around (52, 69) to match i-005.png exact peek angles!) -->
+  <g transform="rotate(-27 52 69)">
+    <rect x="18.2" y="28.5" width="70.0" height="88.0" rx="1.0" fill="#000000" fill-opacity="0.30" filter="url(#paperShadow)"/>
+    <rect x="17.0" y="25.0" width="70.0" height="88.0" rx="0.8" fill="url(#yellowPad)"/>
+    <g clip-path="url(#clipYellowSheet)" stroke="#c7aa2c" stroke-width="0.6" opacity="0.65">
+      <line x1="17" y1="36" x2="87" y2="36"/>
+      <line x1="17" y1="42" x2="87" y2="42"/>
+      <line x1="17" y1="48" x2="87" y2="48"/>
+      <line x1="17" y1="54" x2="87" y2="54"/>
+      <line x1="17" y1="60" x2="87" y2="60"/>
+      <line x1="17" y1="66" x2="87" y2="66"/>
+      <line x1="17" y1="72" x2="87" y2="72"/>
+      <line x1="17" y1="78" x2="87" y2="78"/>
+      <line x1="17" y1="84" x2="87" y2="84"/>
+      <line x1="17" y1="90" x2="87" y2="90"/>
+      <line x1="17" y1="96" x2="87" y2="96"/>
+      <line x1="17" y1="102" x2="87" y2="102"/>
+      <line x1="17" y1="108" x2="87" y2="108"/>
+    </g>
+    <rect x="17.0" y="25.0" width="70.0" height="88.0" rx="0.8" fill="none" stroke="#b59a28" stroke-width="0.7"/>
   </g>
-</g>
-<g filter="url(#drop)" transform="rotate(-58 82 76)">
-  <path d="M40 72h54a4 4 0 0 1 4 4v0a4 4 0 0 1-4 4H40z" fill="url(#barrel)"/>
-  <path d="M28 72h12v8H28z" fill="url(#grip)"/>
-  <path d="M28 72L16 76l12 4z" fill="url(#barrel)"/>
-  <path d="M16 76l5-1.6v3.2z" fill="#3a3f44"/>
-  <path d="M60 70.8h26a1.5 1.5 0 0 1 0 3H60z" fill="url(#barrel)"/>
-</g></svg>
+
+  <!-- 2. Top Crisp White Ruled Letter Sheet (rotated -11.5 deg around (56, 59) per i-005.png) -->
+  <g transform="rotate(-11.5 56 59)">
+    <!-- Soft multi-depth drop shadow onto yellow pad & desk -->
+    <rect x="20.4" y="16.5" width="74.0" height="92.0" rx="1.0" fill="#000000" fill-opacity="0.30" filter="url(#paperShadow)"/>
+
+    <!-- Crisp white sheet -->
+    <rect x="19.0" y="13.0" width="74.0" height="92.0" rx="0.8" fill="url(#whiteSheet)"/>
+
+    <g clip-path="url(#clipWhiteSheet)">
+      <!-- Sky-blue ruled stationery lines (every 5.6 px) -->
+      <g stroke="#bfd0e6" stroke-width="0.65">
+        <line x1="19" y1="23.0" x2="93" y2="23.0"/>
+        <line x1="19" y1="28.6" x2="93" y2="28.6"/>
+        <line x1="19" y1="34.2" x2="93" y2="34.2"/>
+        <line x1="19" y1="39.8" x2="93" y2="39.8"/>
+        <line x1="19" y1="45.4" x2="93" y2="45.4"/>
+        <line x1="19" y1="51.0" x2="93" y2="51.0"/>
+        <line x1="19" y1="56.6" x2="93" y2="56.6"/>
+        <line x1="19" y1="62.2" x2="93" y2="62.2"/>
+        <line x1="19" y1="67.8" x2="93" y2="67.8"/>
+        <line x1="19" y1="73.4" x2="93" y2="73.4"/>
+        <line x1="19" y1="79.0" x2="93" y2="79.0"/>
+        <line x1="19" y1="84.6" x2="93" y2="84.6"/>
+        <line x1="19" y1="90.2" x2="93" y2="90.2"/>
+        <line x1="19" y1="95.8" x2="93" y2="95.8"/>
+        <line x1="19" y1="101.4" x2="93" y2="101.4"/>
+      </g>
+
+      <!-- Real readable letter prose (HIG p. 206 & sampled i-005.png layout: Dear Jon, 7 lines, Best, Kate) -->
+      <g font-family="Georgia, Liberation Serif, DejaVu Serif, serif" font-style="italic" fill="#171a20">
+        <text x="24.5" y="33.6" font-size="5.0" font-weight="700">Dear Jon,</text>
+
+        <g font-size="4.35" font-weight="600" letter-spacing="-0.05">
+          <text x="24.5" y="44.8">Here&apos;s to the crazy ones, the</text>
+          <text x="24.5" y="50.4">misfits, the rebels, the trouble-</text>
+          <text x="24.5" y="56.0">makers, the round pegs in the</text>
+          <text x="24.5" y="61.6">square holes, the ones who see</text>
+          <text x="24.5" y="67.2">things differently and push the</text>
+          <text x="24.5" y="72.8">human race forward with craft</text>
+          <text x="24.5" y="78.4">clarity, warmth, and care.</text>
+        </g>
+
+        <text x="24.5" y="89.6" font-size="4.7" font-weight="700">Best,</text>
+        <text x="24.5" y="95.2" font-size="4.7" font-weight="700">Kate Chen</text>
+      </g>
+
+      <!-- Subtle top/left specular paper highlight -->
+      <path d="M 19.8,104.2 L 19.8,13.8 L 92.2,13.8" fill="none" stroke="#ffffff" stroke-width="1.0"/>
+    </g>
+
+    <!-- Delicate cut-paper edge -->
+    <rect x="19.0" y="13.0" width="74.0" height="92.0" rx="0.8" fill="none" stroke="#aeb6c2" stroke-width="0.7"/>
+  </g>
+
+  <!-- 3. Photorealistic Mirror-Chrome Retractable Ballpoint Pen (angled +26.5 deg per i-005.png) -->
+  <!-- Soft blurred cast shadow of pen across white letter & desk -->
+  <g transform="translate(3.4, 4.2) rotate(26.5 95 75)" opacity="0.34" filter="url(#penShadow)">
+    <rect x="91.5" y="28.0" width="7.0" height="10.0" rx="2.5" fill="#000000"/>
+    <rect x="89.4" y="36.0" width="11.2" height="60.0" rx="1.2" fill="#000000"/>
+    <path d="M 89.4,38.0 L 85.8,39.5 L 86.4,67.5 L 89.4,67.5 Z" fill="#000000"/>
+    <polygon points="89.5,96.0 100.5,96.0 96.2,114.0 93.8,114.0" fill="#000000"/>
+    <rect x="94.0" y="113.5" width="2.0" height="7.5" fill="#000000"/>
+  </g>
+
+  <!-- Actual Chrome Pen Assembly centered around local x=0, y=28..121, translated to (95, 0) & rotated -->
+  <g transform="rotate(26.5 95 75) translate(95, 0)">
+    <!-- Top Retractable Clicker Button (y=27.5..36.5) -->
+    <path d="M -3.6,36.5 L -3.6,30.2 C -3.6,28.4 -2.1,27.4 0.0,27.4 C 2.1,27.4 3.6,28.4 3.6,30.2 L 3.6,36.5 Z"
+          fill="url(#chromeClicker)" stroke="#3a3f48" stroke-width="0.55"/>
+    <ellipse cx="-0.4" cy="28.6" rx="2.1" ry="0.7" fill="#ffffff" opacity="0.9"/>
+
+    <!-- 3D Tapered Chrome Pocket Clip on Left Side (x=-9.4..-5.4, y=37.5..68.5) -->
+    <!-- Subtle clip shadow onto barrel -->
+    <path d="M -6.2,39.5 L -4.2,39.5 L -4.2,69.0 L -6.8,69.0 Z" fill="#000000" fill-opacity="0.25"/>
+    <!-- Clip arm -->
+    <path d="M -5.4,37.8 L -8.6,38.6 C -9.3,38.8 -9.6,39.4 -9.5,40.4 L -8.4,66.2 C -8.3,67.6 -7.4,68.4 -6.3,68.2 C -5.4,68.0 -5.0,67.1 -5.2,66.0 L -6.5,41.4 L -5.4,41.0 Z"
+          fill="url(#chromeClip)" stroke="#4c525c" stroke-width="0.55"/>
+    <!-- Rolled ball highlight at clip tip -->
+    <circle cx="-6.8" cy="66.8" r="1.3" fill="#ffffff" opacity="0.88"/>
+
+    <!-- Upper Polished Chrome Collar Band (y=36.0..44.0) -->
+    <rect x="-5.7" y="36.0" width="11.4" height="8.0" rx="0.6" fill="url(#chromeCollar)" stroke="#343942" stroke-width="0.55"/>
+    <line x1="-5.5" y1="36.6" x2="5.5" y2="36.6" stroke="#ffffff" stroke-width="0.7" opacity="0.85"/>
+    <line x1="-5.6" y1="43.8" x2="5.6" y2="43.8" stroke="#1b1f26" stroke-width="0.8"/>
+
+    <!-- Main Mirror-Chrome Cylindrical Barrel (y=44.0..95.5) -->
+    <rect x="-5.7" y="44.0" width="11.4" height="51.5" fill="url(#chromeBarrel)"/>
+
+    <!-- Machined Ribbed Grip Grooves on Lower Barrel (y=69.5..92.5, 11 lathe-turned rings per i-005.png) -->
+    <g>
+      <line x1="-5.5" y1="70.2" x2="5.5" y2="70.2" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="71.0" x2="5.5" y2="71.0" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="72.3" x2="5.5" y2="72.3" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="73.1" x2="5.5" y2="73.1" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="74.4" x2="5.5" y2="74.4" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="75.2" x2="5.5" y2="75.2" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="76.5" x2="5.5" y2="76.5" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="77.3" x2="5.5" y2="77.3" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="78.6" x2="5.5" y2="78.6" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="79.4" x2="5.5" y2="79.4" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="80.7" x2="5.5" y2="80.7" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="81.5" x2="5.5" y2="81.5" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="82.8" x2="5.5" y2="82.8" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="83.6" x2="5.5" y2="83.6" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="84.9" x2="5.5" y2="84.9" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="85.7" x2="5.5" y2="85.7" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="87.0" x2="5.5" y2="87.0" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="87.8" x2="5.5" y2="87.8" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="89.1" x2="5.5" y2="89.1" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="89.9" x2="5.5" y2="89.9" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+
+      <line x1="-5.5" y1="91.2" x2="5.5" y2="91.2" stroke="#363b44" stroke-width="0.85" opacity="0.72"/>
+      <line x1="-5.5" y1="92.0" x2="5.5" y2="92.0" stroke="#ffffff" stroke-width="0.55" opacity="0.65"/>
+    </g>
+    <!-- Re-reinforce cylindrical highlight over grip ribs -->
+    <rect x="-5.7" y="69.5" width="11.4" height="23.2" fill="url(#chromeBarrel)" fill-opacity="0.34"/>
+
+    <!-- Barrel metallic edge -->
+    <rect x="-5.7" y="44.0" width="11.4" height="51.5" fill="none" stroke="#383d46" stroke-width="0.55"/>
+
+    <!-- Lower Chrome Nose Collar Ring (y=93.2..96.0) -->
+    <line x1="-5.6" y1="93.2" x2="5.6" y2="93.2" stroke="#22262e" stroke-width="0.75"/>
+    <line x1="-5.6" y1="94.2" x2="5.6" y2="94.2" stroke="#ffffff" stroke-width="0.8"/>
+    <line x1="-5.6" y1="95.5" x2="5.6" y2="95.5" stroke="#1e222a" stroke-width="0.85"/>
+
+    <!-- Conical Mirror-Chrome Nose Cone (y=95.6..113.2) with authentic triangular horizon reflections! -->
+    <polygon points="-5.6,95.6 5.6,95.6 1.35,113.2 -1.35,113.2" fill="#b4bac4"/>
+    <!-- Left jet-dark triangular horizon reflection (exact match to i-005.png!) -->
+    <polygon points="-5.5,95.6 -1.5,95.6 -0.35,113.2 -1.35,113.2" fill="#101318"/>
+    <!-- Center-left brilliant white conical reflection wedge -->
+    <polygon points="-1.5,95.6 1.8,95.6 0.45,113.2 -0.35,113.2" fill="#ffffff"/>
+    <!-- Right dark rim reflection -->
+    <polygon points="3.5,95.6 5.5,95.6 1.35,113.2 0.85,113.2" fill="#2c313a"/>
+    <polygon points="-5.6,95.6 5.6,95.6 1.35,113.2 -1.35,113.2" fill="none" stroke="#323740" stroke-width="0.5"/>
+
+    <!-- Extended Stainless Ballpoint Tip & Dark Ink Nib (y=113.2..120.8) -->
+    <polygon points="-1.15,113.2 1.15,113.2 0.85,118.4 -0.85,118.4" fill="url(#chromeClicker)" stroke="#2c3038" stroke-width="0.4"/>
+    <polygon points="-0.85,118.4 0.85,118.4 0.35,120.8 -0.35,120.8" fill="#111318"/>
+  </g>
+</svg>
