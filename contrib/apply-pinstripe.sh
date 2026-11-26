@@ -56,6 +56,10 @@ plasma-apply-colorscheme "$variant" >/dev/null
 echo "Plasma style: pinstripe"
 plasma-apply-desktoptheme pinstripe >/dev/null
 
+if [[ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/icons/KrystalSVG/index.theme" ]]; then
+    echo "icons: KrystalSVG (Crystal) missing; Oxygen Pinstripe falls back to Oxygen until you run" >&2
+    echo "       contrib/install-krystalsvg.sh" >&2
+fi
 echo "icons: Oxygen-Pinstripe"
 /usr/libexec/plasma-changeicons Oxygen-Pinstripe >/dev/null 2>&1 || wr kdeglobals Icons Theme Oxygen-Pinstripe
 

@@ -5,7 +5,7 @@ An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has four parts
 * **Pinstripe** and **Pinstripe Graphite**: a Qt 6 widget style (System Settings → Colors & Themes → Application Style)
 * **Pinstripe**: a Plasma style (System Settings → Colors & Themes → Plasma Style). It has a menu-bar top panel, pinstriped popups, a glass Dock with running-app triangles, yellow tooltips, gel buttons, scroll bars, sliders, progress bars and tabs.
 * **Pinstripe**: a GTK 3 and GTK 4 theme, so GTK apps match
-* **Oxygen Pinstripe**: a Mac OS X 10.2 Aqua icon theme covering Places, Devices, Applications, Categories, Plasma Applets, Actions and solid menu-extra symbolic glyphs over Oxygen
+* **Oxygen Pinstripe**: an icon theme with hand-drawn 10.2-style icons, glass toolbar icons and menu-extra glyphs, over Crystal (KDE 3's Aqua-era icons)
 * **Pinstripe** and **Pinstripe Graphite** colour schemes
 
 It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traffic-lights) window decoration.
@@ -20,46 +20,31 @@ It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traf
 
 ## Oxygen Pinstripe icons
 
-![Oxygen Pinstripe Places, Devices, Apps and Categories](docs/screenshots/icons-places-apps.png)
+![Hand-drawn Oxygen Pinstripe icons](docs/screenshots/icons-artwork.png)
 
-![Oxygen Pinstripe full contact sheet](docs/screenshots/icons.png)
+![Icons resolved through the theme: hand-drawn ones plus Crystal](docs/screenshots/icons-with-crystal.png)
 
-Oxygen Pinstripe remakes the Oxygen icon set in Mac OS X 10.2 "Jaguar" Aqua style:
+Oxygen Pinstripe has three layers:
 
-* **Full-colour 10.2 Places, Devices, Applications, Categories & Applets** (183 master artworks +
-  296 aliases across 16, 22, 32, 48, 64 and 128 px — 100 % of Oxygen's `places/`, `devices/`,
-  `apps/`, `categories/` and PNG `applets/` names), sampled from Apple's June 2002 HIG Chapter 11
-  (Figures 11-2 to 11-15 and Save-dialog Figure `al-107-045`): two-tone Finder smiley face,
-  TextEdit angled pad with chrome pen, Preview stacked photos with photographer's loupe, Mail
-  scalloped hawk stamp, Safari mariner's compass, pinstriped-bezel Terminal (`>_`) and Process
-  Viewer ECG monitors, Console amber dot-matrix log display, System Preferences brushed-silver
-  light-switch wall plates, Stickies, QuickTime player, iTunes CD + 3D eighth notes, Chess wooden
-  knight, sky-blue and colour-tinted pinstriped Aqua folders (including `Public`'s yellow diamond
-  pedestrian road sign), 3.5" internal aluminum and orange external USB/FireWire drives,
-  iridescent CD/DVD/BD discs, snow-white scroll-wheel iPod, cylindrical iSight webcam, sapphire
-  glass network globe on drive pedestal, and gleaming chrome wire-mesh Trash (empty and full).
-* **Full-colour 10.2 Aqua action icons** (111 master artworks + 200 freedesktop/GTK aliases at
-  16, 22, 24, 32, `32@2x` and 48 px in `Context=Actions`), sampled from Apple's 2002 HIG
-  Chapter 11 (Figures 11-18, 11-19 and dialog figures): round clear-glass navigation buttons
-  (`Back` / `Forward` with crisp black triangle + twin dots, `Up`, `Down`, `?` Help), sky-blue
-  pinstriped Aqua folders with navy-outlined `+` badges (`New Folder`, `Open`), curled white
-  document sheets, 3.5" floppy disk, front-on desktop printer, Sherlock silver-rimmed glass
-  magnifier and zoom lenses, yellow wooden `Compose` pencil, perforated blue and crimson Mail
-  postage stamps, spiral-bound `@` address book, Finder `Home` cottage, glossy ruby `Favorites`
-  heart, crossed `Utilities` hammer & wrench, `Disc Burner` trefoil, `Preview` rotate cards,
-  sliding-drawer `Sidebar`, and formatting palette tiles.
-* **Solid, rounded symbolic & menu-extra glyphs** (426 names, 139 distinct shapes) modelled on
-  the 10.2 menu extras — the AirPort fan, the speaker with waves, the horizontal battery, the
-  eject key, and solid triangle arrows — instead of thin wireframe line art.
-* It inherits Oxygen (then Breeze and hicolor) as a fallback for remaining `mimetypes/`, `status/`,
-  `emblems/`, `emotes/` and niche IDE/office `actions/` while those categories are finished.
-* The tray names are also provided at panel sizes (16 to 24 px), so the Plasma system tray
-  shows the menu extras instead of Oxygen's colour tray icons: volume, network, battery
-  (including power profiles), Bluetooth, brightness, notifications, updates, microphone,
-  camera, clipboard, KDE Connect and media.
-* Symbolic glyphs are filled shapes only, with no strokes, using KDE's `ColorScheme-Text` class
-  and `fill:currentColor`, so KDE and GTK recolour them. Unused signal bars and quiet
-  volume waves are the same colour at 35 % opacity.
+* **Hand-drawn photo-illustrative icons** for the icons you see most: folder, home, downloads,
+  trash, file manager, terminal, settings, hard disk, web browser, text editor and calculator.
+  They're drawn as SVG by `tools/draw_aqua_icons.py` (sources in `artwork/aqua-icons/`) to match
+  the icons in Apple's June 2002 HIG chapter 11, measured from its figures: light from directly
+  above, no hard outlines, platinum and white plastics, chrome, crisp paper, soft shadows. The
+  KDE logo stands in where Apple used its own. `docs/mockups/aqua-remix/` has the side-by-side
+  with Apple's figures.
+* **Glass toolbar action icons** (111 masters + 200 aliases) and **solid menu-extra symbolic
+  glyphs** (426 names), modelled on the 10.2 toolbar buttons and menu extras.
+* **Everything else full-colour comes from Crystal**, KDE 3's Aqua-era icon theme by Everaldo
+  Coelho, through its maintained Plasma 6 continuation
+  [KrystalSVG](https://invent.kde.org/blackcrack/krystalsvg). The theme inherits
+  `KrystalSVG,oxygen,breeze,hicolor`. KrystalSVG is licensed CC BY-NC-SA, so it isn't bundled
+  here; install it with `contrib/install-krystalsvg.sh` (about 120 MB). Without it, the
+  remaining icons fall back to Oxygen.
+
+The tray names are also provided at panel sizes (16 to 24 px), so the Plasma system tray shows the
+menu extras instead of colour tray icons. Symbolic glyphs are filled shapes using KDE's
+`ColorScheme-Text` class and `fill:currentColor`, so KDE and GTK recolour them.
 
 Generated by `tools/make_icons.py` (contact sheet: `tools/preview_icons.py`). Pick it in
 System Settings → Colors & Themes → Icons → Oxygen Pinstripe.

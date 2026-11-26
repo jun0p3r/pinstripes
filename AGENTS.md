@@ -133,7 +133,7 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Current state (update this)
 
-*Last updated: 2026-11-26 by Perplexity Computer (Gemini 4 Carbon).*
+*Last updated: 2026-11-26 by Claude Code (Opus 5.5).*
 
 * Repos & remotes:
   * Pinstripe suite: GitHub `https://github.com/jun0p3r/pinstripes` (`main`), local path on user's
@@ -142,42 +142,26 @@ Claude again) relies on them to resume without re-deriving anything.
     `~/projects/oxygen-traffic-lights`.
   * Note: the user asked to push every major and minor step to `origin/main` and keep `AGENTS.md`
     updated for seamless handoff across Claude Code, Google Antigravity and Perplexity Computer.
-* **Oxygen-wide 10.2 Aqua icon remake (in progress — Phase 1 complete & pushed)**:
-  * Modular icon library created in `tools/icons_lib/` (`materials.py`, `places_devices.py`,
-    `apps_categories.py`) and wired into `tools/make_icons.py` (builds all PNG sizes + SVGs in
-    ~2.3 s, ~11 MB total in `icons/Oxygen-Pinstripe/`):
-    * `places/`: **74/74** Oxygen names covered (49 masters + 28 aliases at 16–128 px): sky-blue
-      and 9 colour-tinted pinstriped Aqua folders, 10.2 Save-dialog (`al-107-045.png`) recessed
-      folder glyphs (`Documents`, `Downloads`, `Music`, `Pictures`, `Movies`, `Sites`, `Public`
-      yellow diamond walking-person road sign), `Home` cottage, Aqua `Desktop`, sapphire `Network`
-      globe on drive pedestal, Xserve `network-server` blades, and empty/full chrome wire-mesh
-      `Trash` (`ch11-202-002.png`).
-    * `devices/`: **89/89** Oxygen names covered (40 masters + 50 aliases at 16–128 px): Studio
-      Display `computer`, white clamshell iBook `computer-laptop`, Figure 11-14 brushed-aluminum
-      3.5" internal drive (`#d6d5db..#9d9ca1`) and amber-anodized external USB/FireWire drive
-      (`#f4961e..#ffc448`), Figure 11-15 iridescent CD/DVD/BD discs and 3.5" floppy, snow-white
-      scroll-wheel iPod, cylindrical aluminum iSight webcam, Apple Pro Keyboard/Mouse/Speakers,
-      and UFO AirPort Base Station wireless levels.
-    * `apps/`: **207/207** Oxygen names covered (+ Plasma 6 `org.kde.*` / freedesktop aliases; 59
-      masters + 173 aliases at 16–128 px): sampled two-tone Finder smiley (`#9cbdff..#3052b6` /
-      `#dceaff..#95a6de`, open-stroke nose & smile), TextEdit angled ruled pad + chrome pen,
-      Preview stacked ocean photos + loupe, Mail scalloped hawk stamp, Safari mariner's compass,
-      pinstriped-bezel Terminal (`>_`) and Process Viewer ECG monitors, Console amber LED matrix,
-      Stickies, QuickTime player, iTunes CD + eighth notes, Calculator, Key Caps `⌘` keycap,
-      Sherlock deerstalker + magnifier, Chess wooden knight, and 12 distinct Figure 11-12 System
-      Preferences brushed-silver light-switch wall plates (`#fafafa..#dcdde0` with 4 corner screws)
-      covering all 45+ `preferences-*` entries.
-    * `categories/`: **40/40** Oxygen names covered (19 masters + 21 aliases at 16–128 px),
-      including 10.2 `Applications` ruler-pencil-brush "A" and `Utilities` hammer & wrench.
-    * `applets/`: **40/40** Oxygen PNG widget icons covered (16 masters + 24 aliases at 16–48 px).
-    * `actions/`: **111** 10.2 masters (+200 aliases at 16–48 px & `32@2x`) already built; ~787
-      additional niche Oxygen `actions/` names remain for Phase 3.
-    * `symbolic/` & `panel/status/`: 426 menu-extra & symbolic SVGs.
-  * Refreshed `docs/screenshots/plasma-desktop.png` (Dock & Go menu now render the 10.2 Finder,
-    Terminal, Safari, Mail, System Preferences, Help and Mesh Trash icons),
-    `docs/screenshots/icons-places-apps.png`, `docs/screenshots/icons.png`, `docs/preview.html`
-    and `README.md`. Removed committed `.pyc` files and added `__pycache__/` + `*.py[cod]` to
-    `.gitignore`.
+* **Icon direction (decided by the user, 2026-11-26)**: the procedural `tools/icons_lib/`
+  places/devices/apps/categories/applets read as flat clip-art, so they are **no longer emitted**
+  (the modules stay in the repo, unused). `Oxygen Pinstripe` now has three layers:
+  * **Hand-drawn icons** (`artwork/aqua-icons/*.svg`, written by `tools/draw_aqua_icons.py`,
+    rendered to PNG by `make_icons.py` via librsvg with KDE aliases in `ARTWORK_ICONS`): folder,
+    user-home, folder-download, user-trash, system-file-manager, utilities-terminal,
+    systemsettings, drive-harddisk, internet-web-browser, accessories-text-editor,
+    accessories-calculator. They follow the HIG chapter 11 figures as closely as possible (the
+    user wants them truthful to 10.2 and skeuomorphic, not a loose remix): no hard outlines, light
+    from directly above, colours measured from the figures (monitor bezel #c6c7c8, screen
+    #484b50; globe navy #28338a at the top to #bfe0fa at the bottom; disk top #c4c3c8..#aaa9af,
+    front #4a4a54; logo #9aa0a5..#4c5a61). The KDE logo replaces Apple's. Side-by-side with
+    Apple's figures: `docs/mockups/aqua-remix/hig-side-by-side.png`.
+  * **Glass toolbar action icons** (111 + 200 aliases) and the 426 menu-extra symbolics, as before.
+  * **Crystal for everything else**: `index.theme` inherits `KrystalSVG,oxygen,breeze,hicolor`.
+    KrystalSVG (https://invent.kde.org/blackcrack/krystalsvg) continues Everaldo's KDE 3 Crystal
+    SVG. Its licence is **CC BY-NC-SA**, so it must never be committed here; users install it
+    with `contrib/install-krystalsvg.sh` (120 MB download, into `~/.local/share/icons/KrystalSVG`),
+    and `apply-pinstripe.sh` warns when it's missing. Nuvola (LGPL) and Bluecurve (GPL) were
+    compared and rejected (`docs/mockups/aqua-remix/classic-sets-compare.png`).
 * To install on the user's Fedora machine after pulling `main`:
   * User-local themes, icons & colours:
     `git pull && cmake -S . -B build -G Ninja -DCMAKE_INSTALL_PREFIX=$HOME/.local && cmake --install build && rm -f ~/.cache/icon-cache.kcache`
@@ -195,38 +179,16 @@ Claude again) relies on them to resume without re-deriving anything.
 
 ### Backlog (update this; highest value first)
 
-1. **Finish remaking the remaining Oxygen icon categories in 10.2 Aqua style** (`tools/make_icons.py`
-   already has `try: import` hooks ready at lines 2348–2371 for all three modules — create each
-   module, rerun `python3 tools/make_icons.py`, render & visually inspect contact sheets, update
-   `AGENTS.md`, and push after each step!):
-   * **Phase 2A — `tools/icons_lib/mimetypes_icons.py` (`build_mimetypes_painters()`)**: cover all
-     **441** Oxygen `mimetypes/` names (198 upstream real + 243 aliases) using `aqua_sheet()` from
-     `materials.py` (Figure 11-11 "Do this": hovered curled white document with integrated central
-     10.2 artwork and integrated uppercase bottom label `PDF`, `PNG`, `JPEG`, `SVG`, `MP3`, `MP4`,
-     `ZIP`, `TAR`, `HTML`, `CSS`, `JS`, `PY`, `C++`, `RS`, `SH`, `TTF`, etc.; `pref_strip=True` for
-     config/desktop/theme files per Figure 11-12; `aqua_plugin_cube()` for `package-x-generic`,
-     `.rpm`, `.deb`, `.flatpak`, `.appimage`, `.apk` per Figure 11-13; `.iso`/`.dmg` optical image).
-   * **Phase 2B — `tools/icons_lib/status_emblems_emotes.py`
-     (`build_status_emblems_emotes_painters() -> (status, emblems, emotes, animations, special)`)**:
-     cover all **129** `status/` icons (10.2 amber Caution triangle with `!`, crimson octagon Stop,
-     Aqua blue Get Info sphere, brass lock, 28 Sherlock-style 3D golden sun / silver moon / puffy
-     glass cloud weather icons, iChat glossy glass presence gems, battery/volume/wireless status),
-     all **35** `emblems/` (Finder curved alias arrow `alias_arrow_badge()`, lock, heart, VCS
-     check/plus/delta/bolt, GPG trust), all **51** `emotes/` (2002 iChat glossy 3D amber-yellow gel
-     spheres with expressive faces + heart/rose/gift/food/drink), **4** `animations/` and **4**
-     `special/`.
-   * **Phase 3 — `tools/icons_lib/actions_extra.py` (`extend_action_painters(base_actions)`)**:
-     extend `actions/` from 311 names to all **1,098** Oxygen `actions/` names (IDE `code-*`,
-     `debug-*`, `run-build*`; vector/Calligra `draw-*`, `transform-*`, `align-*`, `distribute-*`,
-     `format-*-node`, `object-*`, `layer-*`; `insert-table`/`edit-table-*`, `office-chart-*`,
-     `view-calendar*`, `view-pim-*`, `view-financial-*`, `flag-*`, `tag*`, `mixer-*`, `im-*`,
-     `irc-*`, `games-*`, `view-certificate*`).
-   * Reference inventory check: clone `https://github.com/KDE/oxygen-icons.git` with
-     `--filter=blob:none --no-checkout --depth 1` and diff `git ls-tree -r HEAD` against generated
-     `icons/Oxygen-Pinstripe/32x32/<cat>/` to verify 0 missing names across all 2,212 Oxygen PNG
-     entries.
-2. **Live desktop verification**: pull on Fedora, run `cmake --install build && rm -f ~/.cache/icon-cache.kcache`,
-   and inspect Dolphin, Konsole, KMail, System Settings, Kickoff and the Plasma Dock.
+1. **Extend the hand-drawn set** where Crystal and the hand-drawn icons clash. Next: the folder
+   family (`folder-documents`, `-music`, `-pictures`, `-videos`, `-desktop`, `-public`,
+   `-templates`, coloured folders) as the Jaguar folder with a stamped glyph, and
+   `user-trash-full`. Add each to `tools/draw_aqua_icons.py` + `ARTWORK_ICONS`, compare against
+   the HIG figures, and render the resolver sheet (QIcon.fromTheme with explicit
+   `setThemeSearchPaths`, since PySide's bundled Qt only searches `:/icons`). Don't recreate the
+   cancelled procedural phases (mimetypes, status, emblems, actions_extra): Crystal covers them,
+   and those `try: import` hooks in `make_icons.py` would shadow it.
+2. **Live desktop check of the new icons** in Konsole, KMail, System Settings, Kickoff and the Dock
+   (Dolphin checked 2026-11-26).
 3. **Default-button pulse & small control variants** (HIG chapter 8, p. 160).
 
 ### Session log (append one line per session, newest last)
@@ -256,3 +218,7 @@ Claude again) relies on them to resume without re-deriving anything.
   the user-local parts (themes, icons, GTK, colours) and reloaded Plasma's caches; the live
   panel shows the new Dock and tray icons. The system-wide widget style + decoration install was
   started in the user's terminal and is waiting for their sudo password.
+* 2026-11-26 Claude Code (Opus 5.5): system-wide install done; menu bar fix (whole bar on window
+  stripes); `gh` signed in so pushes work; set up `~/projects/AGENT-CHAT.md` as a mailbox with
+  Antigravity. Icons: hand-drawn HIG-matched set (`artwork/aqua-icons/`), procedural colour
+  categories dropped, theme now inherits Crystal via KrystalSVG (`contrib/install-krystalsvg.sh`).

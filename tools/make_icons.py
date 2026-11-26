@@ -2325,25 +2325,68 @@ def _emit_category(cat, items, size_specs):
     return dirs_out, alias_count
 
 
+# Hand-drawn photo-illustrative icons (artwork/aqua-icons/*.svg, made by tools/draw_aqua_icons.py
+# to match the HIG chapter 11 figures). Everything else full-colour comes from the inherited
+# KrystalSVG theme (Crystal, KDE 3's Aqua-era set), which is installed separately because its
+# licence (CC BY-NC-SA) can't be bundled here.
+ARTWORK = os.path.join(ROOT, "artwork", "aqua-icons")
+ARTWORK_ICONS = (
+    # canonical name, context dir, aliases
+    ("folder", "places", ("folder-blue", "inode-directory")),
+    ("user-home", "places", ("folder-home",)),
+    ("folder-download", "places", ("folder-downloads",)),
+    ("user-trash", "places", ("trashcan_empty", "user-trash-empty")),
+    ("system-file-manager", "apps", ("org.kde.dolphin", "dolphin", "file-manager")),
+    ("utilities-terminal", "apps", ("org.kde.konsole", "konsole", "terminal")),
+    ("systemsettings", "apps", ("preferences-system", "org.kde.systemsettings", "preferences-desktop")),
+    ("drive-harddisk", "devices", ("drive-harddisk-root", "drive-harddisk-system", "hdd_unmount")),
+    ("internet-web-browser", "apps", ("web-browser", "browser")),
+    ("accessories-text-editor", "apps", ("org.kde.kwrite", "kwrite", "org.kde.kate", "kate", "text-editor")),
+    ("accessories-calculator", "apps", ("org.kde.kcalc", "kcalc", "org.kde.kalk", "calc")),
+)
+
+
+def render_artwork_png(svg_path, px):
+    import gi
+    gi.require_version("Rsvg", "2.0")
+    import cairo
+    from gi.repository import Rsvg
+    surf = cairo.ImageSurface(cairo.FORMAT_ARGB32, px, px)
+    cr = cairo.Context(surf)
+    vp = Rsvg.Rectangle()
+    vp.x, vp.y, vp.width, vp.height = 0, 0, px, px
+    Rsvg.Handle.new_from_file(svg_path).render_document(cr, vp)
+    return surf
+
+
+def _emit_artwork(size_specs):
+    dirs_out = []
+    for sz_dir, sz, scale_f, kind, extra in size_specs:
+        for canon, cat, aliases in ARTWORK_ICONS:
+            rel = f"{sz_dir}/{cat}"
+            if (rel, cat, sz, kind, extra) not in dirs_out:
+                dirs_out.append((rel, cat, sz, kind, extra))
+            d = os.path.join(OUT, rel)
+            os.makedirs(d, exist_ok=True)
+            render_artwork_png(os.path.join(ARTWORK, f"{canon}.svg"), sz * scale_f).write_to_png(
+                os.path.join(d, f"{canon}.png"))
+            for al in aliases:
+                dst = os.path.join(d, f"{al}.png")
+                if not os.path.lexists(dst):
+                    os.symlink(f"{canon}.png", dst)
+    return dirs_out
+
+
 def build():
     app = QGuiApplication.instance() or QGuiApplication(sys.argv)
     if os.path.isdir(OUT):
         shutil.rmtree(OUT)
 
-    from icons_lib.places_devices import build_places_painters, build_devices_painters
-    from icons_lib.apps_categories import build_apps_and_categories_painters
-
+    # The procedural places/devices/apps/categories/applets painters (icons_lib) read as flat
+    # clip-art next to the widget style, so they are no longer emitted; see AGENTS.md.
     cat_groups = [
         ("actions", build_action_painters(), ACTION_SIZES),
-        ("places", build_places_painters(), RICHER_SIZES),
-        ("devices", build_devices_painters(), RICHER_SIZES),
     ]
-    apps_p, cats_p, applets_p = build_apps_and_categories_painters()
-    cat_groups.extend([
-        ("apps", apps_p, RICHER_SIZES),
-        ("categories", cats_p, RICHER_SIZES),
-        ("applets", applets_p, COMPACT_SIZES),
-    ])
 
     try:
         from icons_lib.mimetypes_icons import build_mimetypes_painters
@@ -2376,6 +2419,8 @@ def build():
         c_dirs, n_al = _emit_category(cat, items, specs)
         all_color_dirs.extend(c_dirs)
         summary.append(f"{cat}:{len(items)}(+{n_al})")
+    all_color_dirs.extend(_emit_artwork(RICHER_SIZES))
+    summary.append(f"artwork:{len(ARTWORK_ICONS)}(+{sum(len(a) for *_, a in ARTWORK_ICONS)})")
 
     # 2. Symbolic & panel menu-extra SVGs
     sym_icons = build_symbolic_icons()
@@ -2403,7 +2448,7 @@ def build():
     with open(os.path.join(OUT, "index.theme"), "w") as f:
         f.write("[Icon Theme]\nName=Oxygen Pinstripe\n"
                 "Comment=Mac OS X 10.2 Aqua icon theme and menu-extra symbolic glyphs\n"
-                "Inherits=oxygen,breeze,hicolor\nExample=system-file-manager\nDisplayDepth=32\nDesktopDefault=48\nToolbarDefault=32\nMainToolbarDefault=32\nSmallDefault=16\nPanelDefault=22\n"
+                "Inherits=KrystalSVG,oxygen,breeze,hicolor\nExample=system-file-manager\nDisplayDepth=32\nDesktopDefault=48\nToolbarDefault=32\nMainToolbarDefault=32\nSmallDefault=16\nPanelDefault=22\n"
                 "FollowsColorScheme=true\n"
                 f"Directories={','.join(dirs)}\n\n")
         for rel, cat, sz, kind, extra in all_color_dirs:

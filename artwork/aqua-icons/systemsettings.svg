@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><defs>
+<filter id="drop" x="-30%" y="-30%" width="160%" height="170%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="1.8"/><feOffset dy="2.2"/>
+  <feComponentTransfer><feFuncA type="linear" slope="0.5"/></feComponentTransfer>
+  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+<filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="0.9"/><feOffset dy="1"/>
+  <feComponentTransfer><feFuncA type="linear" slope="0.3"/></feComponentTransfer>
+  <feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge>
+</filter>
+<filter id="b05"><feGaussianBlur stdDeviation="0.5"/></filter>
+<filter id="b1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1"/></filter>
+<filter id="b2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2"/></filter>
+<filter id="b3" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="3"/></filter>
+<filter id="brush" x="0" y="0" width="100%" height="100%">
+  <feTurbulence type="fractalNoise" baseFrequency="0.003 0.7" numOctaves="3" seed="7" result="n"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 -0.4" result="w"/>
+  <feComposite in="w" in2="SourceGraphic" operator="in" result="wi"/>
+  <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.6 0.3" result="d"/>
+  <feComposite in="d" in2="SourceGraphic" operator="in" result="di"/>
+  <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="wi"/><feMergeNode in="di"/></feMerge>
+</filter>
+<pattern id="pin" width="2" height="2" patternUnits="userSpaceOnUse">
+  <rect width="1" height="2" fill="#9aa2aa" fill-opacity="0.2"/>
+</pattern>
+<pattern id="pinH" width="2" height="2" patternUnits="userSpaceOnUse">
+  <rect width="2" height="1" fill="#9aa2aa" fill-opacity="0.18"/>
+</pattern>
+<linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fff" stop-opacity="0.9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+</linearGradient>
+<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ffffff"/><stop offset="0.3" stop-color="#d6dade"/>
+  <stop offset="0.48" stop-color="#8e959c"/><stop offset="0.52" stop-color="#5c636a"/>
+  <stop offset="0.6" stop-color="#b9bfc5"/><stop offset="1" stop-color="#f2f4f6"/>
+</linearGradient>
+<linearGradient id="chromeX" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#6b737b"/><stop offset="0.2" stop-color="#e9ecef"/>
+  <stop offset="0.35" stop-color="#ffffff"/><stop offset="0.55" stop-color="#9ba2a9"/>
+  <stop offset="0.75" stop-color="#dfe3e7"/><stop offset="1" stop-color="#6b737b"/>
+</linearGradient>
+<radialGradient id="floor" cx="0.5" cy="0.5" r="0.5">
+  <stop offset="0" stop-color="#000" stop-opacity="0.45"/><stop offset="1" stop-color="#000" stop-opacity="0"/>
+</radialGradient>
+
+<linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#fbfcfd"/><stop offset="1" stop-color="#dfe3e7"/>
+</linearGradient>
+<linearGradient id="slot" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#5d646b"/><stop offset="1" stop-color="#c7ccd1"/>
+</linearGradient>
+<linearGradient id="lever" x1="0" y1="0" x2="1" y2="0">
+  <stop offset="0" stop-color="#a6adb4"/><stop offset="0.35" stop-color="#ffffff"/><stop offset="1" stop-color="#b9c0c6"/>
+</linearGradient>
+<linearGradient id="leverTop" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd5da"/>
+</linearGradient>
+<linearGradient id="mark" x1="0" y1="0" x2="0" y2="1">
+  <stop offset="0" stop-color="#9aa0a5"/><stop offset="0.35" stop-color="#6b757c"/><stop offset="1" stop-color="#4c5a61"/>
+</linearGradient>
+<radialGradient id="dome" cx="0.45" cy="0.3" r="0.8">
+  <stop offset="0" stop-color="#ffffff"/><stop offset="0.6" stop-color="#d0d5da"/><stop offset="1" stop-color="#8d949b"/>
+</radialGradient>
+<clipPath id="markClip"><path id="markPath"/></clipPath>
+</defs>
+<g filter="url(#drop)">
+  <rect x="8" y="10" width="112" height="104" rx="4" fill="url(#plate)"/>
+  <rect x="8" y="10" width="112" height="104" rx="4" fill="url(#plate)" filter="url(#brush)" opacity="0.8"/>
+  <rect x="8.5" y="10.5" width="111" height="103" rx="3.5" fill="none" stroke="#fff" stroke-width="1.2"/>
+  <rect x="8.5" y="10.5" width="111" height="103" rx="3.5" fill="none" stroke="#8d949b" stroke-opacity="0.4"/>
+  <path d="M42 11v102" stroke="#a7adb3"/><path d="M43 11v102" stroke="#fff"/>
+  <rect x="20" y="44" width="12" height="36" rx="2" fill="url(#slot)"/>
+  <rect x="21" y="45" width="10" height="34" rx="1.5" fill="#3d4349" filter="url(#b05)"/>
+  <path d="M21.5 64h9l2 10h-13z" fill="#000" fill-opacity="0.45" filter="url(#b1)"/>
+  <path d="M21 46.5h10l1 17h-12z" fill="url(#lever)"/>
+  <path d="M20.6 44.5h10.8l-0.4 3h-10z" fill="url(#leverTop)"/>
+  <path d="M21.5 47.6h9" stroke="#fff" stroke-width="0.8"/>
+  <circle cx="25" cy="18.8" r="3.2" fill="#000" fill-opacity="0.25" filter="url(#b05)"/><circle cx="25" cy="18" r="3" fill="url(#dome)"/><path d="M22.8 18h4.4" stroke="#5c636a" stroke-width="1.1" transform="rotate(30 25 18)"/><path d="M23 18.8h4" stroke="#fff" stroke-width="0.5" transform="rotate(30 25 18)"/><circle cx="25" cy="106.8" r="3.2" fill="#000" fill-opacity="0.25" filter="url(#b05)"/><circle cx="25" cy="106" r="3" fill="url(#dome)"/><path d="M22.8 106h4.4" stroke="#5c636a" stroke-width="1.1" transform="rotate(70 25 106)"/><path d="M23 106.8h4" stroke="#fff" stroke-width="0.5" transform="rotate(70 25 106)"/><circle cx="112" cy="18.8" r="3.2" fill="#000" fill-opacity="0.25" filter="url(#b05)"/><circle cx="112" cy="18" r="3" fill="url(#dome)"/><path d="M109.8 18h4.4" stroke="#5c636a" stroke-width="1.1" transform="rotate(-40 112 18)"/><path d="M110 18.8h4" stroke="#fff" stroke-width="0.5" transform="rotate(-40 112 18)"/><circle cx="112" cy="106.8" r="3.2" fill="#000" fill-opacity="0.25" filter="url(#b05)"/><circle cx="112" cy="106" r="3" fill="url(#dome)"/><path d="M109.8 106h4.4" stroke="#5c636a" stroke-width="1.1" transform="rotate(10 112 106)"/><path d="M110 106.8h4" stroke="#fff" stroke-width="0.5" transform="rotate(10 112 106)"/>
+  <path d="M80.00 34.00L83.98 34.28L86.63 39.43L89.77 40.61L95.14 38.44L98.34 40.84L97.78 46.60L99.79 49.28L105.47 50.37L106.87 54.11L103.28 58.65L103.52 62.00L107.72 65.98L106.87 69.89L101.39 71.77L99.79 74.72L101.16 80.34L98.34 83.16L92.72 81.79L89.77 83.39L87.89 88.87L83.98 89.72L80.00 85.52L76.65 85.28L72.11 88.87L68.37 87.47L67.28 81.79L64.60 79.78L58.84 80.34L56.44 77.14L58.61 71.77L57.43 68.63L52.28 65.98L52.00 62.00L56.72 58.65L57.43 55.37L54.53 50.37L56.44 46.86L62.22 46.60L64.60 44.22L64.86 38.44L68.37 36.53L73.37 39.43L76.65 38.72zM97.92 62a17.92 17.92 0 1 0 -35.84 0a17.92 17.92 0 1 0 35.84 0zM72.02 51.36h4.47v8.51l7.98 -8.51h5.85l-9.79 10.11l10.43 11.17h-5.96l-8.51 -9.15v9.15h-4.47z" fill="#ffffff" fill-rule="evenodd" transform="translate(0 1.4)"/>
+  <path d="M80.00 34.00L83.98 34.28L86.63 39.43L89.77 40.61L95.14 38.44L98.34 40.84L97.78 46.60L99.79 49.28L105.47 50.37L106.87 54.11L103.28 58.65L103.52 62.00L107.72 65.98L106.87 69.89L101.39 71.77L99.79 74.72L101.16 80.34L98.34 83.16L92.72 81.79L89.77 83.39L87.89 88.87L83.98 89.72L80.00 85.52L76.65 85.28L72.11 88.87L68.37 87.47L67.28 81.79L64.60 79.78L58.84 80.34L56.44 77.14L58.61 71.77L57.43 68.63L52.28 65.98L52.00 62.00L56.72 58.65L57.43 55.37L54.53 50.37L56.44 46.86L62.22 46.60L64.60 44.22L64.86 38.44L68.37 36.53L73.37 39.43L76.65 38.72zM97.92 62a17.92 17.92 0 1 0 -35.84 0a17.92 17.92 0 1 0 35.84 0zM72.02 51.36h4.47v8.51l7.98 -8.51h5.85l-9.79 10.11l10.43 11.17h-5.96l-8.51 -9.15v9.15h-4.47z" fill="url(#mark)" fill-rule="evenodd"/>
+  <path d="M80.00 34.00L83.98 34.28L86.63 39.43L89.77 40.61L95.14 38.44L98.34 40.84L97.78 46.60L99.79 49.28L105.47 50.37L106.87 54.11L103.28 58.65L103.52 62.00L107.72 65.98L106.87 69.89L101.39 71.77L99.79 74.72L101.16 80.34L98.34 83.16L92.72 81.79L89.77 83.39L87.89 88.87L83.98 89.72L80.00 85.52L76.65 85.28L72.11 88.87L68.37 87.47L67.28 81.79L64.60 79.78L58.84 80.34L56.44 77.14L58.61 71.77L57.43 68.63L52.28 65.98L52.00 62.00L56.72 58.65L57.43 55.37L54.53 50.37L56.44 46.86L62.22 46.60L64.60 44.22L64.86 38.44L68.37 36.53L73.37 39.43L76.65 38.72zM97.92 62a17.92 17.92 0 1 0 -35.84 0a17.92 17.92 0 1 0 35.84 0zM72.02 51.36h4.47v8.51l7.98 -8.51h5.85l-9.79 10.11l10.43 11.17h-5.96l-8.51 -9.15v9.15h-4.47z" fill="none" stroke="#2a2f33" stroke-opacity="0.35" stroke-width="0.6"/>
+  <clipPath id="cogc"><path d="M80.00 34.00L83.98 34.28L86.63 39.43L89.77 40.61L95.14 38.44L98.34 40.84L97.78 46.60L99.79 49.28L105.47 50.37L106.87 54.11L103.28 58.65L103.52 62.00L107.72 65.98L106.87 69.89L101.39 71.77L99.79 74.72L101.16 80.34L98.34 83.16L92.72 81.79L89.77 83.39L87.89 88.87L83.98 89.72L80.00 85.52L76.65 85.28L72.11 88.87L68.37 87.47L67.28 81.79L64.60 79.78L58.84 80.34L56.44 77.14L58.61 71.77L57.43 68.63L52.28 65.98L52.00 62.00L56.72 58.65L57.43 55.37L54.53 50.37L56.44 46.86L62.22 46.60L64.60 44.22L64.86 38.44L68.37 36.53L73.37 39.43L76.65 38.72zM97.92 62a17.92 17.92 0 1 0 -35.84 0a17.92 17.92 0 1 0 35.84 0zM72.02 51.36h4.47v8.51l7.98 -8.51h5.85l-9.79 10.11l10.43 11.17h-5.96l-8.51 -9.15v9.15h-4.47z" fill-rule="evenodd"/></clipPath>
+  <ellipse cx="80" cy="46" rx="27" ry="15" fill="url(#gloss)" opacity="0.75" clip-path="url(#cogc)"/>
+</g></svg>
