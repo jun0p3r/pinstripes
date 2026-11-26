@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Sampled 10.2 3.5-inch High-Density Floppy Disk (HIG Fig. 11-18 top-left / i-018.png) -->
+    <filter id="floppyShadow" x="-20%" y="-15%" width="140%" height="135%">
+      <feGaussianBlur stdDeviation="3.0"/>
+    </filter>
+
+    <!-- Matte charcoal-graphite floppy shell (sampled i-018.png top-left: #4f5054 -> #2e2f33) -->
+    <linearGradient id="charcoalShell" x1="64" y1="14" x2="64" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#55565b"/>
+      <stop offset="0.22" stop-color="#414247"/>
+      <stop offset="0.85" stop-color="#2f3034"/>
+      <stop offset="1.00" stop-color="#232428"/>
+    </linearGradient>
+
+    <!-- Brushed satin-aluminum sliding shutter (sampled i-018.png: bright left, satin right) -->
+    <linearGradient id="metalShutter" x1="39" y1="14" x2="88" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.38" stop-color="#f2f3f7"/>
+      <stop offset="0.72" stop-color="#cfd2da"/>
+      <stop offset="1.00" stop-color="#b4b8c2"/>
+    </linearGradient>
+
+    <!-- Crisp white bottom index label -->
+    <linearGradient id="whiteLabel" x1="64" y1="57" x2="64" y2="111" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.78" stop-color="#f8f9fb"/>
+      <stop offset="1.00" stop-color="#e5e8ee"/>
+    </linearGradient>
+
+    <!-- Authentic 3.5" floppy silhouette with chamfered top-right corner -->
+    <path id="floppyBody" d="M 20.0,14.5 L 101.5,14.5 L 111.5,24.5 L 111.5,108.5 C 111.5,110.4 110.0,111.8 108.0,111.8 L 20.0,111.8 C 18.0,111.8 16.5,110.4 16.5,108.5 L 16.5,18.0 C 16.5,16.0 18.0,14.5 20.0,14.5 Z"/>
+  </defs>
+
+  <!-- Overhead shelf drop shadow -->
+  <use href="#floppyBody" transform="translate(0.8, 3.4)" fill="#000000" fill-opacity="0.32" filter="url(#floppyShadow)"/>
+
+  <!-- Main Charcoal Shell -->
+  <use href="#floppyBody" fill="url(#charcoalShell)" stroke="#1b1c20" stroke-width="0.85"/>
+
+  <!-- Subtle top & left molded plastic rim highlights -->
+  <path d="M 17.7,109.5 L 17.7,18.2 C 17.7,16.6 18.7,15.7 20.4,15.7 L 101.0,15.7 L 110.3,25.0 L 110.3,109.5"
+        fill="none" stroke="#7c7e86" stroke-width="1.1" opacity="0.72"/>
+
+  <!-- Molded vertical rib grooves flanking shutter -->
+  <rect x="27.5" y="14.8" width="11.0" height="35.5" fill="#323338"/>
+  <line x1="27.5" y1="15.0" x2="27.5" y2="50.3" stroke="#666870" stroke-width="0.8"/>
+
+  <!-- Brushed-Aluminum Sliding Shutter (x=38.5..85.5, y=14.5..48.5) -->
+  <path d="M 38.5,14.5 L 85.5,14.5 L 85.5,46.0 C 85.5,47.6 84.2,48.8 82.6,48.8 L 41.4,48.8 C 39.8,48.8 38.5,47.6 38.5,46.0 Z"
+        fill="url(#metalShutter)" stroke="#52555e" stroke-width="0.75"/>
+  <line x1="39.5" y1="15.5" x2="84.5" y2="15.5" stroke="#ffffff" stroke-width="1.2"/>
+  <!-- Rectangular shutter read/write aperture on right side -->
+  <rect x="66.0" y="19.0" width="12.2" height="25.5" rx="0.8" fill="#232428" stroke="#ffffff" stroke-width="0.65"/>
+
+  <!-- Crisp silver-white `HD` mark at top-right (sampled i-018.png!) -->
+  <text x="97.5" y="29.0" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+        font-size="7.2" font-weight="700" fill="#e6e8ee" opacity="0.88">HD</text>
+
+  <!-- Recessed Label Well & Crisp White Label Sheet (x=27.5..100.5, y=56.5..111.5) -->
+  <path d="M 27.0,111.5 L 27.0,58.5 C 27.0,56.8 28.3,55.5 30.0,55.5 L 98.0,55.5 C 99.7,55.5 101.0,56.8 101.0,58.5 L 101.0,111.5 Z"
+        fill="#1a1b1f"/>
+  <rect x="28.5" y="57.2" width="71.0" height="54.2" rx="1.0" fill="url(#whiteLabel)"/>
+  <!-- Subtle coloured Aqua header band & ruled lines on label -->
+  <rect x="28.5" y="57.2" width="71.0" height="7.5" fill="#3a72c8" fill-opacity="0.88"/>
+  <g stroke="#d0d8e6" stroke-width="0.75">
+    <line x1="33.0" y1="74.5" x2="95.0" y2="74.5"/>
+    <line x1="33.0" y1="84.5" x2="95.0" y2="84.5"/>
+    <line x1="33.0" y1="94.5" x2="95.0" y2="94.5"/>
+    <line x1="33.0" y1="104.5" x2="95.0" y2="104.5"/>
+  </g>
+
+  <!-- Bottom-left & bottom-right square write-protect / HD sensor cutouts (exact i-018.png!) -->
+  <rect x="19.5" y="101.5" width="4.6" height="4.2" rx="0.5" fill="#e8eaef" stroke="#18191d" stroke-width="0.6"/>
+  <rect x="103.9" y="101.5" width="4.6" height="4.2" rx="0.5" fill="#e8eaef" stroke="#18191d" stroke-width="0.6"/>
+</svg>

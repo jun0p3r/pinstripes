@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Aqua Translucent Sapphire & White-Acrylic USB Flash Pendrive -->
+    <filter id="stickShadow" x="-30%" y="-30%" width="165%" height="165%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="causticGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+
+    <!-- Machined stainless USB-A connector plug -->
+    <linearGradient id="usbMetal" x1="-13" y1="0" x2="13" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#585e6a"/>
+      <stop offset="0.22" stop-color="#e8ecf2"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="0.68" stop-color="#858c98"/>
+      <stop offset="0.88" stop-color="#d2d7e0"/>
+      <stop offset="1.00" stop-color="#4e5460"/>
+    </linearGradient>
+
+    <!-- Moulded snow-white polycarbonate collar -->
+    <linearGradient id="whiteCollar" x1="-18" y1="0" x2="18" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#cfd4df"/>
+      <stop offset="0.28" stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#f4f6fa"/>
+      <stop offset="1.00" stop-color="#b8bfcc"/>
+    </linearGradient>
+
+    <!-- Translucent 10.2 Sapphire-Aqua Glass Capsule Body -->
+    <linearGradient id="aquaCapsule" x1="-18" y1="16" x2="18" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0b2472"/>
+      <stop offset="0.26" stop-color="#1e5cc4"/>
+      <stop offset="0.62" stop-color="#4292f0"/>
+      <stop offset="0.88" stop-color="#8cd4ff"/>
+      <stop offset="1.00" stop-color="#dff8ff"/>
+    </linearGradient>
+
+    <linearGradient id="capsuleHighlight" x1="-15" y1="20" x2="6" y2="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="0.48" stop-color="#ffffff" stop-opacity="0.28"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <clipPath id="clipCapsule">
+      <path d="M -18.0,36.0 L 18.0,36.0 L 18.0,86.0 C 18.0,96.5 10.0,104.0 0.0,104.0 C -10.0,104.0 -18.0,96.5 -18.0,86.0 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Angled +38 deg across desk for classic 2002 hardware accessory dynamism -->
+  <g transform="translate(64, 64) rotate(38) translate(0, -60)">
+    <!-- Soft cast shadow + blue Aqua glass caustic on desk -->
+    <g transform="translate(2.5, 5.2)">
+      <rect x="-12.5" y="10.0" width="25.0" height="24.0" rx="1.5" fill="#00081c" fill-opacity="0.30" filter="url(#stickShadow)"/>
+      <rect x="-18.0" y="30.0" width="36.0" height="75.0" rx="18.0" fill="#00081c" fill-opacity="0.32" filter="url(#stickShadow)"/>
+      <ellipse cx="0" cy="76" rx="12" ry="24" fill="#2c88ff" fill-opacity="0.26" filter="url(#causticGlow)"/>
+    </g>
+
+    <!-- 1. Spun-Chrome Tail Lanyard Loop (y=101..111) -->
+    <circle cx="0" cy="105.5" r="5.5" fill="none" stroke="url(#usbMetal)" stroke-width="3.0"/>
+    <circle cx="0" cy="105.5" r="5.5" fill="none" stroke="#484e5a" stroke-width="0.6"/>
+
+    <!-- 2. Machined Stainless USB-A Male Connector Plug (y=9..31) -->
+    <rect x="-12.5" y="9.5" width="25.0" height="22.5" rx="1.4" fill="url(#usbMetal)" stroke="#4e5460" stroke-width="0.75"/>
+    <line x1="-11.5" y1="10.6" x2="11.5" y2="10.6" stroke="#ffffff" stroke-width="1.0"/>
+    <!-- Twin rectangular USB contact apertures -->
+    <rect x="-8.5" y="15.5" width="5.6" height="6.8" rx="0.6" fill="#232730" stroke="#ffffff" stroke-width="0.45"/>
+    <rect x="2.9" y="15.5" width="5.6" height="6.8" rx="0.6" fill="#232730" stroke="#ffffff" stroke-width="0.45"/>
+    <!-- Gold contact pins glimpsed inside apertures -->
+    <rect x="-7.2" y="17.0" width="3.0" height="4.2" fill="#e8b838"/>
+    <rect x="4.2" y="17.0" width="3.0" height="4.2" fill="#e8b838"/>
+
+    <!-- 3. Snow-White Polycarbonate Neck Collar (y=29.5..39.0) -->
+    <path d="M -16.2,29.5 L 16.2,29.5 C 17.4,29.5 18.0,30.4 18.0,31.8 L 18.0,38.5 L -18.0,38.5 L -18.0,31.8 C -18.0,30.4 -17.4,29.5 -16.2,29.5 Z"
+          fill="url(#whiteCollar)" stroke="#858d9c" stroke-width="0.75"/>
+    <line x1="-16.5" y1="30.6" x2="16.5" y2="30.6" stroke="#ffffff" stroke-width="1.15"/>
+
+    <!-- 4. Translucent Sapphire-Aqua Glass Capsule Body (y=36..104) -->
+    <path d="M -18.0,36.5 L 18.0,36.5 L 18.0,86.0 C 18.0,96.5 10.0,104.0 0.0,104.0 C -10.0,104.0 -18.0,96.5 -18.0,86.0 Z"
+          fill="url(#aquaCapsule)"/>
+
+    <g clip-path="url(#clipCapsule)">
+      <!-- Subtle translucent internal memory chip & glowing cyan activity LED -->
+      <rect x="-8.5" y="46.0" width="17.0" height="28.0" rx="1.8" fill="#091e5c" fill-opacity="0.42" stroke="#8ad4ff" stroke-width="0.6" stroke-opacity="0.45"/>
+      <circle cx="0" cy="41.5" r="2.4" fill="#d8ff58" filter="url(#causticGlow)"/>
+      <circle cx="0" cy="41.5" r="1.4" fill="#f6ff9c"/>
+
+      <!-- Crisp white USB trident silk-screened on translucent Aqua casing -->
+      <g fill="#ffffff" fill-opacity="0.88" transform="translate(0, 4.0) scale(0.82)">
+        <polygon points="0,55.0 -4.2,61.0 4.2,61.0"/>
+        <rect x="-1.3" y="60.0" width="2.6" height="24.5"/>
+        <circle cx="0" cy="86.0" r="3.8"/>
+        <path d="M 0,79.5 C -6.5,76.5 -9.5,73.0 -9.5,67.0" fill="none" stroke="#ffffff" stroke-opacity="0.88" stroke-width="2.4" stroke-linecap="round"/>
+        <circle cx="-9.5" cy="66.2" r="2.7"/>
+        <path d="M 0,75.5 C 6.5,72.5 9.5,69.0 9.5,63.5" fill="none" stroke="#ffffff" stroke-opacity="0.88" stroke-width="2.4" stroke-linecap="round"/>
+        <rect x="6.8" y="60.4" width="5.4" height="5.4"/>
+      </g>
+
+      <!-- Cylindrical left-side Aqua glass specular reflection -->
+      <rect x="-16.5" y="36.5" width="14.0" height="66.0" rx="7.0" fill="url(#capsuleHighlight)"/>
+      <line x1="-17.5" y1="37.2" x2="17.5" y2="37.2" stroke="#ffffff" stroke-width="1.1" opacity="0.85"/>
+    </g>
+
+    <path d="M -18.0,36.5 L 18.0,36.5 L 18.0,86.0 C 18.0,96.5 10.0,104.0 0.0,104.0 C -10.0,104.0 -18.0,96.5 -18.0,86.0 Z"
+          fill="none" stroke="#18479e" stroke-width="0.8" stroke-opacity="0.68"/>
+  </g>
+</svg>

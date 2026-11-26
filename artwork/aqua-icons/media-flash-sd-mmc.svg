@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Cobalt-Blue Secure Digital (SD) Flash Memory Card (HIG Fig. 11-18 style) -->
+    <filter id="cardShadow" x="-20%" y="-15%" width="140%" height="135%">
+      <feGaussianBlur stdDeviation="3.0"/>
+    </filter>
+
+    <!-- Molded royal cobalt SD card plastic (sampled i-018.png Zip blue: #5878ba -> #2d5096) -->
+    <linearGradient id="sdBlue" x1="64" y1="13" x2="64" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#6486cc"/>
+      <stop offset="0.22" stop-color="#486cb4"/>
+      <stop offset="0.78" stop-color="#335398"/>
+      <stop offset="1.00" stop-color="#243e78"/>
+    </linearGradient>
+
+    <!-- Recessed crisp white & Aqua-striped capacity sticker -->
+    <linearGradient id="sdLabel" x1="64" y1="36" x2="64" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.72" stop-color="#f5f8fc"/>
+      <stop offset="1.00" stop-color="#dfe6f2"/>
+    </linearGradient>
+
+    <!-- Gold contact glimpses along top bevel -->
+    <linearGradient id="goldPin" x1="0" y1="16" x2="0" y2="27" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fff09e"/>
+      <stop offset="0.50" stop-color="#e5b232"/>
+      <stop offset="1.00" stop-color="#9e7012"/>
+    </linearGradient>
+
+    <!-- Authentic SD card silhouette: chamfered top-right corner + left write-protect notch -->
+    <path id="sdBody" d="M 28.0,13.5 L 86.5,13.5 L 102.0,29.0 L 102.0,109.5 C 102.0,111.7 100.2,113.5 98.0,113.5 L 30.0,113.5 C 27.8,113.5 26.0,111.7 26.0,109.5 L 26.0,63.0 L 29.0,61.0 L 29.0,47.0 L 26.0,45.0 L 26.0,17.5 C 26.0,15.2 26.8,13.5 28.0,13.5 Z"/>
+  </defs>
+
+  <!-- Overhead shelf drop shadow -->
+  <use href="#sdBody" transform="translate(0.8, 3.4)" fill="#00081c" fill-opacity="0.32" filter="url(#cardShadow)"/>
+
+  <!-- Pale yellow/silver write-protect lock tab tucked in left notch -->
+  <rect x="25.2" y="48.5" width="4.2" height="9.2" rx="0.8" fill="#f2dc68" stroke="#8c7218" stroke-width="0.6"/>
+
+  <!-- Main Molded Cobalt-Blue SD Card Body -->
+  <use href="#sdBody" fill="url(#sdBlue)" stroke="#1a3164" stroke-width="0.85"/>
+
+  <!-- Sunlit top & left plastic bevel highlight -->
+  <path d="M 27.2,44.5 L 27.2,17.5 C 27.2,15.6 27.9,14.7 29.2,14.7 L 86.0,14.7 L 100.8,29.5 L 100.8,110.5"
+        fill="none" stroke="#98b6f2" stroke-width="1.15" opacity="0.82"/>
+
+  <!-- Subtle molded contact ribs along top header -->
+  <g fill="url(#goldPin)" opacity="0.88">
+    <rect x="33.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="40.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="47.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="54.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="61.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="68.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="75.5" y="17.5" width="4.2" height="9.5" rx="0.6"/>
+    <rect x="82.5" y="19.5" width="4.2" height="7.5" rx="0.6"/>
+  </g>
+
+  <!-- Recessed White & Sky-Blue Label (x=33.5..94.5, y=35.5..103.5) -->
+  <rect x="33.0" y="35.0" width="62.0" height="69.0" rx="2.2" fill="#1b3368"/>
+  <rect x="34.2" y="36.2" width="59.6" height="66.6" rx="1.6" fill="url(#sdLabel)"/>
+
+  <!-- Aqua blue header stripe + insertion arrow + readable capacity text -->
+  <path d="M 34.2,37.8 C 34.2,36.8 35.0,36.2 36.0,36.2 L 92.0,36.2 C 93.0,36.2 93.8,36.8 93.8,37.8 L 93.8,52.0 L 34.2,52.0 Z"
+        fill="#2970d6"/>
+  <polygon points="64.0,40.2 59.2,46.8 68.8,46.8" fill="#ffffff"/>
+
+  <text x="64.0" y="72.5" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+        font-size="15.0" font-weight="700" letter-spacing="0.5" fill="#1e386e">SD</text>
+  <text x="64.0" y="87.5" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+        font-size="8.6" font-weight="600" fill="#526a96">256 MB</text>
+
+  <!-- Bottom grip notch -->
+  <rect x="52.0" y="107.8" width="24.0" height="2.4" rx="1.0" fill="#182c5c"/>
+</svg>

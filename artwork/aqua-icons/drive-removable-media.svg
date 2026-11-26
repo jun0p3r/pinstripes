@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Sampled 10.2 External Removable Drive (HIG Fig. 11-17 top-right / i-017.png) -->
+    <filter id="deskShadow" x="-20%" y="-30%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="3.8"/>
+    </filter>
+    <filter id="contactShadow" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+    <filter id="ledGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
+    <!-- Satin aluminum outer cradle & side rails -->
+    <linearGradient id="aluCradle" x1="64" y1="18" x2="64" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f7f7fb"/>
+      <stop offset="0.25" stop-color="#dcdce3"/>
+      <stop offset="0.88" stop-color="#b8b8c0"/>
+      <stop offset="1.00" stop-color="#eef0f6"/>
+    </linearGradient>
+
+    <!-- Sampled 10.2 Glossy Amber-Tangerine Metallic Top Deck (i-017.png top row:
+         grazed dark-amber sides #a85404, rich golden-orange mid #f79e1c, sunlit center #ffcf5c) -->
+    <linearGradient id="amberDeckH" x1="16" y1="54" x2="112" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#9e4d04"/>
+      <stop offset="0.08" stop-color="#de7e10"/>
+      <stop offset="0.32" stop-color="#fba826"/>
+      <stop offset="0.54" stop-color="#ffc94d"/>
+      <stop offset="0.76" stop-color="#faa624"/>
+      <stop offset="0.92" stop-color="#dc7c10"/>
+      <stop offset="1.00" stop-color="#984904"/>
+    </linearGradient>
+    <linearGradient id="amberDeckV" x1="64" y1="20" x2="64" y2="87" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#7c3802" stop-opacity="0.35"/>
+      <stop offset="0.16" stop-color="#ffffff" stop-opacity="0.14"/>
+      <stop offset="0.78" stop-color="#ffdc78" stop-opacity="0.18"/>
+      <stop offset="1.00" stop-color="#5c2800" stop-opacity="0.28"/>
+    </linearGradient>
+
+    <!-- Moulded white/platinum upper front lip + brushed-silver lower front face (sampled i-017.png) -->
+    <linearGradient id="whiteFrontLip" x1="64" y1="86" x2="64" y2="97" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#f3f4f8"/>
+      <stop offset="1.00" stop-color="#dcdfe6"/>
+    </linearGradient>
+    <linearGradient id="silverFrontFace" x1="64" y1="96" x2="64" y2="111" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#d4d6de"/>
+      <stop offset="0.45" stop-color="#b8bac4"/>
+      <stop offset="0.88" stop-color="#9c9ea8"/>
+      <stop offset="1.00" stop-color="#7e808a"/>
+    </linearGradient>
+
+    <radialGradient id="limeLed" cx="98.5" cy="104.2" r="3.2" fx="98.0" fy="103.5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.38" stop-color="#ebff54"/>
+      <stop offset="0.78" stop-color="#9ad418"/>
+      <stop offset="1.00" stop-color="#456b08"/>
+    </radialGradient>
+
+    <path id="outerShell" d="M 28.0,19.0 L 100.0,19.0 C 103.0,19.0 104.8,20.6 105.3,23.4 L 114.4,86.5 L 13.6,86.5 L 22.7,23.4 C 23.2,20.6 25.0,19.0 28.0,19.0 Z"/>
+    <path id="orangeDeck" d="M 29.2,21.5 L 98.8,21.5 L 111.0,85.5 L 17.0,85.5 Z"/>
+    <clipPath id="clipOrange">
+      <use href="#orangeDeck"/>
+    </clipPath>
+  </defs>
+
+  <!-- Grounded two-layer desk shadow -->
+  <ellipse cx="64" cy="111.5" rx="52" ry="6.2" fill="#000000" fill-opacity="0.33" filter="url(#deskShadow)"/>
+  <rect x="16" y="108.5" width="96" height="4.4" rx="2.2" fill="#000000" fill-opacity="0.50" filter="url(#contactShadow)"/>
+
+  <!-- Top Satin-Aluminum Cradle Rails -->
+  <use href="#outerShell" fill="url(#aluCradle)" stroke="#7c7e88" stroke-width="0.8"/>
+  <line x1="27.0" y1="20.2" x2="101.0" y2="20.2" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- Glossy Amber-Tangerine Removable Media Top Deck -->
+  <use href="#orangeDeck" fill="url(#amberDeckH)"/>
+  <g clip-path="url(#clipOrange)">
+    <rect x="14" y="20" width="100" height="68" fill="url(#amberDeckV)"/>
+    <!-- Crisp dark seam at back & front of orange deck -->
+    <line x1="28" y1="21.8" x2="100" y2="21.8" stroke="#683002" stroke-width="1.2" opacity="0.65"/>
+    <line x1="16" y1="85.2" x2="112" y2="85.2" stroke="#522400" stroke-width="1.4" opacity="0.75"/>
+
+    <!-- Official 10.2 White Removable-Media Diamond + Right Bar Emblem (i-017.png top-right!) -->
+    <g transform="translate(0, 0.8)" fill="#9c4c02" opacity="0.35">
+      <path d="M 62.5,33.5 L 86.5,52.0 L 62.5,73.5 L 36.5,52.0 Z M 62.5,41.2 L 46.8,52.2 L 62.5,65.2 L 76.2,54.8 L 63.5,54.8 L 63.5,49.2 L 76.2,49.2 Z"/>
+      <rect x="61.5" y="49.2" width="31.0" height="5.8" rx="0.8"/>
+    </g>
+    <g fill="#ffffff">
+      <!-- Open perspective diamond broken on right for bar -->
+      <polygon points="62.0,33.5 81.2,47.2 74.2,47.2 62.0,39.0 45.8,52.0 62.0,66.2 74.5,56.8 81.8,56.8 62.0,73.5 36.0,52.0"/>
+      <!-- Horizontal eject/insert bar extending right -->
+      <rect x="61.0" y="49.0" width="31.5" height="6.0" rx="0.6"/>
+    </g>
+  </g>
+
+  <!-- 3D Rounded Satin-Platinum & White Front Bezel (y=85.8..111.0, exact i-017.png front!) -->
+  <!-- Lower satin-silver rounded chassis -->
+  <path d="M 13.6,86.2 L 114.4,86.2 L 113.5,104.8 C 113.2,108.5 110.4,111.0 106.2,111.0 L 21.8,111.0 C 17.6,111.0 14.8,108.5 14.5,104.8 Z"
+        fill="url(#silverFrontFace)" stroke="#686a74" stroke-width="0.8"/>
+  <!-- Upper curved bright-white bezel band -->
+  <path d="M 13.8,86.2 L 114.2,86.2 L 114.0,96.2 L 14.0,96.2 Z" fill="url(#whiteFrontLip)"/>
+  <line x1="14.5" y1="86.8" x2="113.5" y2="86.8" stroke="#ffffff" stroke-width="1.5"/>
+  <line x1="14.2" y1="96.2" x2="113.8" y2="96.2" stroke="#ffffff" stroke-width="1.0" opacity="0.85"/>
+
+  <!-- Glowing Chartreuse-Lime Activity LED at Front Bottom-Right -->
+  <circle cx="98.8" cy="104.5" r="3.4" fill="#d8ff42" fill-opacity="0.38" filter="url(#ledGlow)"/>
+  <circle cx="98.8" cy="104.5" r="2.5" fill="#2c2e35"/>
+  <circle cx="98.8" cy="104.5" r="1.8" fill="url(#limeLed)"/>
+</svg>

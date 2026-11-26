@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Slot-Loading Brushed-Aluminum Optical SuperDrive with Emerging Iridescent Disc -->
+    <filter id="deskShadow" x="-20%" y="-30%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="3.8"/>
+    </filter>
+    <filter id="contactShadow" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+    <filter id="rainbowSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="ledGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+
+    <linearGradient id="aluTop" x1="64" y1="22" x2="64" y2="86" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f6f6fa"/>
+      <stop offset="0.12" stop-color="#e0e0e7"/>
+      <stop offset="0.55" stop-color="#cbcbd3"/>
+      <stop offset="0.94" stop-color="#b5b4bc"/>
+      <stop offset="1.00" stop-color="#f2f2f8"/>
+    </linearGradient>
+
+    <linearGradient id="aluFront" x1="64" y1="86" x2="64" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#eeeeF4"/>
+      <stop offset="0.22" stop-color="#c6c6cf"/>
+      <stop offset="0.75" stop-color="#9696a0"/>
+      <stop offset="1.00" stop-color="#6c6c75"/>
+    </linearGradient>
+
+    <linearGradient id="discSilver" x1="28" y1="78" x2="100" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#d8dce4"/>
+      <stop offset="0.32" stop-color="#ffffff"/>
+      <stop offset="0.58" stop-color="#bfc4ce"/>
+      <stop offset="0.85" stop-color="#f5f7fb"/>
+      <stop offset="1.00" stop-color="#aeb4c0"/>
+    </linearGradient>
+
+    <radialGradient id="limeLed" cx="101" cy="101" r="2.8" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.40" stop-color="#ebff54"/>
+      <stop offset="1.00" stop-color="#58880c"/>
+    </radialGradient>
+
+    <!-- Emerging foreshortened optical disc clipped outside the front slot (y >= 95.5) -->
+    <clipPath id="clipEmergingDisc">
+      <path d="M 10,95.5 L 118,95.5 L 118,124 L 10,124 Z"/>
+    </clipPath>
+    <path id="discEllipse" fill-rule="evenodd"
+          d="M 64,75.0 A 38.0,19.5 0 1 1 63.99,75.0 Z
+             M 64,90.8 A 7.2,3.7 0 1 0 64.01,90.8 Z"/>
+    <clipPath id="clipDiscRing" clip-rule="evenodd">
+      <path clip-rule="evenodd"
+            d="M 64,75.0 A 38.0,19.5 0 1 1 63.99,75.0 Z
+               M 64,90.8 A 7.2,3.7 0 1 0 64.01,90.8 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- Floor shadow under enclosure + protruding optical disc shadow -->
+  <ellipse cx="64" cy="108.5" rx="52" ry="6.2" fill="#000000" fill-opacity="0.32" filter="url(#deskShadow)"/>
+  <rect x="16" y="105.0" width="96" height="4.2" rx="2.0" fill="#000000" fill-opacity="0.48" filter="url(#contactShadow)"/>
+  <ellipse cx="64" cy="115.5" rx="34" ry="4.8" fill="#000000" fill-opacity="0.28" filter="url(#contactShadow)"/>
+
+  <!-- 1. Brushed-Aluminum Optical Drive Chassis (y=24..108) -->
+  <path d="M 13.8,85.5 L 114.2,85.5 L 113.4,104.2 C 113.2,106.6 111.4,108.0 108.8,108.0 L 19.2,108.0 C 16.6,108.0 14.8,106.6 14.6,104.2 Z"
+        fill="url(#aluFront)" stroke="#52525b" stroke-width="0.8"/>
+
+  <!-- Top Cover with Subtle Stamped Circular Optical Mechanism Relief -->
+  <path d="M 28.0,23.5 L 100.0,23.5 C 102.8,23.5 104.5,25.0 105.0,27.6 L 114.2,85.8 L 13.8,85.8 L 23.0,27.6 C 23.5,25.0 25.2,23.5 28.0,23.5 Z"
+        fill="url(#aluTop)" stroke="#767680" stroke-width="0.8"/>
+  <line x1="27.2" y1="24.7" x2="100.8" y2="24.7" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+  <line x1="15.2" y1="85.0" x2="112.8" y2="85.0" stroke="#ffffff" stroke-width="1.6"/>
+
+  <!-- Embossed circular optical clamp relief on top cover -->
+  <ellipse cx="64" cy="54.5" rx="28.0" ry="18.5" fill="none" stroke="#8e8e98" stroke-width="1.2" opacity="0.65"/>
+  <ellipse cx="64" cy="55.6" rx="28.0" ry="18.5" fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.80"/>
+  <ellipse cx="64" cy="54.8" rx="9.5" ry="6.2" fill="#c2c2cb" stroke="#ffffff" stroke-width="0.9"/>
+
+  <!-- Recessed Dark Felt-Lined Front Slot-Load Aperture (x=23..95, y=93.5..98.0) -->
+  <rect x="23.0" y="93.2" width="73.0" height="4.8" rx="2.2" fill="#14151a" stroke="#dcdce5" stroke-width="0.7"/>
+
+  <!-- Activity LED & tiny eject pinhole -->
+  <circle cx="101.5" cy="95.8" r="1.4" fill="#2c2d34"/>
+  <circle cx="106.5" cy="95.8" r="3.0" fill="#d8ff42" fill-opacity="0.35" filter="url(#ledGlow)"/>
+  <circle cx="106.5" cy="95.8" r="1.8" fill="url(#limeLed)"/>
+
+  <!-- 2. Iridescent Rainbow Polycarbonate Optical Disc Emerging from Front Slot! -->
+  <g clip-path="url(#clipEmergingDisc)">
+    <use href="#discEllipse" fill="url(#discSilver)"/>
+    <g clip-path="url(#clipDiscRing)">
+      <g filter="url(#rainbowSoft)">
+        <polygon points="64,94.5 92,114 104,104" fill="#68e6ff" fill-opacity="0.82"/>
+        <polygon points="64,94.5 80,116 92,114" fill="#7cf29c" fill-opacity="0.78"/>
+        <polygon points="64,94.5 70,116 80,116" fill="#fff278" fill-opacity="0.75"/>
+        <polygon points="64,94.5 26,104 42,114" fill="#ffffff" fill-opacity="0.95"/>
+        <polygon points="64,94.5 42,114 56,116" fill="#ea8cff" fill-opacity="0.62"/>
+      </g>
+      <!-- Subtle shadow cast onto disc right where it exits the slot -->
+      <rect x="24" y="95.5" width="80" height="3.2" fill="#000000" fill-opacity="0.36"/>
+      <ellipse cx="64" cy="94.5" rx="14.5" ry="7.4" fill="none" stroke="#8e94a2" stroke-width="0.9"/>
+      <ellipse cx="64" cy="94.5" rx="37.0" ry="18.9" fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.88"/>
+    </g>
+    <ellipse cx="64" cy="94.5" rx="38.0" ry="19.5" fill="none" stroke="#6c7280" stroke-width="0.85"/>
+  </g>
+</svg>
