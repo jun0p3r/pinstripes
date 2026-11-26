@@ -338,15 +338,24 @@ def text_field(p, r):
 LENS_H, GLOW_H = 11, 8  # fixed heights, so tall tiles and short rows look the same
 
 
-def selection(p, r):
-    """Glossy blue gel with the pinstripes showing through (matches the widget style).
-    A fixed 11px lens on top and an 8px glow at the bottom; in between only the striped
-    body, which the frame tiles, so the gel keeps its proportions at any height."""
+def selection(p, r, radius=0.0):
+    """Glossy blue gel. Translucent, so the pinstripes of whatever it sits on show through and
+    stay aligned (an SVG frame can't know the background's stripe phase). A fixed 11px lens on
+    top and an 8px glow at the bottom; the frame tiles the plain body in between, so the gel
+    keeps its proportions at any height. radius > 0 rounds the corners (launcher, lists)."""
+    p.save()
+    p.setRenderHint(QPainter.Antialiasing, True)
+    clip = QPainterPath()
+    if radius > 0:
+        clip.addRoundedRect(r, radius, radius)
+    else:
+        clip.addRect(r)
+    p.setClipPath(clip)
     p.setPen(Qt.NoPen)
-    p.fillRect(r, QColor(40, 108, 218))
-    for y in range(int(r.height())):
-        a = (0, 44, 66, 44)[y % 4]
-        p.fillRect(QRectF(r.left(), r.top() + y, r.width(), 1), QColor(0, 26, 100, a) if a else QColor(255, 255, 255, 34))
+    body = QLinearGradient(r.topLeft(), r.bottomLeft())
+    body.setColorAt(0, QColor(30, 96, 212, 196))
+    body.setColorAt(1, QColor(44, 120, 228, 196))
+    p.fillRect(r, body)
     lens = QRectF(r.left(), r.top(), r.width(), LENS_H)
     lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
     lg.setColorAt(0, QColor(255, 255, 255, 170))
@@ -358,9 +367,19 @@ def selection(p, r):
     gg.setColorAt(0, QColor(128, 202, 255, 0))
     gg.setColorAt(1, QColor(128, 202, 255, 200))
     p.fillRect(glow, gg)
-    p.fillRect(QRectF(r.left(), r.top(), r.width(), 1), QColor(24, 66, 160, 230))
-    p.fillRect(QRectF(r.left(), r.bottom() - 2, r.width(), 1), QColor(170, 225, 255, 150))
-    p.fillRect(QRectF(r.left(), r.bottom() - 1, r.width(), 1), QColor(40, 92, 180, 200))
+    if radius > 0:
+        p.setBrush(Qt.NoBrush)
+        p.setPen(QPen(QColor(24, 66, 160, 210), 1))
+        p.drawRoundedRect(r.adjusted(0.5, 0.5, -0.5, -0.5), radius, radius)
+    else:
+        p.fillRect(QRectF(r.left(), r.top(), r.width(), 1), QColor(24, 66, 160, 230))
+        p.fillRect(QRectF(r.left(), r.bottom() - 2, r.width(), 1), QColor(170, 225, 255, 150))
+        p.fillRect(QRectF(r.left(), r.bottom() - 1, r.width(), 1), QColor(40, 92, 180, 200))
+    p.restore()
+
+
+def rounded_selection(p, r):
+    selection(p, r, 5.0)
 
 
 def transparent(p, r):
@@ -674,7 +693,7 @@ def build():
     # lens in the top border, glow in the bottom border, one stripe period (4px) in the
     # tiled centre: the highlight looks the same on a menu row and on a tall launcher tile
     for prefix in ("selected", "hover", "selected+hover"):
-        s.add_frame(prefix, Frame(24, LENS_H + 4 + GLOW_H, 2, LENS_H, 2, GLOW_H, selection), [("hint-tile-center", 1)])
+        s.add_frame(prefix, Frame(24, LENS_H + 4 + GLOW_H, 6, LENS_H, 6, GLOW_H, rounded_selection), [("hint-tile-center", 1)])
 
     s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
     s.write(os.path.join(OUT, "widgets", "viewitem.svg"))
@@ -715,7 +734,9 @@ def build():
     s = Svg()
     for side in ("north", "south", "west", "east"):
         w, h = (40, 24) if side in ("north", "south") else (24, 40)
-        s.add_frame(f"{side}-active-tab", Frame(w, h, 6, 6, 6, 6, tab(side, TAB_SELECTED)),
+        # Jaguar's selected tab is the Aqua blue gel. Plasma's tray reuses this element to mark an
+        # open menu extra on a top panel, where the saturated blue also reads like an open menu title.
+        s.add_frame(f"{side}-active-tab", Frame(w, h, 6, 6, 6, 6, tab(side, BLUE)),
                     [("hint-stretch-borders", 1), ("hint-top-margin", (1, 4)), ("hint-bottom-margin", (1, 4)),
                      ("hint-left-margin", (12, 1)), ("hint-right-margin", (12, 1))])
     s.add_frame("north-tab", Frame(40, 23, 6, 6, 6, 6, tab("north", TAB_CLEAR)), [("hint-stretch-borders", 1)])
