@@ -184,6 +184,12 @@ Claude again) relies on them to resume without re-deriving anything.
     (then switch Plasma style or icon theme away and back in System Settings to flush caches).
   * System-wide Qt style + KWin decoration (needs sudo, if not yet installed from last round):
     `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so && sudo install -Dm755 ../oxygen-traffic-lights/build-system/bin/org.kde.oxygentrafficlights.so /usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so && dbus-send --session --type=method_call --dest=org.kde.KWin /KWin org.kde.KWin.reconfigure`
+* Regenerating icons on another machine gives **pixel-identical PNGs with different bytes**
+  (each Qt version compresses PNGs differently). Before committing a regeneration, check that
+  pixels actually changed (e.g. PIL `ImageChops.difference(...).getbbox()`), and
+  `git checkout -- icons` if they didn't, to avoid thousands of no-op file changes. Run the
+  generators with plain `python3`, not `python3 -I`: isolated mode drops the script folder from
+  `sys.path`, so `tools/icons_lib` isn't found and the generator stops after clearing its output.
 * Known limits (not bugs to fix): QML/Kirigami pages can't show pinstripes; GTK tabs can't be
   centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes.
 
@@ -245,3 +251,8 @@ Claude again) relies on them to resume without re-deriving anything.
   `applets/` (40) in sampled 10.2 Aqua style (16–128 px), refreshed `plasma-desktop.png` + icon
   contact sheets, wired Phase 2/3 hooks (`mimetypes`, `status/emblems/emotes`, `actions_extra`)
   and updated `AGENTS.md` for handoff.
+* 2026-11-26 Claude Code (Opus 5.5, on the user's machine): pulled all agents' work, built both
+  repos, confirmed the icon generator reproduces the committed icons pixel for pixel, installed
+  the user-local parts (themes, icons, GTK, colours) and reloaded Plasma's caches; the live
+  panel shows the new Dock and tray icons. The system-wide widget style + decoration install was
+  started in the user's terminal and is waiting for their sudo password.
