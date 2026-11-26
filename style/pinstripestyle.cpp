@@ -2149,6 +2149,23 @@ QRect Style::subElementRect(SubElement se, const QStyleOption *opt, const QWidge
     return QProxyStyle::subElementRect(se, opt, w);
 }
 
+// HIG chapter 8 spacing. Nested layouts (and any layout whose horizontal and vertical spacing
+// differ, like ours) ask for this per pair of controls instead of PM_Layout*Spacing.
+int Style::layoutSpacing(QSizePolicy::ControlType c1, QSizePolicy::ControlType c2, Qt::Orientation o, const QStyleOption *, const QWidget *) const
+{
+    if (o == Qt::Horizontal) {
+        // a label sits 8 px from its control; controls sit 12 px apart
+        if (c1 == QSizePolicy::Label || c2 == QSizePolicy::Label)
+            return 8;
+        return 12;
+    }
+    // stacked check boxes and radio buttons sit closer than other controls
+    const auto toggle = QSizePolicy::CheckBox | QSizePolicy::RadioButton;
+    if ((c1 & toggle) && (c2 & toggle))
+        return 6;
+    return 8;
+}
+
 int Style::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QWidget *w) const
 {
     switch (pm) {
