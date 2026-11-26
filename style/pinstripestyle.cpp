@@ -1040,8 +1040,9 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         p->save();
         if (!enabled(opt))
             p->setOpacity(0.55);
-        if (r.height() > ButtonHeight + ShadowSpace + 8) {
-            // tall buttons become bevel buttons, as the HIG recommends (larger text or an icon)
+        if (r.height() >= 40) {
+            // tall buttons become bevel buttons, as the HIG recommends (larger text or an icon).
+            // QML layouts often stretch ordinary one-line buttons to ~30 px: those stay capsules.
             if (isDefault && windowActive(opt) && !sunken) {
                 GelOptions o;
                 o.radius = 5.0;
