@@ -82,6 +82,16 @@ echo "GTK theme: Pinstripe"
 busctl --user call org.kde.kded6 /modules/gtkconfig org.kde.GtkConfig setGtkTheme s Pinstripe >/dev/null 2>&1 || true
 gsettings set org.gnome.desktop.interface gtk-theme Pinstripe 2>/dev/null || true
 gsettings set org.gnome.desktop.wm.preferences button-layout "close,minimize,maximize:" 2>/dev/null || true
+# libadwaita apps ignore GTK themes but still load the user stylesheet; import Pinstripe there
+# (after KDE's colours, which kde-gtk-config keeps at the top of the file)
+gtk4css="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-4.0/gtk.css"
+pinstripe_gtk4="${XDG_DATA_HOME:-$HOME/.local/share}/themes/Pinstripe/gtk-4.0/gtk.css"
+if [[ -f "$pinstripe_gtk4" ]] && ! grep -q 'Pinstripe/gtk-4.0/gtk.css' "$gtk4css" 2>/dev/null; then
+    mkdir -p "$(dirname "$gtk4css")"
+    [[ -s "$gtk4css" && -n "$(tail -c1 "$gtk4css")" ]] && echo >> "$gtk4css"
+    printf "@import url('file://%s'); /* pinstripe: libadwaita */\n" "$pinstripe_gtk4" >> "$gtk4css"
+    echo "libadwaita: Pinstripe imported in $gtk4css"
+fi
 
 if [[ $font == 1 ]]; then
     if [[ -n "$(fc-list "Luxi Sans")" ]]; then

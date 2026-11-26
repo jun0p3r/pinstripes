@@ -28,6 +28,7 @@ if [[ -n "${prev[wmfont]}" ]]; then wr kdeglobals WM activeFont "${prev[wmfont]}
 [[ -n "${prev[deco_theme]}" ]] && wr kwinrc org.kde.kdecoration2 theme "${prev[deco_theme]}"
 wr kwinrc org.kde.kdecoration2 ButtonsOnLeft "${prev[buttons_left]}"
 wr kwinrc org.kde.kdecoration2 ButtonsOnRight "${prev[buttons_right]}"
+sed -i '/pinstripe: libadwaita/d' "${XDG_CONFIG_HOME:-$HOME/.config}/gtk-4.0/gtk.css" 2>/dev/null || true
 [[ -n "${prev[gtktheme]}" ]] && busctl --user call org.kde.kded6 /modules/gtkconfig org.kde.GtkConfig setGtkTheme s "${prev[gtktheme]}" >/dev/null 2>&1 || true
 
 dbus-send --session --type=signal /KGlobalSettings org.kde.KGlobalSettings.notifyChange int32:2 int32:0 || true

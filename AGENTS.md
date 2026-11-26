@@ -198,7 +198,8 @@ Claude again) relies on them to resume without re-deriving anything.
   generators with plain `python3`, not `python3 -I`: isolated mode drops the script folder from
   `sys.path`, so `tools/icons_lib` isn't found and the generator stops after clearing its output.
 * Known limits (not bugs to fix): QML/Kirigami pages can't show pinstripes; GTK tabs can't be
-  centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes.
+  centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes (apply-pinstripe.sh
+  imports the GTK 4 stylesheet into `~/.config/gtk-4.0/gtk.css` as a workaround; revert removes it).
 
 ### Backlog (update this; highest value first)
 
