@@ -1998,6 +1998,13 @@ def build_action_painters():
         bars = U(rr(10.4, 10.6, 11.2, 2.1, 0.9), rr(10.4, 14.5, 11.2, 2.1, 0.9), rr(10.4, 18.4, 11.2, 2.1, 0.9))
         draw_disc_glyph(p, bars, dark=True)
 
+    # "more" menus (Kirigami toolbars and QML apps): the same clear glass button with three dots
+    @act("overflow-menu", "view-more overflow-menu-left overflow-menu-right")
+    def _(p, sm):
+        glass_disc(p, 16, 15.5, 12.0, "clear")
+        dots = U(circ(10.6, 15.6, 1.75), circ(16.0, 15.6, 1.75), circ(21.4, 15.6, 1.75))
+        draw_disc_glyph(p, dots, dark=True)
+
     @act("help-contents", "dialog-question gtk-help documentation")
     def _(p, sm):
         # Exact 10.2 Print-dialog round clear-glass '?' Help button (all-116-080.png)
