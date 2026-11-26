@@ -12,6 +12,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
 #include <QPainter>
@@ -93,6 +94,22 @@ QColor alpha(QColor c, int a)
 {
     c.setAlpha(a);
     return c;
+}
+
+// HIG chapter 10: small system font is 11pt next to the 13pt system font
+QFont smallFont(const QFont &f)
+{
+    QFont s = f;
+    if (f.pointSizeF() > 0)
+        s.setPointSizeF(f.pointSizeF() * 11.0 / 13.0);
+    else if (f.pixelSize() > 0)
+        s.setPixelSize(qRound(f.pixelSize() * 11.0 / 13.0));
+    return s;
+}
+
+QFont widgetFont(const QWidget *w)
+{
+    return w ? w->font() : QApplication::font();
 }
 
 enum class Side { North, South, West, East };
@@ -243,6 +260,19 @@ void Style::polish(QWidget *w)
     if (qobject_cast<QPushButton *>(w) || qobject_cast<QProgressBar *>(w)) {
         m_animated.append(w);
         updateAnimationTimer();
+    }
+    // help tags use the small system font (HIG chapter 10)
+    if (w->inherits("QTipLabel"))
+        w->setFont(smallFont(w->font()));
+    // alerts: message in the emphasized system font, informative text in the small system font
+    if (auto *label = qobject_cast<QLabel *>(w)) {
+        if (label->objectName() == QLatin1String("qt_msgbox_label")) {
+            QFont f = label->font();
+            f.setBold(true);
+            label->setFont(f);
+        } else if (label->objectName() == QLatin1String("qt_msgbox_informativelabel")) {
+            label->setFont(smallFont(label->font()));
+        }
     }
 }
 
@@ -533,15 +563,15 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
     }
 
     case PE_FrameGroupBox: {
-        // recessed box
+        // 10.2 group box: a fine etched line (grey, with white just inside), square corners,
+        // on the same pinstripes as the window (HIG Figures 8-2 to 8-4)
         p->save();
-        p->setRenderHint(QPainter::Antialiasing, true);
-        const QRectF r = QRectF(opt->rect).adjusted(0.5, 0.5, -0.5, -0.5);
-        p->setBrush(QColor(0, 0, 0, 14));
-        p->setPen(QColor(0, 0, 0, 40));
-        p->drawRoundedRect(r, 4, 4);
-        p->setPen(QColor(0, 0, 0, 22));
-        p->drawLine(QPointF(r.left() + 4, r.top() + 1), QPointF(r.right() - 4, r.top() + 1));
+        const QRect r = opt->rect.adjusted(0, 0, -1, -1);
+        p->setPen(QColor(0, 0, 0, 62));
+        p->setBrush(Qt::NoBrush);
+        p->drawRect(r.adjusted(0, 0, -1, -1));
+        p->setPen(QColor(255, 255, 255, 200));
+        p->drawRect(r.adjusted(1, 1, 0, 0));
         p->restore();
         return;
     }
@@ -1007,6 +1037,40 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         return;
     }
 
+    case CE_HeaderLabel: {
+        // list headings use the small system font (HIG chapter 10)
+        p->save();
+        p->setFont(smallFont(p->font()));
+        QProxyStyle::drawControl(ce, opt, p, w);
+        p->restore();
+        return;
+    }
+
+    case CE_ShapedFrame: {
+        const auto *f = qstyleoption_cast<const QStyleOptionFrame *>(opt);
+        if (f && (f->frameShape == QFrame::HLine || f->frameShape == QFrame::VLine)) {
+            // separator: etched line, grey with white below / to the right
+            p->save();
+            const QRect r = f->rect;
+            if (f->frameShape == QFrame::HLine) {
+                const int y = r.center().y();
+                p->setPen(QColor(0, 0, 0, 62));
+                p->drawLine(r.left(), y, r.right(), y);
+                p->setPen(QColor(255, 255, 255, 200));
+                p->drawLine(r.left(), y + 1, r.right(), y + 1);
+            } else {
+                const int x = r.center().x();
+                p->setPen(QColor(0, 0, 0, 62));
+                p->drawLine(x, r.top(), x, r.bottom());
+                p->setPen(QColor(255, 255, 255, 200));
+                p->drawLine(x + 1, r.top(), x + 1, r.bottom());
+            }
+            p->restore();
+            return;
+        }
+        break;
+    }
+
     case CE_ToolBar:
         return;
 
@@ -1379,6 +1443,48 @@ void Style::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt
             return;
         }
         break;
+    case CC_GroupBox:
+        if (const auto *g = qstyleoption_cast<const QStyleOptionGroupBox *>(opt)) {
+            const QRect frame = subControlRect(cc, g, SC_GroupBoxFrame, w);
+            const QRect label = subControlRect(cc, g, SC_GroupBoxLabel, w);
+            const QRect check = subControlRect(cc, g, SC_GroupBoxCheckBox, w);
+            if (!(g->features & QStyleOptionFrame::Flat)) {
+                p->save();
+                QRegion clip(g->rect);
+                if (!g->text.isEmpty() || (g->subControls & SC_GroupBoxCheckBox))
+                    clip -= QRect(label.united(check.isValid() ? check : label).adjusted(-3, 0, 3, 0));
+                p->setClipRegion(clip);
+                QStyleOptionFrame f;
+                f.QStyleOption::operator=(*g);
+                f.rect = frame;
+                drawPrimitive(PE_FrameGroupBox, &f, p, w);
+                p->restore();
+            } else {
+                // flat: a separator line 2px right of the title (HIG Figure 8-3)
+                p->save();
+                const int y = label.center().y();
+                p->setPen(QColor(0, 0, 0, 62));
+                p->drawLine(label.right() + 3, y, g->rect.right(), y);
+                p->setPen(QColor(255, 255, 255, 200));
+                p->drawLine(label.right() + 3, y + 1, g->rect.right(), y + 1);
+                p->restore();
+            }
+            if (g->subControls & SC_GroupBoxCheckBox) {
+                QStyleOptionButton box;
+                box.QStyleOption::operator=(*g);
+                box.rect = check;
+                drawPrimitive(PE_IndicatorCheckBox, &box, p, w);
+            }
+            if (!g->text.isEmpty()) {
+                p->save();
+                p->setFont(smallFont(widgetFont(w)));
+                p->setPen(enabled(opt) ? Ink : QColor(128, 128, 128));
+                p->drawText(label, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextShowMnemonic, g->text);
+                p->restore();
+            }
+            return;
+        }
+        break;
     case CC_TitleBar:
         if (const auto *t = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
             // MDI sub-windows: 10.2 title bar with traffic lights on the left
@@ -1515,6 +1621,35 @@ QRect Style::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, S
             default:
                 break;
             }
+        }
+        break;
+    }
+
+    case CC_GroupBox: {
+        const auto *g = qstyleoption_cast<const QStyleOptionGroupBox *>(opt);
+        if (!g)
+            break;
+        const QFontMetrics fm(smallFont(widgetFont(w)));
+        const bool hasCheck = g->subControls & SC_GroupBoxCheckBox;
+        const int labelH = qMax(fm.height(), hasCheck ? IndicatorSize : 0);
+        const int checkW = hasCheck ? IndicatorSize + 3 : 0;
+        const int textW = g->text.isEmpty() ? 0 : fm.horizontalAdvance(g->text) + 2;
+        const QRect r = g->rect;
+        const int top = (g->text.isEmpty() && !hasCheck) ? 0 : labelH / 2;
+        switch (sc) {
+        case SC_GroupBoxFrame:
+            return QRect(r.left(), r.top() + top, r.width(), r.height() - top);
+        case SC_GroupBoxCheckBox:
+            return hasCheck ? QRect(r.left() + 8, r.top(), IndicatorSize, labelH) : QRect();
+        case SC_GroupBoxLabel:
+            return QRect(r.left() + 8 + checkW, r.top(), textW, labelH);
+        case SC_GroupBoxContents: {
+            // HIG: nothing within 16px of the border; layout margins add the other 8
+            const QRect f(r.left(), r.top() + top, r.width(), r.height() - top);
+            return f.adjusted(8, qMax(8, labelH - top + 4), -8, -8);
+        }
+        default:
+            break;
         }
         break;
     }
@@ -1681,6 +1816,8 @@ int Style::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QWidget *w
         return 0;
     case PM_TitleBarHeight:
         return 22;
+    case PM_MessageBoxIconSize:
+        return 64; // HIG Figure 6-2: the application icon in alerts
     case PM_DockWidgetTitleMargin:
         return 3;
     case PM_ToolBarFrameWidth:
@@ -1761,6 +1898,11 @@ QSize Style::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QS
     case CT_ProgressBar: {
         QSize s = QProxyStyle::sizeFromContents(ct, opt, size, w);
         return {s.width(), qMax(s.height(), ProgressHeight + 4)};
+    }
+    case CT_ItemViewItem: {
+        // lists: 19pt baseline to baseline (HIG Figure 7-32)
+        QSize sz = QProxyStyle::sizeFromContents(ct, opt, size, w);
+        return {sz.width(), qMax(sz.height(), 19)};
     }
     case CT_HeaderSection: {
         QSize s = QProxyStyle::sizeFromContents(ct, opt, size, w);

@@ -1,0 +1,136 @@
+<title>Pinstripe Preview</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one column of rendered screens, each followed by the 2002 HIG specs it follows */
+:root {
+  --bg: #eeeeee;
+  --sheet: #ffffff;
+  --ink: #111214;
+  --muted: #5b6069;
+  --rule: #d4d6da;
+  --blue: #2668d6;
+  --ui: "Lucida Grande", "Luxi Sans", "DejaVu Sans", "Noto Sans", system-ui, sans-serif;
+  --mono: "Luxi Mono", "DejaVu Sans Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #1b1c1f; --sheet: #26282c; --ink: #eceef1; --muted: #a2a7b0; --rule: #3a3d43; --blue: #7aa8ff; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #1b1c1f; --sheet: #26282c; --ink: #eceef1; --muted: #a2a7b0; --rule: #3a3d43; --blue: #7aa8ff; color-scheme: dark; }
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  background-image: repeating-linear-gradient(to bottom, transparent 0 1px, rgba(0,0,0,.035) 1px 3px, transparent 3px 4px);
+  color: var(--ink); font-family: var(--ui); line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 36px 64px;
+}
+.wrap { max-width: 1060px; margin: 0 auto; display: grid; gap: 40px; }
+header h1 { margin: 0 0 6px; font-size: 1.8rem; letter-spacing: -0.01em; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); max-width: 70ch; }
+section { background: var(--sheet); border: 1px solid var(--rule); border-radius: 8px; padding: 20px 22px 22px; display: grid; gap: 14px; min-width: 0; }
+section h2 { margin: 0; font-size: 1.1rem; }
+.shot { overflow-x: auto; }
+.shot img { display: block; max-width: 100%; height: auto; border-radius: 3px; }
+.pair { display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start; }
+.pair > figure { margin: 0; flex: 1 1 320px; min-width: 0; }
+figcaption { color: var(--muted); font-size: 0.85rem; margin-top: 6px; }
+ul.spec { margin: 0; padding-left: 1.1em; color: var(--muted); font-size: 0.92rem; max-width: 80ch; display: grid; gap: 3px; }
+ul.spec b { color: var(--ink); font-weight: 600; }
+.new { display: inline-block; font-size: 0.72rem; letter-spacing: .06em; text-transform: uppercase; color: #fff; background: var(--blue); border-radius: 999px; padding: 1px 8px; margin-left: 6px; vertical-align: 2px; }
+code { font-family: var(--mono); font-size: 0.88em; }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Pinstripe</h1>
+    <p>Current renders of every part, made offscreen from the real builds: the Qt widget style, the Plasma style, the GTK theme, the icons and the window decoration. Each section lists the measurements from Apple's June 2002 Aqua Human Interface Guidelines it follows.</p>
+  </header>
+
+  <section>
+    <h2>Desktop</h2>
+    <div class="shot"><img src="img/plasma-desktop.png" alt="Plasma desktop with the Pinstripe Plasma style: menu-bar panel, Go menu open, a Finder-like window, a tray popup and the glass Dock"></div>
+    <ul class="spec">
+      <li><b>Menus and popups:</b> pinstriped sheets (rows 255, 249, 238, 249), groups separated by space, selection as the striped blue gel.</li>
+      <li><b>Dock:</b> milky glass flush with the bottom edge, black triangles under running apps.</li>
+      <li><b>Menu extras:</b> solid glyphs from the Oxygen Pinstripe icons.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Widget style</h2>
+    <div class="pair">
+      <figure><img src="img/gallery-active.png" alt="Widget gallery, active window"><figcaption>Active window</figcaption></figure>
+      <figure><img src="img/gallery-inactive.png" alt="Widget gallery, inactive window"><figcaption>Inactive: colour leaves the controls</figcaption></figure>
+    </div>
+    <ul class="spec">
+      <li><b>Push buttons:</b> 20 px high, 14 px end caps, 69 px for OK and Cancel; only the default button is blue and it pulses.</li>
+      <li><b>Check boxes and radio buttons:</b> 18 × 18 including the shadow.</li>
+      <li><b>Pop-up menus:</b> 20 px, text 9 px from the left edge, double-arrow cap.</li>
+      <li><b>Tabs:</b> 23 px, 12 px text inset, centred over the 6-row accent bar (#0057ae, #a2d7f0, #a8d1ee, #51b0ea, #79ccff, #acefff) and its grey shadow.</li>
+      <li><b>Text fields:</b> 22 px with a 3 px inner shadow and the blue focus ring.</li>
+      <li><b>Scroll bars:</b> 15 px white cylinder, thumb columns measured from the real thumb.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Dialogs and group boxes <span class="new">New</span></h2>
+    <div class="pair">
+      <figure><img src="img/dialog.png" alt="Preferences dialog with a titled group box and a flat group with separator"><figcaption>Titled group box and a flat group</figcaption></figure>
+      <figure><img src="img/alert.png" alt="Alert with application icon, bold message and smaller informative text"><figcaption>Alert</figcaption></figure>
+    </div>
+    <ul class="spec">
+      <li><b>Group box:</b> a fine etched line with square corners on the window stripes; the title sits on the top border in the small system font; nothing within 16 px of the border (HIG Figures 8-2 to 8-4).</li>
+      <li><b>Flat group:</b> title followed by an etched separator 2 px to its right, as the HIG recommends instead of nested boxes.</li>
+      <li><b>Alert:</b> 64 px application icon, message in the emphasized (bold) system font, informative text in the small system font, default button on the right (Figure 6-2).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Lists, sliders and progress</h2>
+    <div class="shot"><img src="img/more-active.png" alt="List view with header, group box, combination box, slider with ticks, barber-pole progress and horizontal scroll bar"></div>
+    <ul class="spec">
+      <li><b>Lists:</b> rows at least 19 px (19 pt baseline to baseline), headings in the small system font. <span class="new">New</span></li>
+      <li><b>Sliders:</b> 15 × 15 round thumb, 15 × 18 pointed when there are tick marks.</li>
+      <li><b>Progress:</b> blue gel with moving bands; indeterminate is a barber pole; grey in inactive windows.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Menus</h2>
+    <div class="pair">
+      <figure><img src="img/menu.png" alt="Open menu with striped gel highlight"><figcaption>Menu with shortcuts, check mark and submenu</figcaption></figure>
+      <figure><img src="img/menubar.png" alt="Menu bar"><figcaption>Menu bar</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Docks, MDI windows and side tabs</h2>
+    <div class="shot"><img src="img/docks-mdi.png" alt="Dock widget title, MDI windows with traffic lights, bottom and left tabs"></div>
+  </section>
+
+  <section>
+    <h2>Window decoration</h2>
+    <div class="shot"><img src="img/titlebar.png" alt="Oxygen Traffic Lights title bars, active and inactive"></div>
+    <ul class="spec">
+      <li><b>Title bar:</b> the window pinstripe darkening towards the bottom, a dark line under it, traffic-light gels whose glyphs appear on hover; inactive windows show hollow grey lights.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>GTK 3 and GTK 4</h2>
+    <div class="pair">
+      <figure><img src="img/gtk3-gallery.png" alt="GTK 3 widget gallery"><figcaption>GTK 3</figcaption></figure>
+      <figure><img src="img/gtk4-gallery.png" alt="GTK 4 widget gallery"><figcaption>GTK 4</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>Oxygen Pinstripe icons</h2>
+    <div class="shot"><img src="img/icons.png" alt="Contact sheet of symbolic icons at 16 and 32 px, white on the selection, with the old icon below"></div>
+    <ul class="spec">
+      <li>408 names, 132 glyphs: solid rounded shapes after the 10.2 menu extras, recolourable by KDE and GTK.</li>
+    </ul>
+  </section>
+</div>

@@ -27,6 +27,8 @@
 #include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
+#include <QMessageBox>
+#include <QIcon>
 #include <QPainter>
 #include <QProgressBar>
 #include <QPushButton>
@@ -196,6 +198,57 @@ static QWidget *dockMdiWindow()
     return mw;
 }
 
+static QWidget *dialogWindow()
+{
+    // a preferences pane laid out after HIG Figures 8-2 and 8-4: a titled group box, and a
+    // flat group (title + separator line) instead of a second box
+    auto *win = new QWidget;
+    auto *lay = new QVBoxLayout(win);
+    auto *box = new QGroupBox(QStringLiteral("Mail Cache"));
+    auto *form = new QFormLayout(box);
+    auto *once = new QRadioButton(QStringLiteral("Once per session"));
+    once->setChecked(true);
+    auto *rb = new QVBoxLayout;
+    rb->addWidget(once);
+    rb->addWidget(new QRadioButton(QStringLiteral("Never")));
+    form->addRow(QStringLiteral("Update mailbox:"), rb);
+    auto *size = new QHBoxLayout;
+    auto *sz = new QSpinBox;
+    sz->setValue(5);
+    sz->setSuffix(QStringLiteral(" MB"));
+    size->addWidget(sz);
+    size->addWidget(new QPushButton(QStringLiteral("Empty Cache")));
+    form->addRow(QStringLiteral("Size:"), size);
+    lay->addWidget(box);
+    auto *flat = new QGroupBox(QStringLiteral("Display sleep"));
+    flat->setFlat(true);
+    auto *fl = new QVBoxLayout(flat);
+    auto *sep = new QCheckBox(QStringLiteral("Separate timing for display sleep"));
+    sep->setChecked(true);
+    fl->addWidget(sep);
+    auto *sl = new QSlider(Qt::Horizontal);
+    sl->setTickPosition(QSlider::TicksBelow);
+    sl->setTickInterval(10);
+    sl->setValue(60);
+    fl->addWidget(sl);
+    lay->addWidget(flat);
+    win->resize(430, 300);
+    return win;
+}
+
+static QWidget *alertWindow()
+{
+    auto *m = new QMessageBox;
+    m->setIconPixmap(QIcon::fromTheme(QStringLiteral("system-file-manager")).pixmap(64, 64));
+    m->setText(QStringLiteral("The document “Report” could not be saved."));
+    m->setInformativeText(QStringLiteral("You don’t have permission to write to this folder. Choose another location, or ask the owner for access."));
+    m->setStandardButtons(QMessageBox::Cancel | QMessageBox::Save);
+    m->button(QMessageBox::Save)->setText(QStringLiteral("Save As…"));
+    m->setDefaultButton(QMessageBox::Save);
+    m->resize(440, 150);
+    return m;
+}
+
 static QMenu *demoMenu(QWidget *parent)
 {
     auto *m = new QMenu(parent);
@@ -272,6 +325,15 @@ int main(int argc, char **argv)
     QWidget *s = secondWindow();
     render(s, QStringLiteral("more-active.png"), true);
     s->hide();
+
+    QIcon::setThemeSearchPaths({QDir::homePath() + QStringLiteral("/.local/share/icons"), QStringLiteral("/usr/share/icons")});
+    QIcon::setThemeName(QStringLiteral("oxygen"));
+    QWidget *dlg = dialogWindow();
+    render(dlg, QStringLiteral("dialog.png"), true);
+    dlg->hide();
+    QWidget *al = alertWindow();
+    render(al, QStringLiteral("alert.png"), true);
+    al->hide();
 
     QWidget *dm = dockMdiWindow();
     render(dm, QStringLiteral("docks-mdi.png"), true);
