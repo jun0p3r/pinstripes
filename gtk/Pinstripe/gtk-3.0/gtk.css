@@ -269,9 +269,12 @@ progressbar progress:backdrop { border-image: -gtk-scaled(url("assets/progress-b
 progressbar.osd progress { min-height: 4px; }
 
 /* ---------------- notebooks: 23px tabs centred over a 6px blue accent bar */
+/* the notebook itself has no frame: tabs stand free on the window stripes, and the
+   border only starts below the accent bar, around the pane */
+notebook, notebook.frame { border: none; background: none; box-shadow: none; }
 notebook > header { background: none; border: none; padding: 0; }
 notebook > header.top {
-  padding-bottom: 6px;
+  padding: 0 10px 6px 10px;
   background-image: linear-gradient(to bottom, #1a2c70 0px, #e4eaf7 1px, #95bfea 3px, #62a2ee 4px, #a3e4ff 6px);
   background-size: 100% 6px;
   background-position: bottom;

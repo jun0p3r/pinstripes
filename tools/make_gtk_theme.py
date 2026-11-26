@@ -558,9 +558,12 @@ progressbar progress:backdrop {{ border-image: {scaled("progress-backdrop")} 4 /
 progressbar.osd progress {{ min-height: 4px; }}
 
 /* ---------------- notebooks: 23px tabs centred over a 6px blue accent bar */
+/* the notebook itself has no frame: tabs stand free on the window stripes, and the
+   border only starts below the accent bar, around the pane */
+notebook, notebook.frame {{ border: none; background: none; box-shadow: none; }}
 notebook > header {{ background: none; border: none; padding: 0; }}
 notebook > header.top {{
-  padding-bottom: 6px;
+  padding: 0 10px 6px 10px;
   background-image: {ACCENT};
   background-size: 100% 6px;
   background-position: bottom;
