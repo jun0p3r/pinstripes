@@ -29,6 +29,7 @@ enum class GelKind {
     TabSelected, // flatter, lighter gel used by tabs (Figure 7-23)
     TabClear,
     Thumb, // scroll bar thumb: more saturated, narrow medium-blue lens
+    Progress, // determinate progress fill (HIG Figure 7-27), rows measured from the artwork
 };
 
 Gel gel(GelKind kind, Appearance appearance);

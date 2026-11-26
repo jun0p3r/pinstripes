@@ -127,6 +127,20 @@ Gel gel(GelKind kind, Appearance appearance)
         g.lens = stops({{0.0, QColor(232, 232, 234)}, {0.5, QColor(224, 224, 226)}, {1.0, QColor(214, 214, 216)}});
         return g;
     }
+    case GelKind::Progress: {
+        // rows of the 16px large progress bar fill (HIG Figure 7-27): medium blue on top, a dip
+        // to deep blue at half height, rising to cyan; no separate white lens
+        Gel g;
+        g.rimTop = QColor(47, 85, 150);
+        g.rimBottom = QColor(90, 140, 200);
+        static const int rows[15][3] = {{90, 135, 212}, {130, 175, 229}, {143, 187, 234}, {144, 186, 236}, {131, 178, 232},
+                                        {110, 165, 229}, {85, 150, 223}, {74, 145, 227}, {82, 156, 241}, {95, 170, 251},
+                                        {104, 180, 255}, {116, 192, 254}, {125, 202, 255}, {131, 204, 255}, {143, 196, 236}};
+        for (int i = 0; i < 15; ++i)
+            g.body.append({i / 14.0, QColor(rows[i][0], rows[i][1], rows[i][2])});
+        g.lens = g.body;
+        return tint(g, appearance);
+    }
     case GelKind::Thumb: {
         // columns across the 10.2 scroll thumb, averaged over its length (HIG Figure "Sample Window")
         Gel g;

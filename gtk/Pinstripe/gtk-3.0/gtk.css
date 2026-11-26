@@ -253,14 +253,14 @@ scale slider:backdrop { background-image: -gtk-scaled(url("assets/knob-backdrop.
 
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {
-  min-height: 14px; min-width: 14px;
+  min-height: 16px; min-width: 16px;
   padding: 0 3px;
   border-style: solid;
   border-width: 0;
   background-image: -gtk-scaled(url("assets/trough-s.png"), url("assets/trough-s@2.png")), -gtk-scaled(url("assets/trough-e.png"), url("assets/trough-e@2.png")), -gtk-scaled(url("assets/trough-m.png"), url("assets/trough-m@2.png")); background-position: left top, right top, left top; background-size: 4px 100%, 4px 100%, 1px 100%; background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; background-clip: border-box, border-box, content-box; border-image: none;
 }
 progressbar progress {
-  min-height: 14px; min-width: 8px;
+  min-height: 16px; min-width: 8px;
   padding: 0 3px;
   margin: 0;
   border-style: solid;

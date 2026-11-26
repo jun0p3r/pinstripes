@@ -456,6 +456,21 @@ def tab(side):
     return paint
 
 
+def spinner(p, r):
+    """Aqua asynchronous progress indicator: twelve rounded spokes fading round the circle."""
+    import math
+    c = r.center()
+    rad = min(r.width(), r.height()) / 2
+    for i in range(12):
+        a = math.radians(-90 + i * 30)
+        alpha = int(40 + 200 * (i / 11))
+        inner, outer = rad * 0.48, rad * 0.94
+        p1 = QPointF(c.x() + inner * math.cos(a), c.y() + inner * math.sin(a))
+        p2 = QPointF(c.x() + outer * math.cos(a), c.y() + outer * math.sin(a))
+        p.setPen(QPen(QColor(64, 64, 68, alpha), rad * 0.17, Qt.SolidLine, Qt.RoundCap))
+        p.drawLine(p1, p2)
+
+
 def check_glyph(p, r):
     path = QPainterPath()
     path.moveTo(r.left() + 3.5, r.top() + 8.5)
@@ -595,6 +610,11 @@ def build():
     s.add_element("checkbox", 16, 16, check_glyph)
     s.add_element("radiobutton", 16, 16, lambda p, r: dot(p, QRectF(r.center().x() - 3, r.center().y() - 3, 6, 6)))
     s.write(os.path.join(OUT, "widgets", "checkmarks.svg"))
+
+    # busy indicator: Plasma spins this image
+    s = Svg()
+    s.add_element("busywidget", 32, 32, spinner)
+    s.write(os.path.join(OUT, "widgets", "busywidget.svg"))
 
     # menu bar items for the global menu: the same striped gel
     s = Svg()

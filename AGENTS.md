@@ -106,3 +106,85 @@ bugs here were only visible as numbers: a gradient that should be flat, a seam o
 
 Commit only files you changed. The repo's author is set locally; end commit messages with the
 co-author line the session's instructions give.
+
+## Handoff: read this first if you are picking the work up
+
+The user (Franco) works with more than one agent: Claude Code, and Google Antigravity while
+Claude's usage limit resets. Whoever picks the work up continues from the two sections below,
+and **must update both before stopping**. Keep them short and true: the next agent (possibly
+Claude again) relies on them to resume without re-deriving anything.
+
+### How this user works
+
+* Goal: an Aqua look for Plasma 6 that is **as true to Mac OS X 10.2 as possible**, measured
+  against Apple's 2002 HIG (`reference/aqua-hig-2002.pdf`, not in git; see
+  `reference/README.md`). The user notices small inaccuracies (a seam, a missing pinstripe, a
+  cut-off gradient) from screenshots of the live desktop, and calls out work that looks
+  "tacky". Don't claim something is fixed until a render, and ideally pixel samples, show it.
+* Show results as pictures. Render previews (tools above) and update `docs/preview.html`;
+  the user also has a private claude.ai page of it that only Claude can republish, so other
+  agents should just keep the local `docs/preview.html` and `docs/screenshots/` current.
+* Ask before anything outward-facing or hard to undo: switching their themes, pushing,
+  installing system-wide. System installs need their sudo password; give them the command to
+  run in their own terminal.
+* Fedora 45, KDE Plasma 6.8 on Wayland, NVIDIA, two 1920×1080 screens, zsh, Luxi Sans as the
+  UI font (Lucida Grande stand-in). They already run Pinstripe everywhere
+  (`contrib/apply-pinstripe.sh`); `contrib/revert-pinstripe.sh` undoes it.
+
+### Current state (update this)
+
+*Last updated: 2026-11-26 by Claude Code (Opus 5.5).*
+
+* Repos: `~/projects/pinstripe-style` (this one) and `~/projects/oxygen-traffic-lights` (window
+  decoration). Both have local commits only; nothing is pushed and no remote is set.
+* Installed on the user's machine:
+  * Widget style plugin: `/usr/lib64/qt6/plugins/styles/pinstripe.so`, **one build behind**:
+    the progress-bar gel, flat disclosure triangles, menu shortcut column, KWindowShadow drop
+    shadows, matte bevel buttons, group boxes and alerts are built in `build-system/` but not
+    installed yet. To install (user runs it, needs sudo):
+    `sudo install -Dm755 build-system/bin/styles/pinstripe.so /usr/lib64/qt6/plugins/styles/pinstripe.so`
+    then restart apps.
+  * Plasma style, GTK theme, icons, colour schemes, kstyle themerc: `~/.local/share/...`
+    (current; reinstall with `cmake --install build` after regenerating). After installing the
+    Plasma style switch to another style and back; after icons, remove
+    `~/.cache/icon-cache.kcache`.
+  * Decoration: `/usr/lib64/qt6/plugins/org.kde.kdecoration3/org.kde.oxygentrafficlights.so`
+    (current, with the pinstriped title bar).
+* Recently matched to the HIG: group boxes (Fig. 8-2..8-4), alerts (6-2), small system and
+  label fonts, list rows (7-32), menus (chapter 4) with the 10.2 shortcut column, bevel buttons
+  (7-14), sorted header (7-34), disclosure triangles (7-34), 16 px progress bar with measured
+  fill rows (7-27), Plasma busy spinner, menu/tooltip drop shadows.
+* Known limits (not bugs to fix): QML/Kirigami pages can't show pinstripes; GTK tabs can't be
+  centred; Plasma Dock triangle sized for a 44 px panel; libadwaita ignores GTK themes.
+
+### Backlog (update this; highest value first)
+
+1. **Install the latest widget style build** (command above) and check on the live desktop:
+   menus should show drop shadows; group boxes, bevel buttons and progress bars as in
+   `docs/screenshots/`. Ask the user for a screenshot if you can't take one.
+2. **Plasma progress bar / slider groove** (`bar_meter_*` in `tools/make_plasma_theme.py`): use
+   the measured progress rows (see `GelKind::Progress` in `style/gel.cpp`) and 16 px height for
+   progress; the slider groove shares the SVG, so check sliders after.
+3. **GTK parity with this round**: progress fill rows, flat grey disclosure triangles
+   (treeview expander), matte bevel buttons (`button.image-button` / toolbar buttons with
+   frames), group boxes are `frame` with a label: etched line, title on the border, small
+   font; list headings in the small font.
+4. **Help tags (tooltips)**: compare with HIG/10.2 artwork (pale yellow, black text, 11 pt);
+   check padding and the shadow in the live session.
+5. **Toolbars**: HIG chapter 7 "Toolbars" and chapter 11 icon guidance; Finder-style
+   icon-above-label toolbars with no frames, small system font labels (labels done in Qt).
+6. **Window title bar** (`../oxygen-traffic-lights`): compare height, title font (13 pt) and
+   the traffic-light spacing with HIG Figure 5-x window anatomy; inactive title text colour.
+7. **Default-button pulse**: compare timing and the paler phase with a 10.2 recording if one
+   can be found; currently a 1.7 s cosine between full colour and a paler gel.
+8. **Sheets and drawers** (HIG chapter 5): Qt has no direct equivalent; skip unless the user
+   asks.
+9. Keep `docs/preview.html` and the README screenshots current after each round.
+
+### Session log (append one line per session, newest last)
+
+* 2026-11-25 Claude Code: decoration fork, Qt style, Plasma style, GTK theme, icon theme,
+  switch/revert scripts, repo prep; first HIG polish rounds.
+* 2026-11-26 Claude Code: HIG rounds 1-3 (group boxes, alerts, fonts, menus, shadows, bevel
+  buttons, progress, disclosure triangles, spinner); AGENTS.md handoff. Stopped at ~91 % of
+  the 5-hour usage limit.

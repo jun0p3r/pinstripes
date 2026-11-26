@@ -266,7 +266,7 @@ def knob(g):
 
 def progress(g):
     def paint(p, r):
-        mp.gel(p, r.adjusted(0.5, 0.5, -0.5, -0.5), g, 3, shadow=False, lens_inset=2)
+        mp.gel(p, r.adjusted(0.5, 0.5, -0.5, -0.5), g, 2, shadow=False, lens_inset=2)
     return paint
 
 
@@ -309,9 +309,9 @@ def make_assets():
     save("thumb-h-backdrop", 40, 15, thumb(False, False))
     save("knob", 17, 17, knob(mp.BLUE))
     save("knob-backdrop", 17, 17, knob(mp.CLEAR))
-    save("progress", 30, 14, progress(mp.BLUE))
-    save("progress-backdrop", 30, 14, progress(graphite_blue))
-    save("trough", 30, 14, progress(mp.TRACK))
+    save("progress", 30, 16, progress(mp.BLUE))
+    save("progress-backdrop", 30, 16, progress(graphite_blue))
+    save("trough", 30, 16, progress(mp.TRACK))
     for k, name in enumerate(("close", "minimize", "maximize")):
         for state in ("normal", "hover", "backdrop"):
             save(f"{name}-{state}", 16, 16, light(k, state))
@@ -319,7 +319,7 @@ def make_assets():
         "button": (32, 22, "h", 14, 14), "button-default": (32, 22, "h", 14, 14), "button-pressed": (32, 22, "h", 14, 14),
         "popup": (48, 22, "h", 9, 29), "popup-backdrop": (48, 22, "h", 9, 29),
         "tab": (40, 23, "h", 12, 12), "tab-active": (40, 23, "h", 12, 12), "tab-active-backdrop": (40, 23, "h", 12, 12),
-        "progress": (30, 14, "h", 4, 4), "progress-backdrop": (30, 14, "h", 4, 4), "trough": (30, 14, "h", 4, 4),
+        "progress": (30, 16, "h", 4, 4), "progress-backdrop": (30, 16, "h", 4, 4), "trough": (30, 16, "h", 4, 4),
         "thumb-v": (15, 40, "v", 7, 8), "thumb-v-backdrop": (15, 40, "v", 7, 8),
         "thumb-h": (40, 15, "h", 7, 8), "thumb-h-backdrop": (40, 15, "h", 7, 8),
     }.items():
@@ -621,14 +621,14 @@ scale slider:backdrop {{ background-image: {scaled("knob-backdrop")}; }}
 
 /* ---------------- progress bars: light gel groove, blue gel fill (grey in the background) */
 progressbar trough {{
-  min-height: 14px; min-width: 14px;
+  min-height: 16px; min-width: 16px;
   padding: 0 3px;
   border-style: solid;
   border-width: 0;
   {three("trough")}
 }}
 progressbar progress {{
-  min-height: 14px; min-width: 8px;
+  min-height: 16px; min-width: 8px;
   padding: 0 3px;
   margin: 0;
   border-style: solid;

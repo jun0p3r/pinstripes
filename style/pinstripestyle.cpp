@@ -55,7 +55,7 @@ constexpr int ScrollBarWidth = 15;
 constexpr int ScrollArrowLength = 16;
 constexpr int SliderThumb = 15; // 15x15 round, 15x18 pointed
 constexpr int SliderThumbPointed = 18;
-constexpr int ProgressHeight = 14;
+constexpr int ProgressHeight = 16; // HIG Figure 7-27: large progress bar
 constexpr int MenuItemHeight = 19;
 constexpr int MenuSeparatorHeight = 12;
 constexpr int LittleArrowsWidth = 13;
@@ -808,17 +808,17 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
     case PE_IndicatorBranch: {
         if (!(opt->state & State_Children))
             return;
-        // disclosure triangle: grey, outlined
+        // disclosure triangle (HIG Figure 7-34): flat mid-grey, no outline
         p->save();
         p->setRenderHint(QPainter::Antialiasing, true);
         const QPointF c = QRectF(opt->rect).center();
         QPolygonF tri;
         if (opt->state & State_Open)
-            tri << c + QPointF(-4.5, -2.5) << c + QPointF(4.5, -2.5) << c + QPointF(0, 3.5);
+            tri << c + QPointF(-4.0, -2.2) << c + QPointF(4.0, -2.2) << c + QPointF(0, 3.2);
         else
-            tri << c + QPointF(-2.5, -4.5) << c + QPointF(3.5, 0) << c + QPointF(-2.5, 4.5);
-        p->setPen(QPen(QColor(70, 70, 76), 1.0));
-        p->setBrush(QColor(128, 128, 134));
+            tri << c + QPointF(-2.2, -4.0) << c + QPointF(3.2, 0) << c + QPointF(-2.2, 4.0);
+        p->setPen(Qt::NoPen);
+        p->setBrush((opt->state & State_Selected) ? QColor(255, 255, 255) : QColor(122, 122, 124));
         p->drawPolygon(tri);
         p->restore();
         return;
@@ -981,7 +981,7 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         const QRect r = opt->rect;
         const QRectF bar(r.left() + 0.5, r.center().y() - ProgressHeight / 2.0 + 0.5, r.width() - 1, ProgressHeight - 1);
         GelOptions o;
-        o.radius = 3.0;
+        o.radius = 2.0;
         o.lensInset = 2;
         o.shadow = false;
         paintGel(p, bar, trackGel(), o);
@@ -995,15 +995,15 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         const QRectF bar(r.left() + 0.5, r.center().y() - ProgressHeight / 2.0 + 0.5, r.width() - 1, ProgressHeight - 1);
         const bool busy = pb->minimum == 0 && pb->maximum == 0;
         // inactive windows show the bar in grey (HIG Figure 7-28, second row)
-        const Gel fillGel = windowActive(opt) ? coloredGel() : mix(gel(GelKind::Colored, Appearance::Graphite), gel(GelKind::Clear, m_appearance), 0.35);
+        const Gel fillGel = windowActive(opt) ? gel(GelKind::Progress, m_appearance) : mix(gel(GelKind::Progress, Appearance::Graphite), gel(GelKind::Clear, m_appearance), 0.35);
         GelOptions o;
-        o.radius = 3.0;
+        o.radius = 2.0;
         o.lensInset = 2;
         o.shadow = false;
         p->save();
         p->setRenderHint(QPainter::Antialiasing, true);
         QPainterPath clip;
-        clip.addRoundedRect(bar, 3, 3);
+        clip.addRoundedRect(bar, 2, 2);
         p->setClipPath(clip);
         if (busy) {
             // indeterminate: the barber pole
@@ -1020,7 +1020,7 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             p->setClipping(false);
             p->setBrush(Qt::NoBrush);
             p->setPen(QPen(coloredGel().rimTop, 1.0));
-            p->drawRoundedRect(bar, 3, 3);
+            p->drawRoundedRect(bar, 2, 2);
         } else {
             const qreal frac = pb->maximum > pb->minimum ? qreal(pb->progress - pb->minimum) / (pb->maximum - pb->minimum) : 0;
             if (frac > 0) {
