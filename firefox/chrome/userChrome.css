@@ -1,0 +1,248 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later
+ *
+ * Pinstripe for Firefox: the Mac OS X 10.2 "Jaguar" look, laid out like Safari 1.0.
+ * Toolbar, then bookmarks, then Aqua tabs sitting on the blue accent strip; pinstriped chrome;
+ * round clear-glass Back / Forward / Reload / Home; frameless toolbar buttons; an inset white
+ * address field and a capsule search field; pinstriped menus with the blue gel selection.
+ *
+ * Installed by contrib/install-firefox.sh into <profile>/chrome/ with its images in
+ * <profile>/chrome/pinstripe/ (taken from the GTK theme and the Oxygen Pinstripe icons).
+ */
+
+:root {
+  --pinstripe-window: repeating-linear-gradient(to bottom, #ffffff 0px, #ffffff 1px, #eeeeee 1px, #eeeeee 2px, #e6e6e6 2px, #e6e6e6 3px, #eeeeee 3px, #eeeeee 4px);
+  --pinstripe-menu: repeating-linear-gradient(to bottom, #ffffff 0px, #ffffff 1px, #f9f9f9 1px, #f9f9f9 2px, #eeeeee 2px, #eeeeee 3px, #f9f9f9 3px, #f9f9f9 4px);
+  --pinstripe-gel: linear-gradient(to bottom, rgba(255, 255, 255, 0.62) 0px, rgba(255, 255, 255, 0.18) 9px, rgba(255, 255, 255, 0) 10px),
+                   linear-gradient(to top, rgba(128, 202, 255, 0.8) 0px, rgba(128, 202, 255, 0) 7px),
+                   linear-gradient(to bottom, #2a6cd6, #3a86e4);
+
+  --toolbar-bgcolor: transparent !important;
+  --toolbar-color: #000000 !important;
+  --toolbar-field-background-color: #ffffff !important;
+  --toolbar-field-focus-background-color: #ffffff !important;
+  --toolbar-field-color: #000000 !important;
+  --toolbar-field-focus-color: #000000 !important;
+  --toolbar-field-border-color: transparent !important;
+  --toolbarbutton-hover-background: transparent !important;
+  --toolbarbutton-active-background: rgba(0, 0, 0, 0.12) !important;
+  --toolbarbutton-border-radius: 4px !important;
+  --lwt-accent-color: #eeeeee !important;
+  --lwt-text-color: #000000 !important;
+  --tab-selected-bgcolor: transparent !important;
+  --tab-selected-textcolor: #000000 !important;
+  --tab-min-height: 23px !important;
+  --tab-block-margin: 0px !important;
+  --tab-border-radius: 0 !important;
+  --chrome-content-separator-color: transparent !important;
+  --focus-outline-color: #6ca9ee !important;
+  --urlbar-min-height: 24px !important;
+  --arrowpanel-background: #f9f9f9 !important;
+  --arrowpanel-color: #000000 !important;
+  --arrowpanel-border-color: rgba(0, 0, 0, 0.25) !important;
+  --panel-separator-color: transparent !important;
+  font-family: "Lucida Grande", "Luxi Sans", "DejaVu Sans", sans-serif !important;
+}
+
+/* ------------------------------------------------------------------ the chrome: pinstripes */
+#navigator-toolbox {
+  display: flex !important;
+  flex-direction: column !important;
+  background: #eeeeee var(--pinstripe-window) !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+#navigator-toolbox > * { background: transparent !important; border: none !important; box-shadow: none !important; }
+#toolbar-menubar { order: 0 !important; }
+#nav-bar { order: 1 !important; padding: 4px 6px !important; }
+#PersonalToolbar { order: 2 !important; }
+#titlebar, #TabsToolbar { order: 3 !important; }
+#nav-bar, #PersonalToolbar, #TabsToolbar, #titlebar { background-image: none !important; color: #000000 !important; }
+
+/* bookmarks bar: a hairline above, small system font */
+#PersonalToolbar { border-top: 1px solid #c8c8c8 !important; padding: 1px 6px 2px !important; font-size: 11px !important; }
+#PersonalToolbar toolbarbutton.bookmark-item {
+  font-size: 11px !important;
+  padding: 1px 6px !important;
+  border-radius: 9px !important;
+}
+#PersonalToolbar toolbarbutton.bookmark-item:hover { background: rgba(0, 0, 0, 0.08) !important; }
+#PersonalToolbar toolbarbutton.bookmark-item:hover:active, #PersonalToolbar toolbarbutton.bookmark-item[open] {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ------------------------------------------------------------------ toolbar buttons */
+toolbarbutton.toolbarbutton-1 > .toolbarbutton-icon,
+toolbarbutton.toolbarbutton-1 > .toolbarbutton-badge-stack {
+  background: none !important;
+  box-shadow: none !important;
+}
+toolbarbutton.toolbarbutton-1:hover > .toolbarbutton-icon,
+toolbarbutton.toolbarbutton-1:hover > .toolbarbutton-badge-stack { background: none !important; }
+toolbarbutton.toolbarbutton-1:hover:active > .toolbarbutton-icon,
+toolbarbutton.toolbarbutton-1[open] > .toolbarbutton-icon,
+toolbarbutton.toolbarbutton-1:hover:active > .toolbarbutton-badge-stack,
+toolbarbutton.toolbarbutton-1[open] > .toolbarbutton-badge-stack {
+  background: rgba(0, 0, 0, 0.14) !important;
+}
+
+/* Safari's round clear-glass navigation buttons */
+#back-button, #forward-button, #reload-button, #stop-button, #home-button { padding: 0 2px !important; }
+#back-button > .toolbarbutton-icon,
+#forward-button > .toolbarbutton-icon,
+#reload-button > .toolbarbutton-icon,
+#stop-button > .toolbarbutton-icon,
+#home-button > .toolbarbutton-icon {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  border-radius: 14px !important;
+  -moz-context-properties: none !important;
+}
+#back-button { list-style-image: image-set(url("pinstripe/go-previous.png") 1x, url("pinstripe/go-previous@2.png") 2x) !important; }
+#forward-button { list-style-image: image-set(url("pinstripe/go-next.png") 1x, url("pinstripe/go-next@2.png") 2x) !important; }
+#reload-button { list-style-image: image-set(url("pinstripe/view-refresh.png") 1x, url("pinstripe/view-refresh@2.png") 2x) !important; }
+#stop-button { list-style-image: image-set(url("pinstripe/process-stop.png") 1x, url("pinstripe/process-stop@2.png") 2x) !important; }
+#home-button { list-style-image: image-set(url("pinstripe/go-home.png") 1x, url("pinstripe/go-home@2.png") 2x) !important; }
+#back-button[disabled] > .toolbarbutton-icon, #forward-button[disabled] > .toolbarbutton-icon { opacity: 0.45 !important; }
+#back-button:not([disabled]):hover:active > .toolbarbutton-icon,
+#forward-button:not([disabled]):hover:active > .toolbarbutton-icon,
+#reload-button:hover:active > .toolbarbutton-icon,
+#stop-button:hover:active > .toolbarbutton-icon,
+#home-button:hover:active > .toolbarbutton-icon { background: rgba(0, 40, 120, 0.22) !important; }
+
+/* ------------------------------------------------------------------ address and search fields */
+#urlbar .urlbar-background, #searchbar, .searchbar-textbox {
+  background-color: #ffffff !important;
+  border: 1px solid #8e8e8e !important;
+  border-top-color: #6c6c6c !important;
+  border-radius: 1px !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28), 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+  outline: none !important;
+}
+#urlbar[focused] .urlbar-background,
+#searchbar:focus-within {
+  border-color: #4a7fd0 !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28), 0 0 0 3px rgba(108, 169, 238, 0.65) !important;
+}
+#urlbar { color: #000000 !important; }
+#urlbar-input, #urlbar .urlbar-input { font-size: 12px !important; }
+/* the dropdown keeps a plain white sheet with a soft Aqua shadow */
+#urlbar[open] .urlbar-background {
+  border-radius: 1px !important;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.28), inset 0 1px 2px rgba(0, 0, 0, 0.18) !important;
+}
+/* Safari's search field is a capsule */
+#searchbar, #searchbar .searchbar-textbox { border-radius: 11px !important; }
+#urlbar-searchmode-switcher, #identity-box, #tracking-protection-icon-container { border-radius: 9px !important; }
+
+/* ------------------------------------------------------------------ tabs: Aqua tabs on the accent strip */
+#TabsToolbar {
+  padding: 4px 8px 0 !important;
+  min-height: 0 !important;
+  /* the 6-row accent strip (HIG Figure 7-23) and its grey shadow, under the tabs, against the page */
+  background-image: linear-gradient(to bottom,
+      transparent calc(100% - 9px),
+      #0057ae calc(100% - 9px), #0057ae calc(100% - 8px),
+      #a2d7f0 calc(100% - 8px), #a2d7f0 calc(100% - 7px),
+      #a8d1ee calc(100% - 7px), #a8d1ee calc(100% - 6px),
+      #51b0ea calc(100% - 6px), #51b0ea calc(100% - 5px),
+      #79ccff calc(100% - 5px), #79ccff calc(100% - 4px),
+      #acefff calc(100% - 4px), #acefff calc(100% - 3px),
+      #9a9a9a calc(100% - 3px), #9a9a9a calc(100% - 2px),
+      #c8c8c8 calc(100% - 2px), #c8c8c8 calc(100% - 1px),
+      #e6e6e6 calc(100% - 1px)) !important;
+  padding-bottom: 9px !important;
+}
+#TabsToolbar:-moz-window-inactive {
+  background-image: linear-gradient(to bottom,
+      transparent calc(100% - 9px),
+      #8a8f96 calc(100% - 9px), #8a8f96 calc(100% - 8px),
+      #d4d8dc calc(100% - 8px), #d4d8dc calc(100% - 6px),
+      #bfc4ca calc(100% - 6px), #bfc4ca calc(100% - 3px),
+      #9a9a9a calc(100% - 3px), #9a9a9a calc(100% - 2px),
+      #c8c8c8 calc(100% - 2px), #c8c8c8 calc(100% - 1px),
+      #e6e6e6 calc(100% - 1px)) !important;
+}
+.tabbrowser-tab { padding: 0 1px !important; min-height: 23px !important; }
+.tabbrowser-tab .tab-background {
+  margin: 0 !important;
+  border-radius: 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  background-image: url("pinstripe/tab-s.png"), url("pinstripe/tab-e.png"), url("pinstripe/tab-m.png") !important;
+  background-position: left bottom, right bottom, 12px bottom !important;
+  background-size: 12px 23px, 12px 23px, calc(100% - 24px) 23px !important;
+  background-repeat: no-repeat, no-repeat, no-repeat !important;
+  background-origin: border-box !important;
+  border: none !important;
+}
+.tabbrowser-tab:hover .tab-background:not([selected]) { filter: brightness(1.04) !important; }
+.tabbrowser-tab[selected] .tab-background, .tabbrowser-tab[multiselected] .tab-background {
+  background-image: url("pinstripe/tab-active-s.png"), url("pinstripe/tab-active-e.png"), url("pinstripe/tab-active-m.png") !important;
+  background-size: 12px 24px, 12px 24px, calc(100% - 24px) 24px !important;
+  margin-bottom: -1px !important;
+}
+.tabbrowser-tab[selected] .tab-background:-moz-window-inactive {
+  background-image: url("pinstripe/tab-active-backdrop-s.png"), url("pinstripe/tab-active-backdrop-e.png"), url("pinstripe/tab-active-backdrop-m.png") !important;
+}
+.tab-content { padding: 0 12px !important; position: relative !important; top: 5px !important; }
+.tab-label { font-size: 12px !important; color: #000000 !important; text-shadow: none !important; }
+.tab-label-container { justify-content: center !important; }
+.tab-close-button { border-radius: 7px !important; opacity: 0.55 !important; }
+.tab-close-button:hover { opacity: 1 !important; background: rgba(0, 0, 0, 0.12) !important; }
+.tabbrowser-tab::after, .tabbrowser-tab::before, .tab-line { display: none !important; }
+#tabs-newtab-button, #new-tab-button { margin-bottom: 1px !important; }
+
+/* ------------------------------------------------------------------ menus: pinstriped sheets */
+menupopup, panel[type="arrow"] {
+  --panel-background: #f9f9f9 var(--pinstripe-menu) !important;
+  --panel-color: #000000 !important;
+  --panel-border-color: rgba(0, 0, 0, 0.22) !important;
+  --panel-border-radius: 5px !important;
+  --menu-background-color: #f9f9f9 !important;
+  --menu-color: #000000 !important;
+  --menu-border-color: rgba(0, 0, 0, 0.22) !important;
+  --menuitem-hover-background-color: transparent !important;
+  --menuitem-border-radius: 0 !important;
+}
+menupopup::part(content), panel[type="arrow"]::part(content) {
+  background: #f9f9f9 var(--pinstripe-menu) !important;
+  color: #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.22) !important;
+  border-radius: 5px !important;
+  padding: 4px 0 !important;
+}
+menupopup menuitem, menupopup menu {
+  padding: 2px 20px 2px 18px !important;
+  margin: 0 !important;
+  min-height: 19px !important;
+  border-radius: 0 !important;
+  color: #000000 !important;
+}
+menupopup menuitem[_moz-menuactive]:not([disabled]),
+menupopup menu[_moz-menuactive]:not([disabled]),
+menupopup menu[open] {
+  background: var(--pinstripe-gel) !important;
+  color: #ffffff !important;
+}
+menupopup menuitem[_moz-menuactive] .menu-accel, menupopup menuitem[_moz-menuactive] .menu-text { color: #ffffff !important; }
+menupopup menuseparator { padding: 0 !important; margin: 5px 0 !important; border: none !important; }
+menupopup menuseparator::before { border-top-color: transparent !important; }
+menupopup menuitem[disabled] { color: #8c8c8c !important; }
+
+/* app menu and other arrow panels: pinstriped, selected rows in blue gel */
+panelview, .panel-subview-body { background: transparent !important; }
+.subviewbutton:not([disabled]):hover, .subviewbutton[open] {
+  background: var(--pinstripe-gel) !important;
+  color: #ffffff !important;
+  border-radius: 0 !important;
+}
+.subviewbutton { border-radius: 0 !important; margin-inline: 0 !important; }
+
+/* ------------------------------------------------------------------ find bar and sidebars */
+findbar, #sidebar-box, #sidebar-header, sidebar-main {
+  background: #eeeeee var(--pinstripe-window) !important;
+  color: #000000 !important;
+  border-top: 1px solid #a3a3a3 !important;
+}

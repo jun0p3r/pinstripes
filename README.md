@@ -18,6 +18,23 @@ It pairs with the [Oxygen Traffic Lights](https://github.com/jun0p3r/oxygen-traf
 | Dock widget, MDI windows, bottom and left tabs: ![docks](docs/screenshots/docks-mdi.png) | |
 | GTK 3: ![gtk3](docs/screenshots/gtk3-gallery.png) | GTK 4: ![gtk4](docs/screenshots/gtk4-gallery.png) |
 
+## Firefox
+
+![Firefox with the Pinstripe chrome](docs/screenshots/firefox.png)
+
+`firefox/chrome/userChrome.css` gives Firefox the Jaguar look in Safari 1.0's layout: pinstriped
+chrome, the toolbar, then bookmarks, then Aqua tabs on the blue accent strip right above the page;
+round clear-glass Back, Forward, Reload and Home; frameless toolbar buttons; an inset white
+address field and a capsule search field; pinstriped menus with the blue gel selection.
+
+```bash
+contrib/install-firefox.sh            # default profile; restart Firefox
+contrib/install-firefox.sh --remove   # put your previous userChrome.css back
+```
+
+It turns on `toolkit.legacyUserProfileCustomizations.stylesheets` and copies the tab gels and
+toolbar icons from the GTK theme and Oxygen Pinstripe into the profile.
+
 ## Oxygen Pinstripe icons
 
 ![Hand-drawn Oxygen Pinstripe icons](docs/screenshots/icons-artwork.png)
