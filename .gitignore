@@ -1,5 +1,7 @@
 build/
 build-*/
+__pycache__/
+*.py[cod]
 
 # Apple's 2002 HIG: kept locally for reference, not redistributed
 reference/*.pdf
