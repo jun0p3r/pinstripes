@@ -13,6 +13,11 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QDialogButtonBox>
+#include <QDockWidget>
+#include <QListWidget>
+#include <QMainWindow>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 #include <QDir>
 #include <QFormLayout>
 #include <QGridLayout>
@@ -154,6 +159,43 @@ static QWidget *secondWindow()
     return win;
 }
 
+static QWidget *dockMdiWindow()
+{
+    auto *mw = new QMainWindow;
+    mw->setWindowTitle(QStringLiteral("Docks, MDI and tabs"));
+    auto *mdi = new QMdiArea;
+    mdi->setBackground(QColor(110, 140, 190));
+    auto addSub = [&](const QString &title, QTabWidget::TabPosition pos, QPoint at) {
+        auto *tabs = new QTabWidget;
+        tabs->setTabPosition(pos);
+        auto *page = new QWidget;
+        auto *l = new QVBoxLayout(page);
+        l->addWidget(new QCheckBox(QStringLiteral("Show preview")));
+        l->addWidget(new QRadioButton(QStringLiteral("Icons")));
+        l->addStretch();
+        tabs->addTab(page, QStringLiteral("General"));
+        tabs->addTab(new QWidget, QStringLiteral("Advanced"));
+        auto *sub = mdi->addSubWindow(tabs);
+        sub->setWindowTitle(title);
+        sub->resize(250, 170);
+        sub->move(at);
+        return sub;
+    };
+    addSub(QStringLiteral("Bottom tabs"), QTabWidget::South, QPoint(10, 10));
+    auto *active = addSub(QStringLiteral("Left tabs"), QTabWidget::West, QPoint(150, 120));
+    mw->setCentralWidget(mdi);
+    mdi->setActiveSubWindow(active);
+    auto *dock = new QDockWidget(QStringLiteral("Places"));
+    auto *list = new QListWidget;
+    for (auto n : {"Home", "Desktop", "Documents", "Downloads", "Music", "Pictures"})
+        list->addItem(QString::fromLatin1(n));
+    list->setCurrentRow(2);
+    dock->setWidget(list);
+    mw->addDockWidget(Qt::LeftDockWidgetArea, dock);
+    mw->resize(620, 340);
+    return mw;
+}
+
 static QMenu *demoMenu(QWidget *parent)
 {
     auto *m = new QMenu(parent);
@@ -230,6 +272,10 @@ int main(int argc, char **argv)
     QWidget *s = secondWindow();
     render(s, QStringLiteral("more-active.png"), true);
     s->hide();
+
+    QWidget *dm = dockMdiWindow();
+    render(dm, QStringLiteral("docks-mdi.png"), true);
+    dm->hide();
 
     auto *host = new QWidget;
     auto *menu = demoMenu(host);

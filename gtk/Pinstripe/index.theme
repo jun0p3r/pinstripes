@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name=Pinstripe
+Comment=Mac OS X 10.2 Aqua for GTK
+Encoding=UTF-8
+
+[X-GNOME-Metatheme]
+GtkTheme=Pinstripe
+IconTheme=oxygen

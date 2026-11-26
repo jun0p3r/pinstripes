@@ -229,6 +229,54 @@ def main():
             p.drawText(r.adjusted(44, 0, -12, 0), Qt.AlignVCenter | Qt.AlignRight, sc)
         y += rh
 
+    # a tray popup (volume) exercising tabs, slider, progress bar, radio buttons and a scroll bar
+    scroll = FrameSvg(os.path.join(THEME, "widgets", "scrollbar.svg"))
+    slider = FrameSvg(os.path.join(THEME, "widgets", "slider.svg"))
+    meter = FrameSvg(os.path.join(THEME, "widgets", "bar_meter_horizontal.svg"))
+    tabbar = FrameSvg(os.path.join(THEME, "widgets", "tabbar.svg"))
+    radio = FrameSvg(os.path.join(THEME, "widgets", "radiobutton.svg"))
+    tp = QRectF(W - 300, 23, 280, 214)
+    dialog.paint(p, tp.adjusted(-12, -10, 12, 16), "shadow")
+    dialog.paint(p, tp)
+    x0, y0 = tp.left() + 14, tp.top() + 12
+    # tabs
+    p.setFont(font)
+    tx = x0 + 40
+    for i, label in enumerate(("Devices", "Applications")):
+        tw = p.fontMetrics().horizontalAdvance(label) + 24
+        r = QRectF(tx, y0, tw, 23)
+        if i == 0:
+            tabbar.paint(p, r, "north-active-tab")
+        p.setPen(Qt.black)
+        p.drawText(r, Qt.AlignCenter, label)
+        tx += tw
+    y = y0 + 34
+    p.drawText(QRectF(x0, y, 200, 18), Qt.AlignVCenter, "Speakers")
+    y += 22
+    groove = QRectF(x0, y + 4, 200, 12)
+    meter.paint(p, groove, "bar-inactive")
+    meter.paint(p, QRectF(groove.left(), groove.top(), 140, 12), "bar-active")
+    slider.element(p, "horizontal-slider-shadow", QRectF(groove.left() + 140 - 10, groove.center().y() - 10, 21, 21))
+    slider.element(p, "horizontal-slider-handle", QRectF(groove.left() + 140 - 8, groove.center().y() - 8.5, 17, 17))
+    p.drawText(QRectF(groove.right() + 10, y, 50, 20), Qt.AlignVCenter, "70%")
+    y += 32
+    p.drawText(QRectF(x0, y, 200, 18), Qt.AlignVCenter, "Battery")
+    y += 22
+    meter.paint(p, QRectF(x0, y, 200, 12), "bar-inactive")
+    meter.paint(p, QRectF(x0, y, 92, 12), "bar-active")
+    y += 24
+    for i, label in enumerate(("Analog stereo", "HDMI output")):
+        radio.element(p, "shadow", QRectF(x0 - 2, y - 2, 22, 22))
+        radio.element(p, "checked" if i == 0 else "normal", QRectF(x0, y, 18, 18))
+        if i == 0:
+            radio.element(p, "symbol", QRectF(x0 + 6, y + 5.5, 6, 6))
+        p.setPen(Qt.black)
+        p.drawText(QRectF(x0 + 26, y, 200, 18), Qt.AlignVCenter, label)
+        y += 24
+    sb = QRectF(tp.right() - 22, tp.top() + 46, 15, tp.height() - 58)
+    scroll.paint(p, sb, "background-vertical")
+    scroll.paint(p, QRectF(sb.left(), sb.top() + 6, 15, 60), "slider")
+
     # the Dock: flush with the bottom edge, as on 10.2
     names = ["system-file-manager", "utilities-terminal", "internet-web-browser", "kmail", "preferences-system", "help-browser", None, "user-trash-full"]
     iw, gap = 48, 10
@@ -246,11 +294,8 @@ def main():
         if not pm.isNull():
             p.drawPixmap(int(x), int(dock.top() + 3), iw, iw, pm)
         if i in (0, 1, 4):
-            # running-app triangle, as under the 10.2 Dock icons
-            cx = x + iw / 2
-            p.setPen(Qt.NoPen)
-            p.setBrush(QColor(20, 20, 20))
-            p.drawPolygon([QPointF(cx - 3.5, dock.bottom() - 2), QPointF(cx + 3.5, dock.bottom() - 2), QPointF(cx, dock.bottom() - 7)])
+            # running apps: the theme's tasks frame draws the triangle (as Plasma would)
+            tasks.paint(p, QRectF(x - 4, dock.top() + 2, iw + 8, dock.height() - 3), "focus" if i == 1 else "normal")
         if i == 1:
             t = QRectF(x + iw / 2 - 36, dock.top() - 30, 72, 20)
             tip.paint(p, t.adjusted(-6, -5, 6, 8), "shadow")

@@ -139,6 +139,18 @@ class Svg:
             self.items.append(f'<rect id="{pre}{hint}" x="{hx}" y="{y0 + i * 12}" width="{sw}" height="{sh}" fill="none"/>')
         self.y += frame.h + 20
 
+    def add_element(self, eid, w, h, paint):
+        img = QImage(int(w * SCALE), int(h * SCALE), QImage.Format_ARGB32_Premultiplied)
+        img.fill(Qt.transparent)
+        p = QPainter(img)
+        p.setRenderHint(QPainter.Antialiasing)
+        p.scale(SCALE, SCALE)
+        paint(p, QRectF(0, 0, w, h))
+        p.end()
+        self.items.append(f'<image id="{eid}" x="0" y="{self.y}" width="{w}" height="{h}" '
+                          f'preserveAspectRatio="none" xlink:href="data:image/png;base64,{png_data(img)}"/>')
+        self.y += h + 10
+
     def add_rect(self, rid, w, h):
         self.items.append(f'<rect id="{rid}" x="0" y="{self.y}" width="{w}" height="{h}" fill="none"/>')
         self.y += h + 10
@@ -305,6 +317,157 @@ def transparent(p, r):
     pass
 
 
+
+# ------------------------------------------------------------------ scroll bars, sliders, meters, tabs
+
+THUMB_COLS = [(122, 159, 215), (143, 185, 238), (140, 184, 236), (128, 180, 238), (79, 142, 216), (93, 162, 239),
+              (111, 178, 249), (128, 195, 253), (141, 209, 254), (160, 220, 253), (164, 206, 232)]
+
+
+def track(horizontal):
+    """Scroll bar track: an opaque white cylinder shaded along its leading edge, rounded ends."""
+    def paint(p, r):
+        g = QLinearGradient(r.topLeft(), r.bottomLeft() if horizontal else r.topRight())
+        for pos, v in ((0.0, 176), (0.10, 192), (0.22, 212), (0.40, 240), (0.55, 255), (0.85, 250), (1.0, 228)):
+            g.setColorAt(pos, QColor(v, v, v))
+        rad = (r.height() if horizontal else r.width()) / 2
+        p.setPen(Qt.NoPen)
+        p.setBrush(g)
+        p.drawRoundedRect(r, rad, rad)
+        p.setBrush(Qt.NoBrush)
+        p.setPen(QPen(QColor(0, 0, 0, 46), 1.0))
+        p.drawRoundedRect(r.adjusted(0.5, 0.5, -0.5, -0.5), rad - 0.5, rad - 0.5)
+    return paint
+
+
+def thumb(lighter=0):
+    """Plasma uses one 'slider' frame for both orientations, so the gel is shaded symmetrically:
+    the measured thumb colours run inwards from every edge, with a pale streak in the middle."""
+    def paint(p, r):
+        rr = r.adjusted(1, 1, -1, -1)
+        rad = min(rr.width(), rr.height()) / 2
+        path = QPainterPath()
+        path.addRoundedRect(rr, rad, rad)
+        p.setPen(Qt.NoPen)
+        base = QColor(93, 162, 239).lighter(100 + lighter)
+        p.setBrush(base)
+        p.drawPath(path)
+        p.save()
+        p.setClipPath(path)
+        # darker towards every edge (cylinder in both directions)
+        for i in range(int(rad) + 1):
+            a = int(110 * (1 - i / max(1, rad)) ** 2.2)
+            p.setPen(QPen(QColor(20, 60, 150, a), 1.0))
+            p.setBrush(Qt.NoBrush)
+            p.drawRoundedRect(rr.adjusted(i + 0.5, i + 0.5, -i - 0.5, -i - 0.5), max(0, rad - i), max(0, rad - i))
+        glow = QRadialGradient(rr.center(), rad * 1.1)
+        glow.setColorAt(0, QColor(170, 228, 255, 150))
+        glow.setColorAt(1, QColor(170, 228, 255, 0))
+        p.setPen(Qt.NoPen)
+        p.setBrush(glow)
+        p.drawRect(rr)
+        p.restore()
+        p.setBrush(Qt.NoBrush)
+        p.setPen(QPen(QColor(24, 55, 115), 1.0))
+        p.drawRoundedRect(rr.adjusted(0.5, 0.5, -0.5, -0.5), rad - 0.5, rad - 0.5)
+    return paint
+
+
+def round_gel(g, d):
+    def paint(p, r):
+        rr = QRectF(r.center().x() - d / 2, r.center().y() - d / 2 - 0.5, d, d)
+        gel(p, rr, g, d / 2, shadow=True, lens_inset=d * 0.16, lens_h=0.46)
+    return paint
+
+
+def ring(d, color=(94, 146, 228)):
+    def paint(p, r):
+        p.setBrush(Qt.NoBrush)
+        p.setPen(QPen(QColor(*color, 130), 3.0))
+        p.drawEllipse(r.center(), d / 2 - 1.5, d / 2 - 1.5)
+    return paint
+
+
+def soft_shadow(d):
+    def paint(p, r):
+        g = QRadialGradient(r.center() + QPointF(0, 1), d / 2)
+        g.setColorAt(0.6, QColor(0, 0, 0, 60))
+        g.setColorAt(1.0, QColor(0, 0, 0, 0))
+        p.setPen(Qt.NoPen)
+        p.setBrush(g)
+        p.drawEllipse(r)
+    return paint
+
+
+def meter(g, horizontal, radius=3):
+    def paint(p, r):
+        if horizontal:
+            gel(p, r.adjusted(0.5, 0.5, -0.5, -0.5), g, radius, shadow=False, lens_inset=2, lens_h=0.42)
+        else:
+            img = QImage(int(r.height() * SCALE), int(r.width() * SCALE), QImage.Format_ARGB32_Premultiplied)
+            img.fill(Qt.transparent)
+            ip = QPainter(img)
+            ip.setRenderHint(QPainter.Antialiasing)
+            ip.scale(SCALE, SCALE)
+            gel(ip, QRectF(0.5, 0.5, r.height() - 1, r.width() - 1), g, radius, shadow=False, lens_inset=2, lens_h=0.42)
+            ip.end()
+            p.save()
+            p.translate(r.left(), r.bottom())
+            p.rotate(-90)
+            p.drawImage(QRectF(0, 0, r.height(), r.width()), img)
+            p.restore()
+    return paint
+
+
+TRACK = dict(rim=((130, 130, 134), (170, 170, 174)),
+             body=[(0.0, (206, 206, 210)), (0.45, (214, 214, 218)), (0.55, (226, 226, 230)), (1.0, (250, 250, 252))],
+             lens=[(0.0, (248, 248, 250)), (1.0, (230, 230, 234))])
+TAB_SELECTED = dict(rim=((0, 87, 174), (40, 110, 190)),
+                    body=[(0.0, (120, 184, 236)), (0.45, (86, 178, 235)), (0.70, (124, 207, 255)), (1.0, (172, 240, 255))],
+                    lens=[(0.0, (170, 210, 238)), (0.5, (150, 199, 231)), (1.0, (160, 205, 236))])
+
+
+def tab(side):
+    def paint(p, r):
+        rr = r.adjusted(0.5, 0.5, -0.5, -0.5)
+        rad = 4.5
+        path = QPainterPath()
+        L, T, R, B = rr.left(), rr.top(), rr.right(), rr.bottom()
+        if side == "north":
+            path.moveTo(L, B); path.lineTo(L, T + rad); path.quadTo(L, T, L + rad, T); path.lineTo(R - rad, T); path.quadTo(R, T, R, T + rad); path.lineTo(R, B)
+        elif side == "south":
+            path.moveTo(L, T); path.lineTo(L, B - rad); path.quadTo(L, B, L + rad, B); path.lineTo(R - rad, B); path.quadTo(R, B, R, B - rad); path.lineTo(R, T)
+        elif side == "west":
+            path.moveTo(R, T); path.lineTo(L + rad, T); path.quadTo(L, T, L, T + rad); path.lineTo(L, B - rad); path.quadTo(L, B, L + rad, B); path.lineTo(R, B)
+        else:
+            path.moveTo(L, T); path.lineTo(R - rad, T); path.quadTo(R, T, R, T + rad); path.lineTo(R, B - rad); path.quadTo(R, B, R - rad, B); path.lineTo(L, B)
+        path.closeSubpath()
+        vertical = side in ("west", "east")
+        body = QLinearGradient(rr.topLeft(), rr.topRight() if vertical else rr.bottomLeft())
+        for pos, c in TAB_SELECTED["body"]:
+            body.setColorAt(pos, qc(c))
+        p.setPen(QPen(qc(TAB_SELECTED["rim"][0]), 1.0))
+        p.setBrush(body)
+        p.drawPath(path)
+    return paint
+
+
+def check_glyph(p, r):
+    path = QPainterPath()
+    path.moveTo(r.left() + 3.5, r.top() + 8.5)
+    path.lineTo(r.left() + 6.8, r.top() + 12.6)
+    path.cubicTo(r.left() + 8.5, r.top() + 7.5, r.left() + 11, r.top() + 3.5, r.left() + 15, r.top() + 0.8)
+    p.setPen(QPen(QColor(18, 20, 32), 1.9, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+    p.setBrush(Qt.NoBrush)
+    p.drawPath(path)
+
+
+def dot(p, r):
+    p.setPen(Qt.NoPen)
+    p.setBrush(QColor(18, 20, 32))
+    p.drawEllipse(r.center(), r.width() / 2 - 0.5, r.height() / 2 - 0.5)
+
+
 # ------------------------------------------------------------------ theme
 
 def build():
@@ -377,6 +540,58 @@ def build():
     s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
     s.write(os.path.join(OUT, "widgets", "viewitem.svg"))
 
+    # scroll bars: 15px, white cylinder track, gel thumb
+    s = Svg()
+    s.add_rect("hint-scrollbar-size", 15, 15)
+    s.add_frame("background-vertical", Frame(15, 40, 7, 8, 7, 8, track(False)), [("hint-stretch-borders", 1)])
+    s.add_frame("background-horizontal", Frame(40, 15, 8, 7, 8, 7, track(True)), [("hint-stretch-borders", 1)])
+    s.add_frame("slider", Frame(15, 40, 7, 8, 7, 8, thumb()), [("hint-stretch-borders", 1)])
+    s.add_frame("mouseover-slider", Frame(15, 40, 7, 8, 7, 8, thumb(8)), [("hint-stretch-borders", 1)])
+    s.write(os.path.join(OUT, "widgets", "scrollbar.svg"))
+
+    # slider handles: the round 15px Aqua thumb
+    s = Svg()
+    s.add_rect("hint-handle-size", 17, 17)
+    for o in ("horizontal", "vertical"):
+        s.add_element(f"{o}-slider-handle", 17, 17, round_gel(BLUE, 15))
+        s.add_element(f"{o}-slider-hover", 17, 17, round_gel(BLUE, 15))
+        s.add_element(f"{o}-slider-focus", 21, 21, ring(21))
+        s.add_element(f"{o}-slider-shadow", 21, 21, soft_shadow(21))
+    s.write(os.path.join(OUT, "widgets", "slider.svg"))
+
+    # progress bars and slider grooves: light gel track, blue gel fill
+    for name, horizontal in (("bar_meter_horizontal", True), ("bar_meter_vertical", False)):
+        s = Svg()
+        s.add_rect("hint-bar-size", 12, 12)
+        fw, fh = (30, 12) if horizontal else (12, 30)
+        s.add_frame("bar-inactive", Frame(fw, fh, 4, 4, 4, 4, meter(TRACK, horizontal)), [("hint-stretch-borders", 1)])
+        s.add_frame("bar-active", Frame(fw, fh, 4, 4, 4, 4, meter(BLUE, horizontal)), [("hint-stretch-borders", 1)])
+        s.write(os.path.join(OUT, "widgets", name + ".svg"))
+
+    # tab bars: the selected tab is the light Aqua tab gel, rounded away from the pane
+    s = Svg()
+    for side in ("north", "south", "west", "east"):
+        w, h = (40, 23) if side in ("north", "south") else (23, 40)
+        s.add_frame(f"{side}-active-tab", Frame(w, h, 6, 6, 6, 6, tab(side)),
+                    [("hint-stretch-borders", 1), ("hint-top-margin", (1, 4)), ("hint-bottom-margin", (1, 4)),
+                     ("hint-left-margin", (12, 1)), ("hint-right-margin", (12, 1))])
+    s.write(os.path.join(OUT, "widgets", "tabbar.svg"))
+
+    # radio buttons and check marks
+    s = Svg()
+    s.add_rect("hint-size", 18, 18)
+    s.add_element("normal", 18, 18, round_gel(CLEAR, 14))
+    s.add_element("hover", 18, 18, round_gel(CLEAR, 14))
+    s.add_element("checked", 18, 18, round_gel(BLUE, 14))
+    s.add_element("symbol", 6, 6, dot)
+    s.add_element("focus", 22, 22, ring(22))
+    s.add_element("shadow", 22, 22, soft_shadow(22))
+    s.write(os.path.join(OUT, "widgets", "radiobutton.svg"))
+    s = Svg()
+    s.add_element("checkbox", 16, 16, check_glyph)
+    s.add_element("radiobutton", 16, 16, lambda p, r: dot(p, QRectF(r.center().x() - 3, r.center().y() - 3, 6, 6)))
+    s.write(os.path.join(OUT, "widgets", "checkmarks.svg"))
+
     # menu bar items for the global menu: the same striped gel
     s = Svg()
     for prefix in ("hover", "pressed"):
@@ -384,13 +599,28 @@ def build():
     s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
     s.write(os.path.join(OUT, "widgets", "menubaritem.svg"))
 
-    # task manager: Dock items have no frame; a soft glow marks the active and hovered app
+    # task manager: Dock items have no frame; running apps get the small black triangle.
+    # A frame can't centre a shape, so the corners are wide and transparent and the triangle
+    # sits in the bottom edge, which is stretched (not tiled) across the remaining width.
+    def triangle_frame(glow):
+        def paint(p, r):
+            if glow:
+                p.setPen(Qt.NoPen)
+                p.setBrush(QColor(255, 255, 255, 70))
+                p.drawRoundedRect(r.adjusted(1, 1, -1, -7), 6, 6)
+            cx, by = r.center().x(), r.bottom() - 0.5
+            p.setPen(Qt.NoPen)
+            p.setBrush(QColor(20, 20, 20, 235))
+            p.drawPolygon([QPointF(cx - 3.5, by), QPointF(cx + 3.5, by), QPointF(cx, by - 5)])
+        return paint
     s = Svg()
-    s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
-    s.add_frame("minimized", Frame(16, 16, 4, 4, 4, 4, transparent))
-    s.add_frame("focus", Frame(24, 24, 7, 7, 7, 7, flat((255, 255, 255), 80, 6)))
+    hints = [("hint-stretch-borders", 1), ("hint-top-margin", (1, 2)), ("hint-bottom-margin", (1, 2)),
+             ("hint-left-margin", (2, 1)), ("hint-right-margin", (2, 1))]
+    s.add_frame("normal", Frame(44, 44, 18, 6, 18, 6, triangle_frame(False)), hints)
+    s.add_frame("minimized", Frame(44, 44, 18, 6, 18, 6, triangle_frame(False)), hints)
+    s.add_frame("focus", Frame(44, 44, 18, 6, 18, 6, triangle_frame(False)), hints)
     s.add_frame("hover", Frame(24, 24, 7, 7, 7, 7, flat((255, 255, 255), 60, 6)))
-    s.add_frame("attention", Frame(24, 24, 7, 7, 7, 7, flat((255, 170, 40), 110, 6)))
+    s.add_frame("attention", Frame(44, 44, 18, 6, 18, 6, triangle_frame(True)), hints)
     s.write(os.path.join(OUT, "widgets", "tasks.svg"))
 
     with open(os.path.join(OUT, "metadata.json"), "w") as f:

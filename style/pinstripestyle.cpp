@@ -94,6 +94,99 @@ QColor alpha(QColor c, int a)
     c.setAlpha(a);
     return c;
 }
+
+enum class Side { North, South, West, East };
+
+Side tabSide(QTabBar::Shape shape)
+{
+    switch (shape) {
+    case QTabBar::RoundedSouth:
+    case QTabBar::TriangularSouth:
+        return Side::South;
+    case QTabBar::RoundedWest:
+    case QTabBar::TriangularWest:
+        return Side::West;
+    case QTabBar::RoundedEast:
+    case QTabBar::TriangularEast:
+        return Side::East;
+    default:
+        return Side::North;
+    }
+}
+
+bool vertical(Side s)
+{
+    return s == Side::West || s == Side::East;
+}
+
+// Traffic-light gels (same colours as the Oxygen Traffic Lights decoration)
+void paintLight(QPainter *p, const QRectF &r, int kind, bool active, bool hover, bool pressed)
+{
+    static const QColor deep[3] = {QColor(176, 18, 10), QColor(194, 128, 0), QColor(44, 134, 18)};
+    static const QColor mid[3] = {QColor(242, 70, 56), QColor(247, 193, 36), QColor(108, 203, 58)};
+    static const QColor light[3] = {QColor(255, 184, 168), QColor(255, 242, 176), QColor(216, 248, 168)};
+    static const QColor rim[3] = {QColor(128, 12, 6), QColor(140, 90, 0), QColor(29, 90, 10)};
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing, true);
+    const QPointF c = r.center();
+    const qreal rad = qMin(r.width(), r.height()) / 2.0 - 0.5;
+    QColor d = deep[kind], m = mid[kind], l = light[kind], rm = rim[kind];
+    if (!active && !hover) {
+        // inactive windows show hollow grey gels
+        d = QColor(160, 160, 164);
+        m = QColor(214, 214, 218);
+        l = QColor(250, 250, 252);
+        rm = QColor(120, 120, 124);
+    }
+    if (pressed) {
+        d = d.darker(130);
+        m = m.darker(125);
+    }
+    p->setBrush(QColor(0, 0, 0, 30));
+    p->setPen(Qt::NoPen);
+    p->drawEllipse(c + QPointF(0, 0.8), rad, rad);
+    QRadialGradient body(c + QPointF(0, rad * 0.55), rad * 1.45);
+    body.setColorAt(0.0, l);
+    body.setColorAt(0.45, m);
+    body.setColorAt(1.0, d);
+    p->setBrush(body);
+    p->setPen(QPen(rm, 1.0));
+    p->drawEllipse(c, rad, rad);
+    QLinearGradient lens(QPointF(c.x(), c.y() - rad), QPointF(c.x(), c.y()));
+    lens.setColorAt(0, QColor(255, 255, 255, 240));
+    lens.setColorAt(1, QColor(255, 255, 255, 30));
+    p->setPen(Qt::NoPen);
+    p->setBrush(lens);
+    p->drawEllipse(QRectF(c.x() - rad * 0.68, c.y() - rad * 0.92, rad * 1.36, rad * 0.9));
+    if (hover) {
+        p->setPen(QPen(QColor(60, 10, 0, 200), qMax(1.0, rad * 0.22), Qt::SolidLine, Qt::RoundCap));
+        const qreal g = rad * 0.45;
+        if (kind == 0) {
+            p->drawLine(c + QPointF(-g * 0.8, -g * 0.8), c + QPointF(g * 0.8, g * 0.8));
+            p->drawLine(c + QPointF(g * 0.8, -g * 0.8), c + QPointF(-g * 0.8, g * 0.8));
+        } else {
+            p->drawLine(c + QPointF(-g, 0), c + QPointF(g, 0));
+            if (kind == 2)
+                p->drawLine(c + QPointF(0, -g), c + QPointF(0, g));
+        }
+    }
+    p->restore();
+}
+
+// 10.2 title bar: pinstripes darkening towards the bottom, a dark line below
+void paintTitleBar(QPainter *p, const QRect &r, bool active)
+{
+    p->save();
+    for (int y = r.top(); y <= r.bottom(); ++y) {
+        const int rows[4] = {255, 238, 230, 238};
+        int v = rows[(y - r.top()) % 4] - (r.height() > 1 ? 26 * (y - r.top()) / (r.height() - 1) : 0);
+        if (!active)
+            v = 240 + (v - 240) / 2;
+        p->fillRect(QRect(r.left(), y, r.width(), 1), QColor(v, v, v));
+    }
+    p->fillRect(QRect(r.left(), r.bottom(), r.width(), 1), active ? QColor(127, 127, 127) : QColor(160, 160, 160));
+    p->restore();
+}
 }
 
 Style::Style(Appearance appearance)
@@ -455,27 +548,48 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
 
     case PE_FrameTabWidget: {
         const auto *tw = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt);
-        if (!tw || (tw->shape != QTabBar::RoundedNorth && tw->shape != QTabBar::TriangularNorth))
+        if (!tw)
             break;
-        // blue accent bar under the tabs, then the pane with a soft inner shadow
+        // blue accent bar along the tabs' side, then the pane with a soft inner shadow
+        const Side side = tabSide(tw->shape);
         const QRect r = opt->rect;
+        QRect bar, pane;
+        switch (side) {
+        case Side::North:
+            bar = QRect(r.left(), r.top(), r.width(), TabAccentBar);
+            pane = r.adjusted(0, TabAccentBar, 0, 0);
+            break;
+        case Side::South:
+            bar = QRect(r.left(), r.bottom() - TabAccentBar + 1, r.width(), TabAccentBar);
+            pane = r.adjusted(0, 0, 0, -TabAccentBar);
+            break;
+        case Side::West:
+            bar = QRect(r.left(), r.top(), TabAccentBar, r.height());
+            pane = r.adjusted(TabAccentBar, 0, 0, 0);
+            break;
+        case Side::East:
+            bar = QRect(r.right() - TabAccentBar + 1, r.top(), TabAccentBar, r.height());
+            pane = r.adjusted(0, 0, -TabAccentBar, 0);
+            break;
+        }
         p->save();
-        const QRect pane(r.left(), r.top() + TabAccentBar, r.width(), r.height() - TabAccentBar);
-        p->fillRect(pane.adjusted(1, 0, -1, -1), QColor(0, 0, 0, 8));
-        QLinearGradient sh(pane.topLeft(), pane.topLeft() + QPoint(0, 6));
+        p->fillRect(pane.adjusted(1, 1, -1, -1), QColor(0, 0, 0, 8));
+        QPoint from = side == Side::North ? pane.topLeft() : side == Side::South ? pane.bottomLeft() : side == Side::West ? pane.topLeft() : pane.topRight();
+        QPoint dir = side == Side::North ? QPoint(0, 6) : side == Side::South ? QPoint(0, -6) : side == Side::West ? QPoint(6, 0) : QPoint(-6, 0);
+        QLinearGradient sh(from, from + dir);
         sh.setColorAt(0, QColor(0, 0, 0, 40));
         sh.setColorAt(1, QColor(0, 0, 0, 0));
-        p->fillRect(QRect(pane.left() + 1, pane.top(), pane.width() - 2, 6), sh);
+        p->fillRect(pane.adjusted(1, 1, -1, -1), sh);
         p->setPen(QColor(0, 0, 0, 52));
-        p->drawLine(pane.bottomLeft(), pane.bottomRight());
-        p->drawLine(pane.topLeft(), pane.bottomLeft());
-        p->drawLine(pane.topRight(), pane.bottomRight());
+        p->setBrush(Qt::NoBrush);
+        p->drawRect(pane.adjusted(0, 0, -1, -1));
         GelOptions o;
         o.radius = 0;
         o.shadow = false;
         o.lensInset = 0;
         o.lensHeight = 0.4;
-        paintGel(p, QRectF(r.left(), r.top(), r.width(), TabAccentBar), windowActive(opt) ? coloredGel() : gel(GelKind::Clear, m_appearance), o);
+        o.orientation = vertical(side) ? Qt::Vertical : Qt::Horizontal;
+        paintGel(p, QRectF(bar), windowActive(opt) ? coloredGel() : gel(GelKind::Clear, m_appearance), o);
         p->restore();
         return;
     }
@@ -623,25 +737,55 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
 
     case CE_TabBarTabShape: {
         const auto *t = qstyleoption_cast<const QStyleOptionTab *>(opt);
-        if (!t || (t->shape != QTabBar::RoundedNorth && t->shape != QTabBar::TriangularNorth))
+        if (!t)
             break;
+        const Side side = tabSide(t->shape);
         const bool selected = t->state & State_Selected;
-        const QRectF r = QRectF(t->rect).adjusted(0.5, 0.5, -0.5, 0);
+        const QRectF r = QRectF(t->rect).adjusted(0.5, 0.5, -0.5, -0.5);
+        // rounded corners on the side away from the pane
         QPainterPath path;
         const qreal rad = 4.5;
-        path.moveTo(r.bottomLeft());
-        path.lineTo(r.left(), r.top() + rad);
-        path.quadTo(r.left(), r.top(), r.left() + rad, r.top());
-        path.lineTo(r.right() - rad, r.top());
-        path.quadTo(r.right(), r.top(), r.right(), r.top() + rad);
-        path.lineTo(r.bottomRight());
+        switch (side) {
+        case Side::North:
+            path.moveTo(r.bottomLeft());
+            path.lineTo(r.left(), r.top() + rad);
+            path.quadTo(r.left(), r.top(), r.left() + rad, r.top());
+            path.lineTo(r.right() - rad, r.top());
+            path.quadTo(r.right(), r.top(), r.right(), r.top() + rad);
+            path.lineTo(r.bottomRight());
+            break;
+        case Side::South:
+            path.moveTo(r.topLeft());
+            path.lineTo(r.left(), r.bottom() - rad);
+            path.quadTo(r.left(), r.bottom(), r.left() + rad, r.bottom());
+            path.lineTo(r.right() - rad, r.bottom());
+            path.quadTo(r.right(), r.bottom(), r.right(), r.bottom() - rad);
+            path.lineTo(r.topRight());
+            break;
+        case Side::West:
+            path.moveTo(r.topRight());
+            path.lineTo(r.left() + rad, r.top());
+            path.quadTo(r.left(), r.top(), r.left(), r.top() + rad);
+            path.lineTo(r.left(), r.bottom() - rad);
+            path.quadTo(r.left(), r.bottom(), r.left() + rad, r.bottom());
+            path.lineTo(r.bottomRight());
+            break;
+        case Side::East:
+            path.moveTo(r.topLeft());
+            path.lineTo(r.right() - rad, r.top());
+            path.quadTo(r.right(), r.top(), r.right(), r.top() + rad);
+            path.lineTo(r.right(), r.bottom() - rad);
+            path.quadTo(r.right(), r.bottom(), r.right() - rad, r.bottom());
+            path.lineTo(r.bottomLeft());
+            break;
+        }
         path.closeSubpath();
         Gel g = gel(GelKind::TabClear, m_appearance);
         if (selected)
             g = windowActive(opt) ? gel(GelKind::TabSelected, m_appearance) : gel(GelKind::TabSelected, Appearance::Graphite);
         else if (t->state & State_Sunken)
             g = gel(GelKind::Pressed, m_appearance);
-        paintGelPath(p, path, r, g, Qt::Horizontal, false);
+        paintGelPath(p, path, r, g, vertical(side) ? Qt::Vertical : Qt::Horizontal, false);
         return;
     }
     case CE_TabBarTabLabel: {
@@ -843,10 +987,25 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
     }
 
     case CE_ToolBar:
-    case CE_DockWidgetTitle:
-        if (ce == CE_ToolBar)
-            return;
-        break;
+        return;
+
+    case CE_DockWidgetTitle: {
+        // like a 10.2 utility window: a short pinstriped title bar, small centred title
+        const auto *d = qstyleoption_cast<const QStyleOptionDockWidget *>(opt);
+        if (!d)
+            break;
+        paintTitleBar(p, d->rect, windowActive(opt));
+        if (!d->title.isEmpty()) {
+            p->save();
+            QFont f = p->font();
+            f.setPointSizeF(f.pointSizeF() * 0.9);
+            p->setFont(f);
+            p->setPen(windowActive(opt) ? Ink : QColor(120, 120, 120));
+            p->drawText(d->rect, Qt::AlignCenter, p->fontMetrics().elidedText(d->title, Qt::ElideRight, d->rect.width() - 50));
+            p->restore();
+        }
+        return;
+    }
 
     case CE_Splitter: {
         // a small dimple in the middle of the splitter
@@ -873,72 +1032,109 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
 
 void Style::drawScrollBar(const QStyleOptionSlider *opt, QPainter *p, const QWidget *w) const
 {
+    // Measured from the 10.2 artwork: the whole bar is an opaque white cylinder shaded at its
+    // edges (181 -> 255 over ~7px on the leading side); the track ends in rounded caps; the
+    // thumb sits 1px inside with a crisp dark navy rim; arrows are small dark triangles.
     const bool horizontal = opt->orientation == Qt::Horizontal;
+    const QRect r = opt->rect;
     const QRect groove = subControlRect(CC_ScrollBar, opt, SC_ScrollBarGroove, w);
     const QRect slider = subControlRect(CC_ScrollBar, opt, SC_ScrollBarSlider, w);
     const QRect add = subControlRect(CC_ScrollBar, opt, SC_ScrollBarAddLine, w);
     const QRect sub = subControlRect(CC_ScrollBar, opt, SC_ScrollBarSubLine, w);
+    const int thick = horizontal ? r.height() : r.width();
     p->save();
 
-    // arrow area background
-    auto across = [&](const QRect &r) {
-        QLinearGradient g(r.topLeft(), horizontal ? r.bottomLeft() : r.topRight());
-        g.setColorAt(0, QColor(226, 226, 228));
-        g.setColorAt(0.5, QColor(255, 255, 255));
-        g.setColorAt(1, QColor(236, 236, 238));
+    auto across = [&](const QRect &rr, std::initializer_list<std::pair<qreal, int>> stops) {
+        QLinearGradient g(rr.topLeft(), horizontal ? rr.bottomLeft() : rr.topRight());
+        for (const auto &[pos, v] : stops)
+            g.setColorAt(pos, QColor(v, v, v));
         return g;
     };
-    p->fillRect(opt->rect, across(opt->rect));
+    // arrow area / end background: a lighter cylinder
+    p->fillRect(r, across(r, {{0.0, 204}, {0.25, 236}, {0.5, 255}, {0.85, 250}, {1.0, 232}}));
 
-    // the groove: white, with the inner shadow along one side (sampled 181 -> 255 over 7px)
+    // track: capsule with the inner shadow along the leading edge
     p->setRenderHint(QPainter::Antialiasing, true);
     {
-        QLinearGradient g(groove.topLeft(), horizontal ? groove.bottomLeft() : groove.topRight());
-        g.setColorAt(0.00, QColor(181, 181, 181));
-        g.setColorAt(0.08, QColor(198, 198, 198));
-        g.setColorAt(0.30, QColor(214, 214, 214));
-        g.setColorAt(0.45, QColor(239, 239, 239));
-        g.setColorAt(0.55, QColor(255, 255, 255));
-        g.setColorAt(1.00, QColor(247, 247, 247));
-        p->setPen(QPen(QColor(150, 150, 154), 1.0));
-        p->setBrush(g);
-        const qreal rr = (horizontal ? groove.height() : groove.width()) / 2.0;
-        p->drawRoundedRect(QRectF(groove).adjusted(0.5, 0.5, -0.5, -0.5), rr, rr);
+        const qreal rad = thick / 2.0;
+        const QRectF t = QRectF(groove).adjusted(0, 0, horizontal ? 0 : 0, 0);
+        QPainterPath cap;
+        cap.addRoundedRect(t, rad, rad);
+        p->setPen(Qt::NoPen);
+        p->setBrush(across(groove, {{0.00, 176}, {0.10, 192}, {0.22, 212}, {0.40, 240}, {0.55, 255}, {0.85, 250}, {1.00, 228}}));
+        p->drawPath(cap);
+        // the rounded caps catch a grey arc, as on 10.2
+        p->setBrush(Qt::NoBrush);
+        p->setPen(QPen(QColor(0, 0, 0, 46), 1.0));
+        p->drawRoundedRect(t.adjusted(0.5, 0.5, -0.5, -0.5), rad - 0.5, rad - 0.5);
     }
 
-    // arrows: together at the bottom / right, as on 10.2
+    // arrows: together at the end, separated by a fine line
     p->setRenderHint(QPainter::Antialiasing, false);
-    for (const QRect &r : {sub, add}) {
-        const bool isAdd = r == add;
+    for (const QRect &ar : {sub, add}) {
+        const bool isAdd = ar == add;
         const bool pressed = (opt->activeSubControls & (isAdd ? SC_ScrollBarAddLine : SC_ScrollBarSubLine)) && (opt->state & State_Sunken);
         if (pressed)
-            p->fillRect(r, QColor(0, 0, 80, 50));
-        p->setPen(QColor(162, 162, 166));
-        if (horizontal)
-            p->drawLine(r.topLeft(), r.bottomLeft());
-        else
-            p->drawLine(r.topLeft(), r.topRight());
+            p->fillRect(ar, across(ar, {{0.0, 150}, {0.5, 196}, {1.0, 170}}));
         const Qt::ArrowType t = horizontal ? (isAdd ? Qt::RightArrow : Qt::LeftArrow) : (isAdd ? Qt::DownArrow : Qt::UpArrow);
-        drawArrow(p, QRectF(r).adjusted(3, 3, -3, -3), t, enabled(opt) ? GlyphInk : QColor(160, 160, 160));
+        const QRectF ir = QRectF(ar).adjusted(3, 3, -3, -3);
+        drawArrow(p, ir.adjusted(0.5, 0.5, -0.5, -0.5), t, enabled(opt) ? QColor(34, 34, 38) : QColor(160, 160, 160));
     }
+    p->setPen(QColor(190, 190, 194));
+    if (horizontal)
+        p->drawLine(add.topLeft(), add.bottomLeft());
+    else
+        p->drawLine(add.topLeft(), add.topRight());
+    // leading edge line against the content
     p->setPen(QColor(150, 150, 154));
     if (horizontal)
-        p->drawLine(opt->rect.topLeft(), opt->rect.topRight());
+        p->drawLine(r.topLeft(), r.topRight());
     else
-        p->drawLine(opt->rect.topLeft(), opt->rect.bottomLeft());
+        p->drawLine(r.topLeft(), r.bottomLeft());
 
-    // thumb: coloured gel in the active window, clear otherwise
+    // thumb
     if (opt->maximum > opt->minimum && slider.isValid() && enabled(opt)) {
         Gel g = windowActive(opt) ? gel(GelKind::Thumb, m_appearance) : gel(GelKind::Clear, m_appearance);
         if ((opt->activeSubControls & SC_ScrollBarSlider) && (opt->state & State_Sunken))
             g = gel(GelKind::Pressed, m_appearance);
-        GelOptions o;
-        o.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
-        o.shadow = false;
-        o.lensHeight = 0.36;
-        o.lensInset = 3;
-        const QRectF thumb = horizontal ? QRectF(slider).adjusted(0.5, 0.5, -0.5, -0.5) : QRectF(slider).adjusted(0.5, 0.5, -0.5, -0.5);
-        paintGel(p, thumb, g, o);
+        const QRect tr = horizontal ? slider.adjusted(0, 1, 0, -1 + 1) : slider.adjusted(1, 0, -1 + 1, 0);
+        const qreal rad = (horizontal ? tr.height() : tr.width()) / 2.0;
+        p->setRenderHint(QPainter::Antialiasing, true);
+        QPainterPath shape;
+        shape.addRoundedRect(QRectF(tr), rad, rad);
+        // body across the thumb (lens side first)
+        QLinearGradient body(tr.topLeft(), horizontal ? tr.bottomLeft() : tr.topRight());
+        body.setStops(g.body);
+        p->setPen(Qt::NoPen);
+        p->setBrush(body);
+        p->drawPath(shape);
+        // narrow lens streak, inset from the rounded ends
+        p->save();
+        p->setClipPath(shape);
+        const qreal tk = horizontal ? tr.height() : tr.width();
+        const QRectF lens = horizontal ? QRectF(tr.left() + rad * 0.6, tr.top() + 1.5, tr.width() - rad * 1.2, tk * 0.34)
+                                       : QRectF(tr.left() + 1.5, tr.top() + rad * 0.6, tk * 0.34, tr.height() - rad * 1.2);
+        QLinearGradient lg(lens.topLeft(), horizontal ? lens.bottomLeft() : lens.topRight());
+        lg.setStops(g.lens);
+        p->setBrush(lg);
+        p->drawRoundedRect(lens, tk * 0.17, tk * 0.17);
+        // the rounded ends fall into shadow, which gives the pill its depth
+        if (windowActive(opt)) {
+            QLinearGradient ends(tr.topLeft(), horizontal ? tr.topRight() : tr.bottomLeft());
+            const qreal len = horizontal ? tr.width() : tr.height();
+            const qreal e = qMin(0.45, (rad * 1.3) / qMax(1.0, len));
+            ends.setColorAt(0.0, QColor(10, 40, 120, 90));
+            ends.setColorAt(e, QColor(10, 40, 120, 0));
+            ends.setColorAt(1.0 - e, QColor(10, 40, 120, 0));
+            ends.setColorAt(1.0, QColor(10, 40, 120, 90));
+            p->setBrush(ends);
+            p->drawRect(QRectF(tr));
+        }
+        p->restore();
+        // crisp dark rim
+        p->setBrush(Qt::NoBrush);
+        p->setPen(QPen(g.rimTop, 1.0));
+        p->drawRoundedRect(QRectF(tr).adjusted(0.5, 0.5, -0.5, -0.5), rad - 0.5, rad - 0.5);
     }
     p->restore();
 }
@@ -1162,6 +1358,28 @@ void Style::drawComplexControl(ComplexControl cc, const QStyleOptionComplex *opt
             return;
         }
         break;
+    case CC_TitleBar:
+        if (const auto *t = qstyleoption_cast<const QStyleOptionTitleBar *>(opt)) {
+            // MDI sub-windows: 10.2 title bar with traffic lights on the left
+            const bool active = (t->titleBarState & Qt::WindowActive) || (t->state & State_Active);
+            paintTitleBar(p, t->rect, active);
+            const bool lightsHover = (t->state & State_MouseOver) && (t->activeSubControls & (SC_TitleBarCloseButton | SC_TitleBarMinButton | SC_TitleBarMaxButton | SC_TitleBarNormalButton));
+            const SubControl subs[3] = {SC_TitleBarCloseButton, SC_TitleBarMinButton, (t->titleBarState & (Qt::WindowMaximized | Qt::WindowMinimized)) ? SC_TitleBarNormalButton : SC_TitleBarMaxButton};
+            for (int i = 0; i < 3; ++i) {
+                const QRect r = subControlRect(cc, t, subs[i], w);
+                if (!r.isValid())
+                    continue;
+                const bool pressed = (t->activeSubControls & subs[i]) && (t->state & State_Sunken);
+                paintLight(p, r, i, active, lightsHover, pressed);
+            }
+            const QRect label = subControlRect(cc, t, SC_TitleBarLabel, w);
+            p->save();
+            p->setPen(active ? Ink : QColor(120, 120, 120));
+            p->drawText(label, Qt::AlignCenter, p->fontMetrics().elidedText(t->text, Qt::ElideRight, label.width()));
+            p->restore();
+            return;
+        }
+        break;
     default:
         break;
     }
@@ -1182,7 +1400,8 @@ QRect Style::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, S
         const int len = horizontal ? r.width() : r.height();
         const int arrows = qMin(2 * ScrollArrowLength, len / 2);
         const int one = arrows / 2;
-        QRect groove = horizontal ? QRect(r.left(), r.top(), len - arrows, r.height()) : QRect(r.left(), r.top(), r.width(), len - arrows);
+        // the track keeps 1px from the content edge line; its end overlaps the arrow area slightly
+        QRect groove = horizontal ? QRect(r.left() + 1, r.top() + 1, len - arrows - 1 + 3, r.height() - 1) : QRect(r.left() + 1, r.top() + 1, r.width() - 1, len - arrows - 1 + 3);
         switch (sc) {
         case SC_ScrollBarSubLine:
             return horizontal ? QRect(r.right() - arrows + 1, r.top(), one, r.height()) : QRect(r.left(), r.bottom() - arrows + 1, r.width(), one);
@@ -1279,6 +1498,36 @@ QRect Style::subControlRect(ComplexControl cc, const QStyleOptionComplex *opt, S
         break;
     }
 
+    case CC_TitleBar: {
+        const auto *t = qstyleoption_cast<const QStyleOptionTitleBar *>(opt);
+        if (!t)
+            break;
+        const QRect r = t->rect;
+        const int d = 13, cy = r.top() + (r.height() - d) / 2;
+        const bool hasMax = t->titleBarFlags & Qt::WindowMaximizeButtonHint;
+        const bool hasMin = t->titleBarFlags & Qt::WindowMinimizeButtonHint;
+        switch (sc) {
+        case SC_TitleBarCloseButton:
+            return QRect(r.left() + 8, cy, d, d);
+        case SC_TitleBarMinButton:
+            return hasMin && !(t->titleBarState & Qt::WindowMinimized) ? QRect(r.left() + 29, cy, d, d) : QRect();
+        case SC_TitleBarMaxButton:
+            return hasMax && !(t->titleBarState & (Qt::WindowMaximized | Qt::WindowMinimized)) ? QRect(r.left() + 50, cy, d, d) : QRect();
+        case SC_TitleBarNormalButton:
+            return (t->titleBarState & (Qt::WindowMaximized | Qt::WindowMinimized)) ? QRect(r.left() + (t->titleBarState & Qt::WindowMinimized ? 29 : 50), cy, d, d) : QRect();
+        case SC_TitleBarLabel:
+            return r.adjusted(72, 0, -72, 0);
+        case SC_TitleBarSysMenu:
+        case SC_TitleBarShadeButton:
+        case SC_TitleBarUnshadeButton:
+        case SC_TitleBarContextHelpButton:
+            return QRect();
+        default:
+            break;
+        }
+        break;
+    }
+
     case CC_SpinBox: {
         const auto *s = qstyleoption_cast<const QStyleOptionSpinBox *>(opt);
         if (!s)
@@ -1313,9 +1562,18 @@ QRect Style::subElementRect(SubElement se, const QStyleOption *opt, const QWidge
     switch (se) {
     case SE_TabWidgetTabContents: {
         const auto *tw = qstyleoption_cast<const QStyleOptionTabWidgetFrame *>(opt);
-        if (tw && (tw->shape == QTabBar::RoundedNorth || tw->shape == QTabBar::TriangularNorth)) {
+        if (tw) {
             const QRect pane = subElementRect(SE_TabWidgetTabPane, opt, w);
-            return pane.adjusted(2, TabAccentBar + 4, -2, -2);
+            switch (tabSide(tw->shape)) {
+            case Side::North:
+                return pane.adjusted(2, TabAccentBar + 4, -2, -2);
+            case Side::South:
+                return pane.adjusted(2, 2, -2, -TabAccentBar - 4);
+            case Side::West:
+                return pane.adjusted(TabAccentBar + 4, 2, -2, -2);
+            case Side::East:
+                return pane.adjusted(2, 2, -TabAccentBar - 4, -2);
+            }
         }
         break;
     }
@@ -1400,6 +1658,10 @@ int Style::pixelMetric(PixelMetric pm, const QStyleOption *opt, const QWidget *w
         return 0;
     case PM_ToolBarHandleExtent:
         return 0;
+    case PM_TitleBarHeight:
+        return 22;
+    case PM_DockWidgetTitleMargin:
+        return 3;
     case PM_ToolBarFrameWidth:
         return 0;
     case PM_SplitterWidth:
@@ -1453,8 +1715,12 @@ QSize Style::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QS
     case CT_TabBarTab: {
         const auto *t = qstyleoption_cast<const QStyleOptionTab *>(opt);
         QSize s = QProxyStyle::sizeFromContents(ct, opt, size, w);
-        if (t && (t->shape == QTabBar::RoundedNorth || t->shape == QTabBar::TriangularNorth))
-            s.setHeight(TabHeight);
+        if (t) {
+            if (vertical(tabSide(t->shape)))
+                s.setWidth(TabHeight);
+            else
+                s.setHeight(TabHeight);
+        }
         return s;
     }
     case CT_MenuItem: {
@@ -1483,6 +1749,39 @@ QSize Style::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QS
         break;
     }
     return QProxyStyle::sizeFromContents(ct, opt, size, w);
+}
+
+QIcon Style::standardIcon(StandardPixmap sp, const QStyleOption *opt, const QWidget *w) const
+{
+    int kind = -1;
+    switch (sp) {
+    case SP_TitleBarCloseButton:
+    case SP_DockWidgetCloseButton:
+        kind = 0;
+        break;
+    case SP_TitleBarMinButton:
+        kind = 1;
+        break;
+    case SP_TitleBarMaxButton:
+    case SP_TitleBarNormalButton:
+        kind = 2;
+        break;
+    default:
+        break;
+    }
+    if (kind < 0)
+        return QProxyStyle::standardIcon(sp, opt, w);
+    QIcon icon;
+    for (int scale : {1, 2}) {
+        QPixmap pm(13 * scale, 13 * scale);
+        pm.fill(Qt::transparent);
+        pm.setDevicePixelRatio(scale);
+        QPainter p(&pm);
+        paintLight(&p, QRectF(0, 0, 12, 12), kind, true, false, false);
+        p.end();
+        icon.addPixmap(pm);
+    }
+    return icon;
 }
 
 int Style::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *w, QStyleHintReturn *ret) const

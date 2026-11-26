@@ -1,9 +1,10 @@
 # Pinstripe for KDE Plasma
 
-An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has three parts:
+An Aqua look for Plasma 6, modelled on Mac OS X 10.2 "Jaguar". It has four parts:
 
 * **Pinstripe** and **Pinstripe Graphite**: a Qt 6 widget style (System Settings → Colors & Themes → Application Style)
-* **Pinstripe**: a Plasma style (System Settings → Colors & Themes → Plasma Style) with a menu-bar top panel, pinstriped popups, a glass Dock, yellow tooltips and gel buttons
+* **Pinstripe**: a Plasma style (System Settings → Colors & Themes → Plasma Style). It has a menu-bar top panel, pinstriped popups, a glass Dock with running-app triangles, yellow tooltips, gel buttons, scroll bars, sliders, progress bars and tabs.
+* **Pinstripe**: a GTK 3 and GTK 4 theme, so GTK apps match
 * **Pinstripe** and **Pinstripe Graphite** colour schemes
 
 It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decoration.
@@ -13,6 +14,8 @@ It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decor
 | ![gallery](docs/screenshots/gallery-active.png) | ![desktop](docs/screenshots/plasma-desktop.png) |
 | ![list, group box, combination box, ticks, barber pole](docs/screenshots/more-active.png) | ![menu](docs/screenshots/menu.png) |
 | Inactive window: ![inactive](docs/screenshots/gallery-inactive.png) | Graphite: ![graphite](docs/screenshots/graphite-gallery.png) |
+| Dock widget, MDI windows, bottom and left tabs: ![docks](docs/screenshots/docks-mdi.png) | |
+| GTK 3: ![gtk3](docs/screenshots/gtk3-gallery.png) | GTK 4: ![gtk4](docs/screenshots/gtk4-gallery.png) |
 
 ## How true to 10.2 it is
 
@@ -42,12 +45,16 @@ Behaviour follows the HIG too:
 * Inactive windows lose their colour: thumbs, pop-up caps, the progress bar and the default button turn clear or grey.
 * Dialog buttons use the Mac order, with OK on the right.
 * Menus separate groups with blank space, not lines.
-* Scroll arrows sit together at the end of the bar.
+* Scroll bars: the whole bar is an opaque white cylinder, and the track has rounded, shaded ends. The thumb sits 1 px inside the track with a crisp navy rim; its columns are measured pixel by pixel from the real thumb, including the sharp dip after the lens. The arrows sit together at the end of the bar.
 * Determinate progress bars have moving light bands, and indeterminate ones are a barber pole.
 
 **Deliberate departure from 10.2: the selection highlight.** Jaguar's menu highlight was flat blue. Here it's a glossy gel with the pinstripes showing through, used for menus, the menu bar, selected list rows and Plasma lists.
 
-**Font:** 10.2 used Lucida Grande, which is Apple's and can't be redistributed. If you own a Mac, you can copy it from `/System/Library/Fonts`. The closest freely redistributable font is Luxi Sans by Bigelow & Holmes, Lucida's designers, from X.Org's `font-bh-ttf` package. Set it in System Settings → Fonts. The style itself doesn't force a font.
+**Font:** 10.2 used Lucida Grande, which is Apple's and can't be redistributed. If you own a Mac, you can copy it from `/System/Library/Fonts`. The closest freely redistributable font is **Luxi Sans** by Bigelow & Holmes, Lucida's designers, from X.Org's `font-bh-ttf` package. The previews use it. The GTK theme asks for Lucida Grande, then Luxi Sans. For Qt and Plasma apps, set it in System Settings → Text & Fonts. To install Luxi for your user:
+
+```bash
+mkdir -p ~/.local/share/fonts/luxi && curl -sSfL https://www.x.org/releases/individual/font/font-bh-ttf-1.0.4.tar.xz | tar -xJ --strip-components=1 -C ~/.local/share/fonts/luxi --wildcards '*.ttf' '*/COPYING' && fc-cache -f
+```
 
 ## Build
 
@@ -59,10 +66,10 @@ sudo dnf install cmake ninja-build gcc-c++ extra-cmake-modules qt6-qtbase-devel 
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=$HOME/.local && cmake --build build
 ```
 
-The Plasma style is generated from `tools/make_plasma_theme.py`. Rerun it after changing colours:
+The Plasma style and the GTK theme are generated. Rerun the generators after changing colours:
 
 ```bash
-python3 tools/make_plasma_theme.py
+python3 tools/make_plasma_theme.py && python3 tools/make_gtk_theme.py
 ```
 
 ## Install
@@ -85,7 +92,13 @@ or install the plugin system-wide:
 cmake -S . -B build-system -G Ninja -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_INSTALL_PREFIX=/usr && cmake --build build-system && sudo cmake --install build-system
 ```
 
-Then pick them in System Settings, or from a terminal:
+`cmake --install build` also puts the GTK theme in `~/.local/share/themes/Pinstripe`. Pick it in System Settings → Colors & Themes → Application Style → Configure GNOME/GTK Application Style. GTK windows with client-side title bars get the traffic lights. Put them on the left with:
+
+```bash
+gsettings set org.gnome.desktop.wm.preferences button-layout "close,minimize,maximize:"
+```
+
+Then pick the rest in System Settings, or from a terminal:
 
 ```bash
 plasma-apply-desktoptheme pinstripe && plasma-apply-colorscheme Pinstripe
@@ -119,11 +132,22 @@ cmake -S . -B build -DBUILD_GALLERY=ON && cmake --build build && QT_PLUGIN_PATH=
 python3 tools/preview_plasma.py /tmp/plasma.png ~/projects/pinstripe/sddm/pinstripe/backgrounds/water.jpg /tmp/gallery/more-active.png
 ```
 
-## Not done yet
+GTK, rendered through a headless Broadway display:
 
-* Tabs on the left, right or bottom, dock widget titles and MDI windows use Fusion's drawing.
-* Plasma scroll bars, sliders, progress bars and tab bars fall back to the default Plasma style.
-* The Plasma task manager can't draw the Dock's small running-app triangles from an SVG frame. Active apps get a soft glow instead.
+```bash
+broadwayd :7 & GDK_BACKEND=broadway BROADWAY_DISPLAY=:7 python3 tools/gtk_gallery.py 3 /tmp/gtk3.png
+```
+
+```bash
+gtk4-broadwayd :8 & GDK_BACKEND=broadway BROADWAY_DISPLAY=:8 python3 tools/gtk_gallery.py 4 /tmp/gtk4.png
+```
+
+## Limits
+
+* **Dock triangles:** a Plasma frame can't centre a single shape. The triangle sits in a stretched bottom edge between wide, transparent corners. It's sized for the default 44 px panel; on thicker panels it gets wider.
+* **GTK tabs** can't be centred, because GTK's CSS has no `margin: auto`. They stay left-aligned over the blue accent bar.
+* **libadwaita apps** (most GNOME apps) ignore GTK themes; only plain GTK 3 and GTK 4 apps pick up Pinstripe.
+* **Plasma sliders** use the progress-bar groove (Plasma draws both from one SVG), so the slider track is light grey rather than Aqua's dark one.
 
 ## License
 

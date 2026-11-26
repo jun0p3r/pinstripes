@@ -30,6 +30,7 @@ public:
     QRect subElementRect(SubElement se, const QStyleOption *opt, const QWidget *w = nullptr) const override;
     int pixelMetric(PixelMetric pm, const QStyleOption *opt = nullptr, const QWidget *w = nullptr) const override;
     QSize sizeFromContents(ContentsType ct, const QStyleOption *opt, const QSize &size, const QWidget *w = nullptr) const override;
+    QIcon standardIcon(StandardPixmap sp, const QStyleOption *opt = nullptr, const QWidget *w = nullptr) const override;
     int styleHint(StyleHint sh, const QStyleOption *opt = nullptr, const QWidget *w = nullptr, QStyleHintReturn *ret = nullptr) const override;
 
 protected:

@@ -128,12 +128,20 @@ Gel gel(GelKind kind, Appearance appearance)
         return g;
     }
     case GelKind::Thumb: {
-        // sampled row across the 10.2 scroll thumb (lens on the left, glow on the right)
+        // columns across the 10.2 scroll thumb, averaged over its length (HIG Figure "Sample Window")
         Gel g;
-        g.rimTop = QColor(25, 57, 116);
-        g.rimBottom = QColor(72, 95, 120);
-        g.body = stops({{0.0, QColor(110, 160, 222)}, {0.36, QColor(96, 155, 223)}, {0.50, QColor(110, 176, 244)}, {0.70, QColor(139, 206, 255)}, {0.90, QColor(178, 235, 255)}, {1.0, QColor(170, 214, 238)}});
-        g.lens = stops({{0.0, QColor(170, 200, 238)}, {0.35, QColor(146, 190, 239)}, {1.0, QColor(139, 188, 244)}});
+        g.rimTop = QColor(24, 55, 115);
+        g.rimBottom = QColor(68, 93, 110);
+        // piecewise-constant so each pixel column keeps its measured colour (the sharp dip after
+        // the lens is what makes the thumb read as a cylinder)
+        static const int cols[11][3] = {{122, 159, 215}, {143, 185, 238}, {140, 184, 236}, {128, 180, 238}, {79, 142, 216}, {93, 162, 239},
+                                        {111, 178, 249}, {128, 195, 253}, {141, 209, 254}, {160, 220, 253}, {164, 206, 232}};
+        for (int i = 0; i < 11; ++i) {
+            const QColor col(cols[i][0], cols[i][1], cols[i][2]);
+            g.body.append({i / 11.0 + (i ? 0.001 : 0.0), col});
+            g.body.append({(i + 1) / 11.0, col});
+        }
+        g.lens = stops({{0.0, QColor(124, 161, 217)}, {0.35, QColor(143, 185, 238)}, {1.0, QColor(130, 181, 238)}});
         return tint(g, appearance);
     }
     case GelKind::Pressed: {
