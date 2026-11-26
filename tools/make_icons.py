@@ -78,9 +78,15 @@ def poly(*pts, round_=0.0):
     return p
 
 
+# Menu-extra (panel) glyphs are rebuilt with thinner lines: Jaguar's menu bar extras are hairline
+# arcs and waves around small solid bodies. build() sets this to MENU_EXTRA_STROKE for the panel set.
+STROKE_SCALE = 1.0
+MENU_EXTRA_STROKE = 0.6
+
+
 def stroke(path, width, cap=Qt.RoundCap, join=Qt.RoundJoin):
     s = QPainterPathStroker()
-    s.setWidth(width)
+    s.setWidth(width * STROKE_SCALE)
     s.setCapStyle(cap)
     s.setJoinStyle(join)
     return s.createStroke(path).simplified()
@@ -111,6 +117,7 @@ def arc(cx, cy, r, start, span, w=2.0, cap=Qt.RoundCap):
 
 
 def ring(cx, cy, r, w):
+    w *= STROKE_SCALE
     return S(circ(cx, cy, r + w / 2), circ(cx, cy, r - w / 2))
 
 
@@ -172,7 +179,8 @@ def fan_arcs():
 
 
 def battery_shell():
-    return U(S(rr(0.8, 4.2, 13.4, 7.6, 1.8), rr(2.4, 5.8, 10.2, 4.4, 0.8)), rr(14.3, 6.2, 1.5, 3.6, 0.6))
+    t = max(0.9, 1.6 * STROKE_SCALE)
+    return U(S(rr(0.8, 4.2, 13.4, 7.6, 1.8), rr(0.8 + t, 4.2 + t, 13.4 - 2 * t, 7.6 - 2 * t, 0.8)), rr(14.3, 6.2, 1.5, 3.6, 0.6))
 
 
 def battery_fill(level):
@@ -2299,10 +2307,118 @@ def svg_d(path):
     return "".join(out) + "Z"
 
 
+def hollow(shape, w):
+    """The outline band of a solid glyph, w units wide."""
+    return QPainterPath(shape).subtracted(thin(shape, w)).simplified()
+
+
+def menu_extra_overrides(lw=1.0):
+    """Line versions of the tray glyphs that are solid shapes in the symbolic set, drawn like the
+    10.2 menu extras: hairline outlines, small solid details. Built at STROKE_SCALE 1.0."""
+    O = {}
+
+    def add(names, solid, faint=None):
+        for n in names.split():
+            O[n] = (solid, faint)
+
+    empty = QPainterPath()
+    bell = U(circ(8, 6.6, 4.3), rr(3.7, 6.6, 8.6, 4.4), rr(1.8, 10.6, 12.4, 2.0, 1.0))
+    bell_o = U(hollow(bell, lw), circ(8, 13.6, 1.4), circ(8, 2.0, 0.9))
+    add("notifications notification-active", bell_o)
+    add("notification-inactive notifications-disabled", empty, bell_o)
+    add("notification-new", U(S(bell_o, circ(12.8, 3.4, 3.6)), circ(12.8, 3.4, 2.4)))
+
+    rune = polyline([(5.0, 5.2), (11.0, 10.6), (8.0, 13.6), (8.0, 2.4), (11.0, 5.4), (5.0, 10.8)], lw)
+    add("bluetooth bluetooth-active bluetooth-online network-bluetooth network-bluetooth-activated "
+        "network-bluetooth-activated-locked network-wireless-bluetooth", rune)
+    add("bluetooth-disabled bluetooth-inactive bluetooth-offline network-bluetooth-inactive", empty, rune)
+
+    core = circ(8, 8, 2.7)
+    rays = U(*[rot(line(8, 0.9, 8, 3.1, lw), a) for a in range(0, 360, 45)])
+    add("brightness-high high-brightness video-display-brightness display-brightness", U(core, rays))
+    add("brightness-low low-brightness", core, rays)
+
+    upd = U(ring(8, 8, 6.4, lw))
+    add("update-low update-medium update-high kpackagekit-updates software-update-available",
+        U(upd, move(scale(arrow("down"), 0.55), 0, 0.2)))
+    add("update-none", U(upd, scale(check_mark(lw * 1.6), 0.6)))
+    add("update-busy", U(upd, scale(circular_arrow(True), 0.5)))
+
+    add("klipper", U(hollow(rr(2.6, 2.6, 10.8, 12.4, 1.4), lw), rr(5.2, 1.0, 5.6, 3.0, 1.0),
+                     line(5.4, 7.2, 10.6, 7.2, lw), line(5.4, 9.6, 10.6, 9.6, lw), line(5.4, 12.0, 8.8, 12.0, lw)))
+    add("kdeconnect-tray kdeconnect", U(hollow(rr(4.4, 1.2, 7.2, 13.6, 1.8), lw), circ(8, 12.4, 0.8)))
+
+    # Night Light: a crescent moon (on), a small sun (day), faint when off
+    moon = hollow(S(circ(7.6, 8.4, 6.0), circ(10.8, 5.6, 5.0)), lw)
+    add("redshift-status-on night-light night-light-on preferences-desktop-display-nightcolor", moon)
+    add("redshift-status-day night-light-day", U(circ(8, 8, 2.4), *[rot(line(8, 2.0, 8, 3.8, lw), a) for a in range(0, 360, 45)]))
+    add("redshift-status-off redshift-status-inactive night-light-off night-light-disabled", empty, moon)
+    add("system-software-update software-update-available software-update-urgent",
+        U(upd, move(scale(arrow("up"), 0.55), 0, -0.2)))
+
+    # Lock Keys applet: an outlined shift arrow, faint when off
+    shift = hollow(scale(arrow("up"), 0.86), lw)
+    add("input-caps-on", shift)
+    add("input-caps-off", empty, shift)
+
+    # Weather, drawn like the other menu extras so Crystal's colour weather art doesn't land in
+    # the panel (only 16-24 px is covered, so the weather popup keeps the colour art)
+    def sun(cx, cy, r, ray):
+        return U(circ(cx, cy, r), *[rot(line(cx, cy - r - 1.2, cx, cy - r - 1.2 - ray, lw), a, cx, cy)
+                                     for a in range(0, 360, 45)])
+
+    def moon_at(cx, cy, r):
+        return hollow(S(circ(cx, cy, r), circ(cx + r * 0.55, cy - r * 0.45, r * 0.85)), lw)
+
+    cloud_shape = U(circ(5.4, 9.0, 3.4), circ(9.6, 7.0, 4.3), rr(2.0, 8.8, 12.6, 4.9, 2.45))
+    cloud = hollow(cloud_shape, lw)
+    low_cloud = move(cloud, 0, 1.2)
+    drops = U(*[line(x, 14.0, x - 0.8, 15.6, lw) for x in (5.6, 8.4, 11.2)])
+    flakes = U(*[circ(x, 15.0, 0.75) for x in (5.6, 8.4, 11.2)])
+    zap = scale(bolt(), 0.56, 8.4, 14.6)
+    W = {
+        "clear": sun(8, 8, 2.8, 2.0),
+        "clear-night": moon_at(7.6, 8.4, 6.0),
+        "few": U(S(sun(5.4, 5.4, 2.0, 1.4), cloud_shape.translated(1.4, 2.2)), cloud.translated(1.4, 2.2)),
+        "few-night": U(S(moon_at(5.0, 5.0, 3.6), cloud_shape.translated(1.4, 2.2)), cloud.translated(1.4, 2.2)),
+        "clouds": move(cloud, 0, 0.8),
+        "rain": U(move(cloud, 0, -1.4), drops),
+        "snow": U(move(cloud, 0, -1.4), flakes),
+        "storm": U(S(move(cloud, 0, -1.4), zap.translated(0, 0.4)), zap),
+        "fog": U(*[line(2.5 + (i % 2) * 1.5, 5.0 + i * 3.0, 13.5 - ((i + 1) % 2) * 1.5, 5.0 + i * 3.0, lw) for i in range(4)]),
+    }
+    for n in ("clear clear-wind", "clear-night clear-wind-night", "few-clouds few-clouds-day few-clouds-wind",
+              "few-clouds-night few-clouds-wind-night", "clouds clouds-day clouds-wind many-clouds many-clouds-day "
+              "many-clouds-wind overcast overcast-wind clouds-night clouds-wind-night many-clouds-night",
+              "showers showers-day showers-night showers-scattered showers-scattered-day showers-scattered-night "
+              "freezing-rain freezing-rain-day freezing-rain-night freezing-scattered-rain freezing-scattered-rain-day "
+              "freezing-scattered-rain-night snow-rain",
+              "snow snow-day snow-night snow-scattered snow-scattered-day snow-scattered-night hail",
+              "storm storm-day storm-night showers-scattered-storm showers-scattered-storm-day "
+              "showers-scattered-storm-night freezing-storm freezing-storm-day freezing-storm-night "
+              "freezing-scattered-rain-storm freezing-scattered-rain-storm-day freezing-scattered-rain-storm-night "
+              "snow-storm snow-storm-day snow-storm-night snow-scattered-storm snow-scattered-storm-day "
+              "snow-scattered-storm-night",
+              "fog mist"):
+        first = n.split()[0]
+        key = {"clear": "clear", "clear-night": "clear-night", "few-clouds": "few", "few-clouds-night": "few-night",
+               "clouds": "clouds", "showers": "rain", "snow": "snow", "storm": "storm", "fog": "fog"}[first]
+        add(" ".join(f"weather-{x}" for x in n.split()), W[key])
+    add("weather-none-available", empty, W["clouds"])
+
+    # Power profiles (the power applet on a desktop) and the device notifier
+    zap_o = hollow(scale(bolt(), 1.05), lw * 0.9)
+    add("battery-profile-performance power-profile-performance", zap_o)
+    add("battery-profile-powersave power-profile-power-saver power-profile-powersave", moon)
+    add("battery-profile-balanced power-profile-balanced", U(ring(8, 8, 6.0, lw), S(circ(8, 8, 6.0), rr(8, 0, 8, 16))))
+    eject = U(hollow(poly((8, 2.6), (13.4, 8.6), (2.6, 8.6), round_=0.6), lw), rr(2.6, 11.0, 10.8, 2.0, 0.6))
+    add("device-notifier media-eject", eject)
+    return O
+
+
 # The glyphs are drawn as solid shapes on a 16-unit grid; these erode every edge by a fixed
 # amount so strokes read lighter, more on the panel where they're drawn at 22-24 px.
 THIN = 0.18
-THIN_PANEL = 0.27
 
 
 def thin(path, d):
@@ -2331,7 +2447,9 @@ def svg(solid, faint, size=16):
 TRAY = ("audio-volume", "network-wireless", "network-wired", "network-offline", "network-bluetooth", "network-vpn", "battery", "bluetooth", "notification",
         "brightness", "high-brightness", "low-brightness", "video-display-brightness", "update-", "kpackagekit", "mic-", "microphone-",
         "media-playback-playing", "media-playback-paused", "media-playback-stopped", "camera-on", "camera-off", "camera-ready",
-        "klipper", "kdeconnect", "input-keyboard-virtual", "keyboard-layout", "firewall-applet", "pamac-tray", "redshift-status", "osd-")
+        "klipper", "kdeconnect", "input-keyboard-virtual", "keyboard-layout", "firewall-applet", "pamac-tray", "redshift-status", "osd-",
+        "input-caps", "weather-", "night-light", "system-software-update", "software-update",
+        "battery-profile", "power-profile", "device-notifier", "media-eject")
 
 ACTION_SIZES = (
     ("16x16",   16, 1, "Fixed",    ""),
@@ -2480,19 +2598,46 @@ def build():
 
     # 2. Symbolic & panel menu-extra SVGs
     sym_icons = build_symbolic_icons()
+
+    # Tray names in the 10.2 menu-extra style (hairline strokes, small solid bodies), plus line
+    # versions of the glyphs that are solid shapes in the symbolic set. Plasma's tray asks for the
+    # -symbolic names at 16 px, so these replace the symbolic glyph for tray names everywhere;
+    # all other symbolic glyphs keep the solid style.
+    global STROKE_SCALE
+    overrides = menu_extra_overrides()
+    STROKE_SCALE = MENU_EXTRA_STROKE
+    try:
+        extras = build_symbolic_icons()
+    finally:
+        STROKE_SCALE = 1.0
+    extras = {k: v for k, v in extras.items() if k.startswith(TRAY)}
+    extras.update(overrides)
+
     contexts = set()
     for name, (solid, faint) in sym_icons.items():
         ctx = context_of(name)
         contexts.add(ctx)
         d = os.path.join(OUT, "symbolic", ctx)
         os.makedirs(d, exist_ok=True)
+        if name in extras:
+            solid, faint = extras[name]
+            body = svg(solid, faint)
+        else:
+            body = svg(thin(solid, THIN), thin(faint, THIN))
         with open(os.path.join(d, f"{name}-symbolic.svg"), "w") as f:
-            f.write(svg(thin(solid, THIN), thin(faint, THIN)))
-        if name.startswith(TRAY):
-            d = os.path.join(OUT, "panel", "status")
-            os.makedirs(d, exist_ok=True)
-            with open(os.path.join(d, f"{name}.svg"), "w") as f:
-                f.write(svg(thin(solid, THIN_PANEL), thin(faint, THIN_PANEL)))
+            f.write(body)
+    for name in sorted(set(extras) - set(sym_icons)):
+        solid, faint = extras[name]
+        d = os.path.join(OUT, "symbolic", "status")
+        os.makedirs(d, exist_ok=True)
+        contexts.add("status")
+        with open(os.path.join(d, f"{name}-symbolic.svg"), "w") as f:
+            f.write(svg(solid, faint))
+    d = os.path.join(OUT, "panel", "status")
+    os.makedirs(d, exist_ok=True)
+    for name, (solid, faint) in extras.items():
+        with open(os.path.join(d, f"{name}.svg"), "w") as f:
+            f.write(svg(solid, faint))
 
     ctx_names = {
         "actions": "Actions", "status": "Status", "devices": "Devices",

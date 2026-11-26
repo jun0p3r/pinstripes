@@ -161,6 +161,16 @@ Claude again) relies on them to resume without re-deriving anything.
     glyph fills into Jaguar's dark grey #3b3e43 (matching the Finder's light-rimmed Back/Forward
     buttons in real 10.2 screenshots). Symbolic glyphs are eroded by `thin()` (0.18 units, 0.27 on
     the panel); more than that breaks the Bluetooth rune and clipboard lines apart.
+  * **Panel = 10.2 menu extras** (user's choice: outlined, like the real Jaguar menu bar). Tray
+    names (`TRAY` prefixes) are rebuilt with `STROKE_SCALE = MENU_EXTRA_STROKE` (0.6) plus line
+    versions from `menu_extra_overrides()` (bell, Bluetooth rune, sun, update ring, clipboard,
+    phone, moon/night light, Caps Lock, weather set, power profiles, eject). They replace the
+    `-symbolic` glyph for those names, because Plasma's tray asks for `-symbolic` names at 16 px;
+    every other symbolic glyph keeps the solid style. **Plasma caches tray icons in memory:**
+    after installing, `systemctl --user restart plasma-plasmashell.service` (toggling the icon
+    theme isn't enough). Crystal sits before Breeze in the fallback chain, so any tray name we
+    don't draw shows Crystal's colour art; add it to the overrides. One unidentified solid up
+    arrow remains in the user's tray.
   * **Crystal for everything else**: `index.theme` inherits `KrystalSVG,oxygen,breeze,hicolor`.
     KrystalSVG (https://invent.kde.org/blackcrack/krystalsvg) continues Everaldo's KDE 3 Crystal
     SVG. Its licence is **CC BY-NC-SA**, so it must never be committed here; users install it
