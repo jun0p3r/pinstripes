@@ -2512,7 +2512,7 @@ ARTWORK_ICONS = (
     ("user-trash", "places", ("trashcan_empty", "user-trash-empty")),
     ("system-file-manager", "apps", ("org.kde.dolphin", "dolphin", "file-manager")),
     ("utilities-terminal", "apps", ("org.kde.konsole", "konsole", "terminal")),
-    ("systemsettings", "apps", ("preferences-system", "org.kde.systemsettings", "preferences-desktop")),
+    ("systemsettings", "apps", ("org.kde.systemsettings",)),
     ("drive-harddisk", "devices", ("drive-harddisk-root", "drive-harddisk-system", "hdd_unmount")),
     ("internet-web-browser", "apps", ("web-browser", "browser")),
     ("accessories-text-editor", "apps", ("org.kde.kwrite", "kwrite", "org.kde.kate", "kate", "text-editor")),
