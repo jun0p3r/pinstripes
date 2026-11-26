@@ -1,0 +1,97 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Apple Pro Keyboard (Clear Acrylic Tray + Snow-White Sculpted Keys) -->
+    <filter id="floorBlur" x="-20%" y="-40%" width="140%" height="200%">
+      <feGaussianBlur stdDeviation="4.0"/>
+    </filter>
+    <filter id="contactBlur" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+
+    <linearGradient id="clearTray" x1="64" y1="36" x2="64" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="0.50" stop-color="#dfe7f2" stop-opacity="0.82"/>
+      <stop offset="1.00" stop-color="#b4c0d2" stop-opacity="0.92"/>
+    </linearGradient>
+
+    <linearGradient id="keyCap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.65" stop-color="#f3f5fa"/>
+      <stop offset="1.00" stop-color="#d5dae6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Grounded two-layer shadow -->
+  <ellipse cx="64" cy="104.5" rx="56" ry="5.8" fill="#000818" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <rect x="10" y="101.2" width="108" height="3.8" rx="1.8" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- Smooth grey USB cable curving gracefully from top center (64, 38 -> 72, 16) -->
+  <path d="M 64,38 C 64,26 74,24 72,14" fill="none" stroke="#8e96a6" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M 63.5,38 C 63.5,26 73.5,24 71.5,14" fill="none" stroke="#e8ecf4" stroke-width="1.0" stroke-linecap="round"/>
+
+  <!-- Diminishing-Perspective Clear Polycarbonate Keyboard Housing (y=38..103) -->
+  <!-- Front 3D clear acrylic lip -->
+  <path d="M 8.0,97.5 L 120.0,97.5 L 119.2,101.8 C 119.0,103.0 117.6,103.8 115.5,103.8 L 12.5,103.8 C 10.4,103.8 9.0,103.0 8.8,101.8 Z"
+        fill="#a8b4c8" stroke="#6c788c" stroke-width="0.75"/>
+  <!-- Sloped top deck -->
+  <path d="M 16.5,38.0 L 111.5,38.0 C 113.8,38.0 115.2,39.2 115.8,41.4 L 120.0,98.0 L 8.0,98.0 L 12.2,41.4 C 12.8,39.2 14.2,38.0 16.5,38.0 Z"
+        fill="url(#clearTray)" stroke="#7c889c" stroke-width="0.85"/>
+  <line x1="16.0" y1="39.2" x2="112.0" y2="39.2" stroke="#ffffff" stroke-width="1.3"/>
+  <line x1="9.5" y1="97.2" x2="118.5" y2="97.2" stroke="#ffffff" stroke-width="1.4"/>
+
+  <!-- Recessed Dark Key Well -->
+  <polygon points="18.5,43.5 109.5,43.5 113.5,92.5 14.5,92.5" fill="#323844" stroke="#ffffff" stroke-width="0.7"/>
+
+  <!-- 5 Crisp Rows of Sculpted Snow-White 3D Pro Keys -->
+  <g fill="url(#keyCap)" stroke="#858e9e" stroke-width="0.55">
+    <!-- Row 1: Function row -->
+    <rect x="20.0" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="30.2" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="39.0" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="47.8" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="56.6" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="67.2" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="76.0" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="84.8" y="45.2" width="7.8" height="6.2" rx="1.0"/>
+    <rect x="93.6" y="45.2" width="13.8" height="6.2" rx="1.0"/>
+
+    <!-- Row 2: Number row -->
+    <rect x="19.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="28.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="37.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="46.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="55.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="64.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="73.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="82.2" y="53.4" width="7.8" height="7.8" rx="1.1"/>
+    <rect x="91.2" y="53.4" width="17.0" height="7.8" rx="1.1"/>
+
+    <!-- Row 3: QWERTY row -->
+    <rect x="18.2" y="63.0" width="11.2" height="8.0" rx="1.1"/>
+    <rect x="30.6" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="39.8" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="49.0" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="58.2" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="67.4" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="76.6" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="85.8" y="63.0" width="8.0" height="8.0" rx="1.1"/>
+    <rect x="95.0" y="63.0" width="14.2" height="8.0" rx="1.1"/>
+
+    <!-- Row 4: Home row -->
+    <rect x="17.2" y="72.8" width="13.5" height="8.2" rx="1.1"/>
+    <rect x="32.0" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="41.4" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="50.8" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="60.2" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="69.6" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="79.0" y="72.8" width="8.2" height="8.2" rx="1.1"/>
+    <rect x="88.4" y="72.8" width="21.8" height="8.2" rx="1.1"/>
+
+    <!-- Row 5: Bottom modifier & wide Spacebar row -->
+    <rect x="16.2" y="82.8" width="11.0" height="8.4" rx="1.2"/>
+    <rect x="28.6" y="82.8" width="11.0" height="8.4" rx="1.2"/>
+    <rect x="41.0" y="82.8" width="44.0" height="8.4" rx="1.2"/>
+    <rect x="86.4" y="82.8" width="11.0" height="8.4" rx="1.2"/>
+    <rect x="98.8" y="82.8" width="12.4" height="8.4" rx="1.2"/>
+  </g>
+</svg>

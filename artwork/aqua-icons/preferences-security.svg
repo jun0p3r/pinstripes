@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Security & Passwords KCM: Heavy 3D Spun-Brass & Mirror-Chrome Padlock -->
+    <filter id="floorBlur" x="-30%" y="-45%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+
+    <!-- Hardened mirror-chrome U-shackle -->
+    <linearGradient id="shackleChrome" x1="34" y1="34" x2="94" y2="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#484c56"/>
+      <stop offset="0.18" stop-color="#ffffff"/>
+      <stop offset="0.42" stop-color="#b8beca"/>
+      <stop offset="0.65" stop-color="#ffffff"/>
+      <stop offset="0.82" stop-color="#2e323a"/>
+      <stop offset="1.00" stop-color="#cfd4e0"/>
+    </linearGradient>
+
+    <!-- Brushed satin-gold/brass padlock body -->
+    <linearGradient id="brassBody" x1="25" y1="80" x2="103" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#8c5c0c"/>
+      <stop offset="0.14" stop-color="#f5ce62"/>
+      <stop offset="0.34" stop-color="#fff8cc"/>
+      <stop offset="0.52" stop-color="#f2c44c"/>
+      <stop offset="0.78" stop-color="#b87e18"/>
+      <stop offset="0.92" stop-color="#f0c24e"/>
+      <stop offset="1.00" stop-color="#7a4e08"/>
+    </linearGradient>
+
+    <pattern id="brassGrain" width="16" height="3" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="16" height="1" fill="#ffffff" fill-opacity="0.20"/>
+      <rect x="0" y="1.6" width="16" height="0.8" fill="#5c3804" fill-opacity="0.10"/>
+    </pattern>
+  </defs>
+
+  <!-- Grounded two-layer shadow -->
+  <ellipse cx="64" cy="112.5" rx="43" ry="6.0" fill="#180e00" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <rect x="28" y="109.2" width="72" height="4.0" rx="2.0" fill="#180e00" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- 1. Thick Hardened Mirror-Chrome Shackle (x=39..89, y=15..58) -->
+  <!-- Outer dark chrome contour -->
+  <path d="M 41.0,56.0 L 41.0,36.5 C 41.0,23.2 51.2,14.5 64.0,14.5 C 76.8,14.5 87.0,23.2 87.0,36.5 L 87.0,56.0"
+        fill="none" stroke="#363a44" stroke-width="12.2" stroke-linecap="butt"/>
+  <!-- Inner multi-stop chrome cylinder -->
+  <path d="M 41.0,56.0 L 41.0,36.5 C 41.0,23.2 51.2,14.5 64.0,14.5 C 76.8,14.5 87.0,23.2 87.0,36.5 L 87.0,56.0"
+        fill="none" stroke="url(#shackleChrome)" stroke-width="10.4" stroke-linecap="butt"/>
+  <!-- Overhead white specular crest along shackle arch -->
+  <path d="M 40.2,36.0 C 40.2,22.4 50.8,13.6 64.0,13.6 C 77.2,13.6 87.8,22.4 87.8,36.0"
+        fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.92"/>
+
+  <!-- Shackle socket collars on top of brass body -->
+  <ellipse cx="41.0" cy="52.5" rx="7.6" ry="2.4" fill="#4e3204"/>
+  <ellipse cx="87.0" cy="52.5" rx="7.6" ry="2.4" fill="#4e3204"/>
+
+  <!-- 2. Heavy Machined Satin-Brass Padlock Body (x=25..103, y=51..111, rx=6.5) -->
+  <rect x="25.0" y="51.0" width="78.0" height="60.0" rx="6.5" fill="url(#brassBody)" stroke="#684206" stroke-width="0.9"/>
+  <rect x="25.0" y="51.0" width="78.0" height="60.0" rx="6.5" fill="url(#brassGrain)"/>
+
+  <!-- Sunlit top chamfer highlight -->
+  <path d="M 26.5,105.0 L 26.5,57.5 C 26.5,54.2 28.6,52.3 32.0,52.3 L 96.0,52.3 C 99.4,52.3 101.5,54.2 101.5,57.5 L 101.5,105.0"
+        fill="none" stroke="#fffce0" stroke-width="1.5" opacity="0.90"/>
+
+  <!-- Horizontal machined security bands near top & bottom -->
+  <g opacity="0.55">
+    <line x1="26.0" y1="60.0" x2="102.0" y2="60.0" stroke="#784c06" stroke-width="0.9"/>
+    <line x1="26.0" y1="61.0" x2="102.0" y2="61.0" stroke="#fffbe0" stroke-width="0.9"/>
+    <line x1="26.0" y1="101.5" x2="102.0" y2="101.5" stroke="#784c06" stroke-width="0.9"/>
+    <line x1="26.0" y1="102.5" x2="102.0" y2="102.5" stroke="#fffbe0" stroke-width="0.9"/>
+  </g>
+
+  <!-- 3. Recessed Spun-Chrome Keyhole Escutcheon & Classic Keyway -->
+  <circle cx="64.0" cy="81.0" r="12.5" fill="#fffbe0" opacity="0.75"/>
+  <circle cx="64.0" cy="80.2" r="12.0" fill="url(#shackleChrome)" stroke="#684206" stroke-width="0.8"/>
+  <path d="M 60.2,76.8 A 4.6,4.6 0 1 1 67.8,76.8 L 66.8,87.8 L 61.2,87.8 Z" fill="#1e2028"/>
+</svg>

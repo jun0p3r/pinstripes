@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Sherlock / Search KCM: Spun-Chrome Optical Magnifying Glass + Aqua Lens Caustic (figures-sheet.png!) -->
+    <filter id="lensShadow" x="-30%" y="-30%" width="165%" height="165%">
+      <feGaussianBlur stdDeviation="3.4"/>
+    </filter>
+    <filter id="aquaCaustic" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="2.8"/>
+    </filter>
+
+    <linearGradient id="chromeRim" x1="16" y1="16" x2="88" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.22" stop-color="#eef0f6"/>
+      <stop offset="0.48" stop-color="#a8aebc"/>
+      <stop offset="0.68" stop-color="#525662"/>
+      <stop offset="0.86" stop-color="#d8dce6"/>
+      <stop offset="1.00" stop-color="#7c808c"/>
+    </linearGradient>
+
+    <radialGradient id="sapphireLens" cx="58" cy="58" r="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f0fcff" stop-opacity="0.88"/>
+      <stop offset="0.45" stop-color="#9ad8ff" stop-opacity="0.78"/>
+      <stop offset="0.82" stop-color="#3586eb" stop-opacity="0.84"/>
+      <stop offset="1.00" stop-color="#14459c" stop-opacity="0.90"/>
+    </radialGradient>
+
+    <linearGradient id="ebonyHandle" x1="-6" y1="0" x2="6" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#14161c"/>
+      <stop offset="0.32" stop-color="#585e6c"/>
+      <stop offset="0.50" stop-color="#a2aab8"/>
+      <stop offset="0.68" stop-color="#222630"/>
+      <stop offset="1.00" stop-color="#0d0f14"/>
+    </linearGradient>
+
+    <linearGradient id="chromeCollar" x1="-6" y1="0" x2="6" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#484d58"/>
+      <stop offset="0.30" stop-color="#ffffff"/>
+      <stop offset="0.62" stop-color="#c8ceda"/>
+      <stop offset="1.00" stop-color="#525864"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Soft cast shadow of magnifier + focused bright cyan optical caustic on desk! -->
+  <g transform="translate(3.5, 5.5)">
+    <circle cx="51" cy="50" r="35" fill="#000a20" fill-opacity="0.28" filter="url(#lensShadow)"/>
+    <circle cx="53" cy="52" r="24" fill="#42a8ff" fill-opacity="0.35" filter="url(#aquaCaustic)"/>
+    <line x1="76" y1="75" x2="110" y2="109" stroke="#000818" stroke-width="11" stroke-linecap="round" stroke-opacity="0.32" filter="url(#lensShadow)"/>
+  </g>
+
+  <!-- 1. Turned Ebony & Spun-Chrome Handle (angled -45 deg from (75, 74) to (112, 111)) -->
+  <g transform="translate(75, 74) rotate(-45)">
+    <!-- Chrome neck collar -->
+    <rect x="-5.4" y="0" width="10.8" height="11.5" rx="1.2" fill="url(#chromeCollar)" stroke="#3c404c" stroke-width="0.65"/>
+    <!-- Sculpted ebony grip -->
+    <path d="M -5.2,11.0 L 5.2,11.0 L 6.0,44.5 L -6.0,44.5 Z" fill="url(#ebonyHandle)" stroke="#0d0f14" stroke-width="0.65"/>
+    <!-- Rounded chrome pommel cap -->
+    <path d="M -6.0,44.0 L 6.0,44.0 L 5.6,49.5 C 5.4,51.8 3.0,53.2 0.0,53.2 C -3.0,53.2 -5.4,51.8 -5.6,49.5 Z"
+          fill="url(#chromeCollar)" stroke="#3c404c" stroke-width="0.65"/>
+  </g>
+
+  <!-- 2. Spun-Chrome Optical Bezel & Refractive Aqua Sapphire Glass Lens (cx=51, cy=50, r=36) -->
+  <circle cx="51.0" cy="50.0" r="36.5" fill="url(#chromeRim)" stroke="#4c505c" stroke-width="0.9"/>
+  <path d="M 15.8,44.0 A 35.5,35.5 0 0 1 86.2,44.0" fill="none" stroke="#ffffff" stroke-width="1.4" opacity="0.92"/>
+  <circle cx="51.0" cy="50.0" r="31.2" fill="#3a404c"/>
+
+  <!-- Multi-coated Aqua Optical Lens -->
+  <circle cx="51.0" cy="50.0" r="29.8" fill="url(#sapphireLens)" stroke="#18479e" stroke-width="0.8"/>
+
+  <!-- Crisp curved top-left optical specular crescent + lower-right secondary refraction -->
+  <ellipse cx="43.5" cy="34.5" rx="18.5" ry="8.5" fill="#ffffff" fill-opacity="0.78" transform="rotate(-22 43.5 34.5)"/>
+  <path d="M 34.0,68.0 A 24.0,24.0 0 0 0 70.0,64.0" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+</svg>

@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Apple Cinema / Studio Display for Displays KCM -->
+    <filter id="floorBlur" x="-25%" y="-40%" width="150%" height="200%">
+      <feGaussianBlur stdDeviation="4.2"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+    <filter id="auroraSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+
+    <linearGradient id="clearAcrylic" x1="64" y1="15" x2="64" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.90"/>
+      <stop offset="0.50" stop-color="#dfe6f2" stop-opacity="0.72"/>
+      <stop offset="1.00" stop-color="#b4c0d4" stop-opacity="0.86"/>
+    </linearGradient>
+
+    <linearGradient id="whiteFrame" x1="64" y1="20" x2="64" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.70" stop-color="#f2f4f9"/>
+      <stop offset="1.00" stop-color="#d8dde8"/>
+    </linearGradient>
+
+    <linearGradient id="jaguarScreen" x1="20" y1="25" x2="108" y2="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#093082"/>
+      <stop offset="0.45" stop-color="#1e6ad4"/>
+      <stop offset="0.82" stop-color="#5cb2fa"/>
+      <stop offset="1.00" stop-color="#b4ebff"/>
+    </linearGradient>
+
+    <clipPath id="clipCinema">
+      <rect x="21.0" y="25.0" width="86.0" height="58.0" rx="1.2"/>
+    </clipPath>
+  </defs>
+
+  <!-- Floor shadow under wide Studio Display easel feet -->
+  <ellipse cx="64" cy="112.5" rx="52" ry="5.5" fill="#000818" fill-opacity="0.28" filter="url(#floorBlur)"/>
+  <ellipse cx="29" cy="112.2" rx="11" ry="2.6" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+  <ellipse cx="99" cy="112.2" rx="11" ry="2.6" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- Clear Polycarbonate Studio Display Left & Right Easel Feet (y=96..112.5) -->
+  <path d="M 25.0,96.0 L 35.0,96.0 L 32.5,110.5 C 32.0,112.2 30.2,113.0 28.0,113.0 C 25.8,113.0 24.2,111.8 24.4,109.8 Z"
+        fill="url(#clearAcrylic)" stroke="#7c889c" stroke-width="0.8"/>
+  <path d="M 93.0,96.0 L 103.0,96.0 L 103.6,109.8 C 103.8,111.8 102.2,113.0 100.0,113.0 C 97.8,113.0 96.0,112.2 95.5,110.5 Z"
+        fill="url(#clearAcrylic)" stroke="#7c889c" stroke-width="0.8"/>
+
+  <!-- Outer Clear Acrylic Widescreen Halo (x=11..117, y=16..101) -->
+  <rect x="11.0" y="16.0" width="106.0" height="85.0" rx="7.0" fill="url(#clearAcrylic)" stroke="#8490a4" stroke-width="0.9"/>
+  <rect x="12.3" y="17.3" width="103.4" height="82.4" rx="6.0" fill="none" stroke="#ffffff" stroke-width="1.3" opacity="0.92"/>
+
+  <!-- Inner Snow-White Pinstriped Cinema Frame -->
+  <rect x="15.5" y="20.2" width="97.0" height="75.0" rx="4.0" fill="url(#whiteFrame)" stroke="#aeb6c6" stroke-width="0.75"/>
+
+  <!-- 16:10 Jaguar Screen with Display Calibration & Resolution Card -->
+  <g clip-path="url(#clipCinema)">
+    <rect x="21.0" y="25.0" width="86.0" height="58.0" fill="url(#jaguarScreen)"/>
+    <g filter="url(#auroraSoft)">
+      <path d="M 18,72 C 44,44 76,72 110,36 L 110,84 L 18,84 Z" fill="#70dcff" fill-opacity="0.48"/>
+    </g>
+
+    <!-- Crisp white Display Calibration / Geometry dialog centered on screen -->
+    <rect x="40.0" y="38.0" width="48.0" height="32.0" rx="2.5" fill="#ffffff" fill-opacity="0.94" stroke="#18479e" stroke-width="0.75"/>
+    <!-- Colour calibration swatch bars inside card -->
+    <rect x="44.5" y="43.0" width="9.0" height="6.0" fill="#e83228"/>
+    <rect x="54.8" y="43.0" width="9.0" height="6.0" fill="#2cc23c"/>
+    <rect x="65.1" y="43.0" width="9.0" height="6.0" fill="#2874e8"/>
+    <rect x="75.4" y="43.0" width="8.0" height="6.0" fill="#f5b418"/>
+    <text x="64.0" y="61.5" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+          font-size="7.4" font-weight="700" fill="#1e2838">1920 × 1080</text>
+
+    <polygon points="21,25 76,25 48,83 21,83" fill="#ffffff" fill-opacity="0.12"/>
+  </g>
+  <rect x="21.0" y="25.0" width="86.0" height="58.0" rx="1.2" fill="none" stroke="#122858" stroke-width="0.85"/>
+</svg>

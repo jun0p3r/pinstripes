@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Bluetooth KCM: Spun-Chrome Oval Bezel + Glowing Royal-Sapphire Aqua Glass Lozenge -->
+    <filter id="floorBlur" x="-30%" y="-45%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.4"/>
+    </filter>
+    <filter id="causticGlow" x="-35%" y="-45%" width="170%" height="200%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <filter id="runeShadow" x="-30%" y="-20%" width="160%" height="150%">
+      <feGaussianBlur stdDeviation="2.0"/>
+    </filter>
+
+    <linearGradient id="chromeBezel" x1="24" y1="12" x2="104" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.22" stop-color="#eef0f6"/>
+      <stop offset="0.48" stop-color="#aeb4c0"/>
+      <stop offset="0.68" stop-color="#646874"/>
+      <stop offset="0.86" stop-color="#d4d8e2"/>
+      <stop offset="1.00" stop-color="#848894"/>
+    </linearGradient>
+
+    <linearGradient id="btSapphire" x1="64" y1="16" x2="64" y2="104" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#030a38"/>
+      <stop offset="0.18" stop-color="#0d2982"/>
+      <stop offset="0.48" stop-color="#2060d4"/>
+      <stop offset="0.78" stop-color="#58a8fa"/>
+      <stop offset="0.93" stop-color="#b4ecff"/>
+      <stop offset="1.00" stop-color="#f2feff"/>
+    </linearGradient>
+
+    <radialGradient id="btCaustic" cx="64" cy="96" r="34" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="0.35" stop-color="#c4f0ff" stop-opacity="0.72"/>
+      <stop offset="1.00" stop-color="#1854c8" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <linearGradient id="topLens" x1="64" y1="17" x2="64" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.76"/>
+      <stop offset="0.38" stop-color="#dbf0ff" stop-opacity="0.32"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <ellipse id="btDome" cx="64" cy="59.5" rx="33.5" ry="44.2"/>
+    <clipPath id="clipBtDome">
+      <use href="#btDome"/>
+    </clipPath>
+
+    <!-- Crisp geometric Bluetooth rune path -->
+    <path id="btRune" d="M 48.0,45.5 L 77.5,73.5 L 63.5,87.5 L 63.5,31.5 L 77.5,45.5 L 48.0,73.5"
+          fill="none" stroke-width="5.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </defs>
+
+  <!-- Overhead floor shadow + sapphire caustic -->
+  <ellipse cx="64" cy="113.2" rx="32" ry="5.6" fill="#020a28" fill-opacity="0.34" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="112.6" rx="17" ry="3.0" fill="#3894ff" fill-opacity="0.30" filter="url(#causticGlow)"/>
+
+  <!-- Outer Spun-Chrome Oval Medallion Ring (rx=38.5, ry=49.2) -->
+  <ellipse cx="64" cy="59.5" rx="38.5" ry="49.2" fill="url(#chromeBezel)" stroke="#585c68" stroke-width="0.85"/>
+  <path d="M 26.8,52.0 A 37.5,48.0 0 0 1 101.2,52.0" fill="none" stroke="#ffffff" stroke-width="1.3" opacity="0.92"/>
+  <ellipse cx="64" cy="59.5" rx="34.6" ry="45.3" fill="#464a56"/>
+
+  <!-- Glowing Royal-Sapphire Aqua Glass Lozenge -->
+  <use href="#btDome" fill="url(#btSapphire)"/>
+
+  <g clip-path="url(#clipBtDome)">
+    <rect x="28" y="14" width="72" height="92" fill="url(#btCaustic)"/>
+
+    <!-- 3D Cast Shadow + Crisp Pearl-White Bluetooth Rune -->
+    <use href="#btRune" transform="translate(1.2, 2.8)" stroke="#061654" stroke-opacity="0.52" filter="url(#runeShadow)"/>
+    <use href="#btRune" stroke="#ffffff"/>
+
+    <!-- Curved Top Aqua Glass Lens Cap -->
+    <ellipse cx="64" cy="32.5" rx="25.0" ry="15.0" fill="url(#topLens)"/>
+  </g>
+
+  <use href="#btDome" fill="none" stroke="#123888" stroke-width="0.85" stroke-opacity="0.65"/>
+</svg>
