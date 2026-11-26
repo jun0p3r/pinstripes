@@ -139,10 +139,10 @@ toolbarbutton.toolbarbutton-1[open] > .toolbarbutton-badge-stack {
 #TabsToolbar {
   padding: 4px 8px 0 !important;
   min-height: 0 !important;
-  /* the 6-row accent strip (HIG Figure 7-23) and its grey shadow, under the tabs, against the page */
+  /* the accent strip's light rows (HIG Figure 7-23) and its grey shadow, against the page; its dark
+     top row is drawn in the tab row itself (below) so the selected tab can flow into the strip */
   background-image: linear-gradient(to bottom,
-      transparent calc(100% - 9px),
-      #0057ae calc(100% - 9px), #0057ae calc(100% - 8px),
+      transparent calc(100% - 8px),
       #a2d7f0 calc(100% - 8px), #a2d7f0 calc(100% - 7px),
       #a8d1ee calc(100% - 7px), #a8d1ee calc(100% - 6px),
       #51b0ea calc(100% - 6px), #51b0ea calc(100% - 5px),
@@ -151,18 +151,22 @@ toolbarbutton.toolbarbutton-1[open] > .toolbarbutton-badge-stack {
       #9a9a9a calc(100% - 3px), #9a9a9a calc(100% - 2px),
       #c8c8c8 calc(100% - 2px), #c8c8c8 calc(100% - 1px),
       #e6e6e6 calc(100% - 1px)) !important;
-  padding-bottom: 9px !important;
+  padding-bottom: 8px !important;
 }
 #TabsToolbar:-moz-window-inactive {
   background-image: linear-gradient(to bottom,
-      transparent calc(100% - 9px),
-      #8a8f96 calc(100% - 9px), #8a8f96 calc(100% - 8px),
+      transparent calc(100% - 8px),
       #d4d8dc calc(100% - 8px), #d4d8dc calc(100% - 6px),
       #bfc4ca calc(100% - 6px), #bfc4ca calc(100% - 3px),
       #9a9a9a calc(100% - 3px), #9a9a9a calc(100% - 2px),
       #c8c8c8 calc(100% - 2px), #c8c8c8 calc(100% - 1px),
       #e6e6e6 calc(100% - 1px)) !important;
 }
+/* the strip's dark top row: along the whole tab row and under every tab except the selected one */
+#TabsToolbar-customization-target { background: linear-gradient(to top, #0057ae 0, #0057ae 1px, transparent 1px) !important; }
+#TabsToolbar-customization-target:-moz-window-inactive { background: linear-gradient(to top, #8a8f96 0, #8a8f96 1px, transparent 1px) !important; }
+.tabbrowser-tab:not([selected]):not([multiselected]) .tab-background { box-shadow: inset 0 -1px #0057ae !important; }
+.tabbrowser-tab:not([selected]):not([multiselected]) .tab-background:-moz-window-inactive { box-shadow: inset 0 -1px #8a8f96 !important; }
 .tabbrowser-tab { padding: 0 1px !important; min-height: 23px !important; }
 .tabbrowser-tab .tab-background {
   margin: 0 !important;
@@ -181,7 +185,6 @@ toolbarbutton.toolbarbutton-1[open] > .toolbarbutton-badge-stack {
 .tabbrowser-tab[selected] .tab-background, .tabbrowser-tab[multiselected] .tab-background {
   background-image: url("pinstripe/tab-active-s.png"), url("pinstripe/tab-active-e.png"), url("pinstripe/tab-active-m.png") !important;
   background-size: 12px 24px, 12px 24px, calc(100% - 24px) 24px !important;
-  margin-bottom: -1px !important;
 }
 .tabbrowser-tab[selected] .tab-background:-moz-window-inactive {
   background-image: url("pinstripe/tab-active-backdrop-s.png"), url("pinstripe/tab-active-backdrop-e.png"), url("pinstripe/tab-active-backdrop-m.png") !important;
