@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Brushed-Platinum & Pearl-White Bluetooth Pocket Handset (Mac OS X 10.2 iSync Era) -->
+    <filter id="floorBlur" x="-30%" y="-40%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.2"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.7"/>
+    </filter>
+
+    <!-- Satin aluminum outer frame -->
+    <linearGradient id="phoneFrame" x1="34" y1="12" x2="94" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.25" stop-color="#e5e8f0"/>
+      <stop offset="0.68" stop-color="#bfc4d0"/>
+      <stop offset="1.00" stop-color="#8e94a2"/>
+    </linearGradient>
+
+    <!-- Pearl-white sculpted front faceplate -->
+    <linearGradient id="facePlate" x1="64" y1="15" x2="64" y2="111" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.52" stop-color="#f5f7fb"/>
+      <stop offset="0.88" stop-color="#e2e6ef"/>
+      <stop offset="1.00" stop-color="#cbd0dc"/>
+    </linearGradient>
+
+    <!-- Backlit 10.2 Aqua-Blue Colour LCD Screen -->
+    <linearGradient id="phoneLcd" x1="64" y1="26" x2="64" y2="63" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0f3c96"/>
+      <stop offset="0.48" stop-color="#2876de"/>
+      <stop offset="0.85" stop-color="#6cc2ff"/>
+      <stop offset="1.00" stop-color="#bceeff"/>
+    </linearGradient>
+
+    <!-- Aqua sapphire joystick center jewel -->
+    <radialGradient id="joyAqua" cx="64" cy="72" r="5" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#d8f8ff"/>
+      <stop offset="0.45" stop-color="#2b82f0"/>
+      <stop offset="1.00" stop-color="#0d3588"/>
+    </radialGradient>
+
+    <clipPath id="clipPhoneScreen">
+      <rect x="43.0" y="27.0" width="42.0" height="35.0" rx="2.0"/>
+    </clipPath>
+  </defs>
+
+  <!-- Grounded two-layer floor shadow -->
+  <ellipse cx="64" cy="114.2" rx="30" ry="5.4" fill="#000818" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="113.5" rx="20" ry="2.8" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- Outer Satin-Aluminum Handset Shell (x=35..93, y=12..114, rx=13) -->
+  <rect x="35.0" y="12.0" width="58.0" height="102.0" rx="13.0" fill="url(#phoneFrame)" stroke="#686e7c" stroke-width="0.9"/>
+  <rect x="36.2" y="13.2" width="55.6" height="99.6" rx="12.0" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>
+
+  <!-- Sculpted Pearl-White Inner Faceplate -->
+  <rect x="38.5" y="15.5" width="51.0" height="95.0" rx="9.8" fill="url(#facePlate)" stroke="#9ea5b4" stroke-width="0.7"/>
+
+  <!-- Earpiece Acoustic Slots at Top -->
+  <rect x="56.5" y="19.8" width="15.0" height="2.4" rx="1.2" fill="#323640" stroke="#ffffff" stroke-width="0.5"/>
+
+  <!-- Dark Charcoal Display Bezel & Backlit 10.2 Aqua LCD (x=41.5..86.5, y=25.5..63.5) -->
+  <rect x="41.5" y="25.5" width="45.0" height="38.0" rx="3.2" fill="#1e222b" stroke="#ffffff" stroke-width="0.8"/>
+
+  <g clip-path="url(#clipPhoneScreen)">
+    <rect x="43.0" y="27.0" width="42.0" height="35.0" fill="url(#phoneLcd)"/>
+    <!-- Top white status bar with signal bars & battery -->
+    <rect x="43.0" y="27.0" width="42.0" height="5.5" fill="#ffffff" fill-opacity="0.86"/>
+    <g fill="#163b88">
+      <rect x="45.2" y="29.8" width="1.4" height="1.6"/>
+      <rect x="47.2" y="29.0" width="1.4" height="2.4"/>
+      <rect x="49.2" y="28.2" width="1.4" height="3.2"/>
+      <rect x="78.2" y="28.4" width="4.8" height="2.8" rx="0.4"/>
+    </g>
+    <!-- Crisp readable clock on handset screen -->
+    <text x="64.0" y="48.5" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+          font-size="10.8" font-weight="700" fill="#ffffff">9:41</text>
+    <!-- Bottom soft-key labels bar -->
+    <rect x="43.0" y="57.2" width="42.0" height="4.8" fill="#0c2b6e" fill-opacity="0.45"/>
+    <!-- Diagonal glass reflection -->
+    <polygon points="43.0,27.0 74.0,27.0 54.0,62.0 43.0,62.0" fill="#ffffff" fill-opacity="0.16"/>
+  </g>
+
+  <!-- 5-Way Chrome & Aqua Joystick + Call / End Softkeys (y=66.5..76.5) -->
+  <!-- Left green call key & right red end key -->
+  <rect x="42.0" y="67.8" width="12.5" height="6.8" rx="2.2" fill="#ffffff" stroke="#969dac" stroke-width="0.65"/>
+  <line x1="45.0" y1="71.2" x2="51.5" y2="71.2" stroke="#22a854" stroke-width="1.6" stroke-linecap="round"/>
+
+  <rect x="73.5" y="67.8" width="12.5" height="6.8" rx="2.2" fill="#ffffff" stroke="#969dac" stroke-width="0.65"/>
+  <line x1="76.5" y1="71.2" x2="83.0" y2="71.2" stroke="#dc2c38" stroke-width="1.6" stroke-linecap="round"/>
+
+  <!-- Center Chrome Bezel & Sapphire-Aqua Joystick -->
+  <circle cx="64.0" cy="71.2" r="5.6" fill="#ffffff" stroke="#687080" stroke-width="0.8"/>
+  <circle cx="64.0" cy="71.2" r="3.8" fill="url(#joyAqua)"/>
+  <circle cx="63.0" cy="69.8" r="1.2" fill="#ffffff" opacity="0.82"/>
+
+  <!-- 3 x 4 Sculpted Pearl-White Chicklet Keypad (y=78.5..106.5) -->
+  <g fill="#ffffff" stroke="#9ca3b2" stroke-width="0.6">
+    <!-- Row 1 -->
+    <rect x="42.2" y="79.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="57.4" y="79.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="72.6" y="79.0" width="13.2" height="5.4" rx="1.6"/>
+    <!-- Row 2 -->
+    <rect x="42.2" y="86.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="57.4" y="86.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="72.6" y="86.0" width="13.2" height="5.4" rx="1.6"/>
+    <!-- Row 3 -->
+    <rect x="42.2" y="93.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="57.4" y="93.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="72.6" y="93.0" width="13.2" height="5.4" rx="1.6"/>
+    <!-- Row 4 -->
+    <rect x="42.2" y="100.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="57.4" y="100.0" width="13.2" height="5.4" rx="1.6"/>
+    <rect x="72.6" y="100.0" width="13.2" height="5.4" rx="1.6"/>
+  </g>
+</svg>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Flat-Panel Desktop Mac (iMac G4 "Sunflower" dome + chrome arm + clear-halo Aqua LCD) -->
+    <filter id="floorBlur" x="-30%" y="-40%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.7"/>
+    </filter>
+    <filter id="auroraSoft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+
+    <!-- Snow-white polycarbonate hemisphere dome base -->
+    <radialGradient id="snowDome" cx="60" cy="92" r="34" fx="56" fy="88" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.48" stop-color="#f4f6fa"/>
+      <stop offset="0.82" stop-color="#d5dae4"/>
+      <stop offset="1.00" stop-color="#a8b0be"/>
+    </radialGradient>
+
+    <!-- Cylindrical mirror-chrome articulated neck -->
+    <linearGradient id="chromeArm" x1="58.5" y1="74" x2="69.5" y2="74" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#3c404a"/>
+      <stop offset="0.24" stop-color="#ffffff"/>
+      <stop offset="0.48" stop-color="#d0d5e0"/>
+      <stop offset="0.68" stop-color="#ffffff"/>
+      <stop offset="0.84" stop-color="#282c34"/>
+      <stop offset="1.00" stop-color="#9ea4b0"/>
+    </linearGradient>
+
+    <!-- Clear polycarbonate outer halo + snow-white inner LCD bezel -->
+    <linearGradient id="clearHalo" x1="64" y1="12" x2="64" y2="78" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.86"/>
+      <stop offset="0.50" stop-color="#dce4f0" stop-opacity="0.62"/>
+      <stop offset="1.00" stop-color="#b8c4d6" stop-opacity="0.78"/>
+    </linearGradient>
+    <linearGradient id="whiteBezel" x1="64" y1="16" x2="64" y2="74" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.70" stop-color="#f3f5f9"/>
+      <stop offset="1.00" stop-color="#dfe3ec"/>
+    </linearGradient>
+
+    <!-- Mac OS X 10.2 "Jaguar" Aqua Blue Aurora Wallpaper -->
+    <linearGradient id="jaguarWall" x1="24" y1="21" x2="104" y2="68" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0b368c"/>
+      <stop offset="0.42" stop-color="#1f6cd4"/>
+      <stop offset="0.78" stop-color="#58aef8"/>
+      <stop offset="1.00" stop-color="#a6e4ff"/>
+    </linearGradient>
+
+    <clipPath id="clipLcd">
+      <rect x="24.5" y="21.5" width="79.0" height="47.0" rx="1.2"/>
+    </clipPath>
+  </defs>
+
+  <!-- Grounded two-layer floor shadow beneath hemisphere dome -->
+  <ellipse cx="64" cy="112.5" rx="40" ry="5.8" fill="#000818" fill-opacity="0.30" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="111.5" rx="29" ry="3.4" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- 1. Articulated Mirror-Chrome Neck Arm (y=72..86) -->
+  <rect x="59.0" y="72.0" width="10.0" height="15.0" fill="url(#chromeArm)" stroke="#484d58" stroke-width="0.65"/>
+
+  <!-- 2. Iconic Snow-White Hemisphere Dome Base (y=83..112) -->
+  <path d="M 33.5,109.2 C 33.5,91.8 46.8,83.2 64.0,83.2 C 81.2,83.2 94.5,91.8 94.5,109.2 C 94.5,111.0 92.8,112.0 90.2,112.0 L 37.8,112.0 C 35.2,112.0 33.5,111.0 33.5,109.2 Z"
+        fill="url(#snowDome)" stroke="#8890a0" stroke-width="0.85"/>
+  <!-- Chrome neck collar ring on top of dome -->
+  <ellipse cx="64" cy="84.2" rx="7.6" ry="2.1" fill="url(#chromeArm)" stroke="#5c6270" stroke-width="0.55"/>
+  <!-- Slot-load optical drive seam along lower dome -->
+  <path d="M 43.0,104.2 Q 64.0,105.6 85.0,104.2" fill="none" stroke="#858d9c" stroke-width="1.1"/>
+  <path d="M 43.0,105.2 Q 64.0,106.6 85.0,105.2" fill="none" stroke="#ffffff" stroke-width="0.9"/>
+  <!-- Sunlit dome specular highlight -->
+  <path d="M 38.0,102.0 C 40.5,91.5 49.5,85.5 61.5,85.2" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round" opacity="0.88"/>
+
+  <!-- 3. Floating Flat-Panel Display with Translucent Clear Polycarbonate Halo (x=15..113, y=13..77) -->
+  <!-- Soft drop shadow behind floating display -->
+  <rect x="16.5" y="16.0" width="95.0" height="61.5" rx="6.5" fill="#000a20" fill-opacity="0.24" filter="url(#floorBlur)"/>
+
+  <!-- Outer crystal-clear polycarbonate halo rim -->
+  <rect x="15.0" y="13.0" width="98.0" height="64.0" rx="6.2" fill="url(#clearHalo)" stroke="#8a96a8" stroke-width="0.85"/>
+  <rect x="16.2" y="14.2" width="95.6" height="61.6" rx="5.2" fill="none" stroke="#ffffff" stroke-width="1.2" opacity="0.9"/>
+
+  <!-- Inner snow-white LCD frame -->
+  <rect x="19.2" y="17.0" width="89.6" height="56.0" rx="3.4" fill="url(#whiteBezel)" stroke="#aeb6c4" stroke-width="0.75"/>
+
+  <!-- Vibrant 10.2 Jaguar Aqua Aurora Screen -->
+  <g clip-path="url(#clipLcd)">
+    <rect x="24.5" y="21.5" width="79.0" height="47.0" fill="url(#jaguarWall)"/>
+    <!-- Swooping luminous Aqua wallpaper ribbons -->
+    <g filter="url(#auroraSoft)">
+      <path d="M 22,58 C 44,36 72,62 106,30 L 106,68 L 22,68 Z" fill="#6cd4ff" fill-opacity="0.48"/>
+      <path d="M 22,42 C 52,24 76,46 106,22" fill="none" stroke="#ffffff" stroke-width="4.5" stroke-opacity="0.45"/>
+    </g>
+    <!-- Top translucent white 10.2 menu bar -->
+    <rect x="24.5" y="21.5" width="79.0" height="3.6" fill="#ffffff" fill-opacity="0.88"/>
+    <!-- Miniature frosted Aqua Dock at bottom center -->
+    <rect x="44.0" y="62.8" width="40.0" height="4.4" rx="1.2" fill="#ffffff" fill-opacity="0.58"/>
+    <circle cx="49.5" cy="65.0" r="1.4" fill="#2874e8"/>
+    <circle cx="55.0" cy="65.0" r="1.4" fill="#f25244"/>
+    <circle cx="60.5" cy="65.0" r="1.4" fill="#32b868"/>
+    <circle cx="66.0" cy="65.0" r="1.4" fill="#f5a624"/>
+    <circle cx="71.5" cy="65.0" r="1.4" fill="#7c4ce8"/>
+    <circle cx="78.5" cy="65.0" r="1.4" fill="#8892a0"/>
+    <!-- Subtle diagonal LCD glass sheen -->
+    <polygon points="24.5,21.5 76.0,21.5 48.0,68.5 24.5,68.5" fill="#ffffff" fill-opacity="0.11"/>
+  </g>
+  <rect x="24.5" y="21.5" width="79.0" height="47.0" rx="1.2" fill="none" stroke="#122858" stroke-width="0.85"/>
+</svg>

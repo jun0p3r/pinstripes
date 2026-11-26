@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 2002 Apple Xserve-Inspired Brushed-Aluminum 3-Blade Rack Server Stack -->
+    <filter id="floorBlur" x="-25%" y="-40%" width="150%" height="200%">
+      <feGaussianBlur stdDeviation="4.4"/>
+    </filter>
+    <filter id="contactBlur" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur stdDeviation="1.7"/>
+    </filter>
+    <filter id="ledGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+
+    <linearGradient id="aluTop" x1="64" y1="16" x2="64" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f7f8fc"/>
+      <stop offset="0.30" stop-color="#dfe1e8"/>
+      <stop offset="0.88" stop-color="#c2c4ce"/>
+      <stop offset="1.00" stop-color="#f2f3f8"/>
+    </linearGradient>
+
+    <linearGradient id="bladeFace" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#f4f5f9"/>
+      <stop offset="0.22" stop-color="#dcdfe8"/>
+      <stop offset="0.78" stop-color="#b4b8c4"/>
+      <stop offset="1.00" stop-color="#8c909c"/>
+    </linearGradient>
+
+    <!-- Reusable 1U Xserve Front Drive/Status Blade Row (width=102, height=22) -->
+    <g id="serverBlade">
+      <rect x="13.0" y="0" width="102.0" height="22.0" rx="2.4" fill="url(#bladeFace)" stroke="#585c68" stroke-width="0.8"/>
+      <line x1="14.5" y1="1.2" x2="113.5" y2="1.2" stroke="#ffffff" stroke-width="1.2"/>
+      <!-- Left & right rack ear Torx screws -->
+      <circle cx="17.5" cy="11.0" r="2.0" fill="#3a3e48" stroke="#ffffff" stroke-width="0.5"/>
+      <circle cx="110.5" cy="11.0" r="2.0" fill="#3a3e48" stroke="#ffffff" stroke-width="0.5"/>
+      <!-- 4 Hot-Swap Drive Bays (x=23..88) -->
+      <g fill="#cfd3de" stroke="#6c707c" stroke-width="0.65">
+        <rect x="22.5" y="3.5" width="15.0" height="15.0" rx="1.2"/>
+        <rect x="39.2" y="3.5" width="15.0" height="15.0" rx="1.2"/>
+        <rect x="55.9" y="3.5" width="15.0" height="15.0" rx="1.2"/>
+        <rect x="72.6" y="3.5" width="15.0" height="15.0" rx="1.2"/>
+      </g>
+      <!-- Drive bay cooling slots & chrome release buttons -->
+      <g fill="#22252e">
+        <rect x="24.5" y="13.5" width="11.0" height="2.6" rx="0.5"/>
+        <rect x="41.2" y="13.5" width="11.0" height="2.6" rx="0.5"/>
+        <rect x="57.9" y="13.5" width="11.0" height="2.6" rx="0.5"/>
+        <rect x="74.6" y="13.5" width="11.0" height="2.6" rx="0.5"/>
+      </g>
+      <!-- Glowing Aqua-Blue Activity Bar & Lime Power LED on Right -->
+      <rect x="91.0" y="5.5" width="14.5" height="11.0" rx="1.4" fill="#1b1e26"/>
+      <g fill="#42b4ff" filter="url(#ledGlow)" opacity="0.55">
+        <circle cx="94.5" cy="11.0" r="1.8"/>
+        <circle cx="98.5" cy="11.0" r="1.8"/>
+      </g>
+      <circle cx="94.5" cy="11.0" r="1.3" fill="#8ce2ff"/>
+      <circle cx="98.5" cy="11.0" r="1.3" fill="#42a8ff"/>
+      <circle cx="102.5" cy="11.0" r="1.3" fill="#dcff48"/>
+    </g>
+  </defs>
+
+  <!-- Grounded two-layer floor shadow -->
+  <ellipse cx="64" cy="112.5" rx="53" ry="6.2" fill="#000614" fill-opacity="0.33" filter="url(#floorBlur)"/>
+  <rect x="15" y="109.2" width="98" height="4.2" rx="2.0" fill="#000614" fill-opacity="0.50" filter="url(#contactBlur)"/>
+
+  <!-- Perspective Satin-Aluminum Top Cover (y=17..41) -->
+  <path d="M 27.0,17.5 L 101.0,17.5 C 103.6,17.5 105.4,18.8 106.2,21.2 L 114.6,41.5 L 13.4,41.5 L 21.8,21.2 C 22.6,18.8 24.4,17.5 27.0,17.5 Z"
+        fill="url(#aluTop)" stroke="#747884" stroke-width="0.8"/>
+  <line x1="26.5" y1="18.7" x2="101.5" y2="18.7" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round"/>
+
+  <!-- Dark chassis shadow backbone between stacked 1U server blades -->
+  <rect x="15.0" y="40.5" width="98.0" height="70.0" rx="2.0" fill="#181a22"/>
+
+  <!-- 3 Stacked 1U Brushed-Aluminum Xserve Nodes (y=40.5, 64.5, 88.5) -->
+  <use href="#serverBlade" y="40.5"/>
+  <use href="#serverBlade" y="64.5"/>
+  <use href="#serverBlade" y="88.5"/>
+</svg>
