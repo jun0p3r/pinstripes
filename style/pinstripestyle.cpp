@@ -16,6 +16,7 @@
 #include <QLineEdit>
 #include <QMenu>
 #include <QMenuBar>
+#include <QStatusBar>
 #include <QPainter>
 #include <QProgressBar>
 #include <QPushButton>
@@ -378,6 +379,25 @@ void Style::polish(QWidget *w)
         w->setFont(smallFont(w->font()));
         w->setContentsMargins(4, 0, 4, 0);
     }
+    // Dolphin's floating status bar fills its scroll-area container with the window brush, which is
+    // our pinstripe texture and paints a square box over the view; make it transparent there and
+    // draw the panel ourselves (PE_PanelTipLabel)
+    if (w->inherits("DolphinStatusBar")) {
+        QPalette pal = w->palette();
+        pal.setBrush(QPalette::Window, Qt::transparent);
+        w->setPalette(pal);
+    }
+    // status text uses the small system font, like the Finder's "13 items" line. Dolphin sizes its
+    // floating status bar from its own (regular) font, so this also stops the label being elided
+    // with fonts that have a narrow average character, such as Luxi Sans.
+    if (w->parentWidget() && qobject_cast<QLabel *>(w)) {
+        for (QWidget *p = w->parentWidget(); p; p = p->parentWidget()) {
+            if (p->inherits("DolphinStatusBar") || qobject_cast<QStatusBar *>(p)) {
+                w->setFont(smallFont(w->font()));
+                break;
+            }
+        }
+    }
     // alerts: message in the emphasized system font, informative text in the small system font
     if (auto *label = qobject_cast<QLabel *>(w)) {
         if (label->objectName() == QLatin1String("qt_msgbox_label")) {
@@ -734,6 +754,19 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
 
     case PE_Frame:
     case PE_FrameWindow: {
+        // Dolphin 26's floating status bar fills a rounded rect with the window colour (transparent
+        // under this style, see polish) and asks for PE_Frame clipped to its top and right edges:
+        // draw a pinstriped corner panel with a fine divider instead of a hard box
+        if (pe == PE_Frame && w && w->inherits("DolphinStatusBar")) {
+            p->save();
+            p->setRenderHint(QPainter::Antialiasing);
+            const QRectF r = QRectF(opt->rect).adjusted(0.5, 0.5, -0.5, -0.5);
+            p->setBrush(QBrush(QColor(238, 238, 238), windowStripes()));
+            p->setPen(QPen(QColor(163, 163, 163), 1));
+            p->drawRoundedRect(r, 5, 5);
+            p->restore();
+            return;
+        }
         // list and text view frames: a fine grey line, darker on top
         p->save();
         const QRect r = opt->rect.adjusted(0, 0, -1, -1);
@@ -875,6 +908,32 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
 
     case PE_PanelTipLabel: {
         p->save();
+        bool dolphinStatus = false;
+        for (const QWidget *a = w; a; a = a->parentWidget())
+            dolphinStatus |= a->inherits("DolphinStatusBar");
+        if (dolphinStatus) {
+            // Dolphin's floating status bar sits in the bottom-left corner of the white view: draw it
+            // as an attached pinstriped panel with a fine divider on its open top and right edges
+            const QRect r = opt->rect;
+            p->setRenderHint(QPainter::Antialiasing);
+            QPainterPath path;
+            path.moveTo(r.left(), r.top());
+            path.lineTo(r.right() - 4, r.top());
+            path.quadTo(r.right() + 1, r.top(), r.right() + 1, r.top() + 5);
+            path.lineTo(r.right() + 1, r.bottom() + 1);
+            path.lineTo(r.left(), r.bottom() + 1);
+            path.closeSubpath();
+            p->fillPath(path, QBrush(QColor(238, 238, 238), windowStripes()));
+            QPainterPath edge;
+            edge.moveTo(r.left(), r.top() + 0.5);
+            edge.lineTo(r.right() - 4, r.top() + 0.5);
+            edge.quadTo(r.right() + 0.5, r.top() + 0.5, r.right() + 0.5, r.top() + 5);
+            edge.lineTo(r.right() + 0.5, r.bottom() + 1);
+            p->setPen(QPen(QColor(163, 163, 163), 1));
+            p->drawPath(edge);
+            p->restore();
+            return;
+        }
         p->fillRect(opt->rect, opt->palette.brush(QPalette::ToolTipBase));
         p->setPen(QColor(0, 0, 0, 90));
         p->drawRect(opt->rect.adjusted(0, 0, -1, -1));
