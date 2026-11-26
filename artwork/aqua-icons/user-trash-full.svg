@@ -1,0 +1,232 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Floor shadow beneath 10.2 full chrome wire-mesh wastebasket (sampled i-002.png right) -->
+    <filter id="floorBlur" x="-35%" y="-45%" width="170%" height="200%">
+      <feGaussianBlur stdDeviation="5.0"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+    <filter id="paperSoft" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="1.1"/>
+    </filter>
+
+    <linearGradient id="chromeEnv" x1="21" y1="64" x2="107" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#cfd0d8"/>
+      <stop offset="0.11" stop-color="#ffffff"/>
+      <stop offset="0.24" stop-color="#686874"/>
+      <stop offset="0.38" stop-color="#8b8b96"/>
+      <stop offset="0.56" stop-color="#f5f5fc"/>
+      <stop offset="0.68" stop-color="#ffffff"/>
+      <stop offset="0.82" stop-color="#4e4e58"/>
+      <stop offset="0.93" stop-color="#b8b8c2"/>
+      <stop offset="1.00" stop-color="#dedee6"/>
+    </linearGradient>
+
+    <linearGradient id="rimInner" x1="21" y1="22" x2="107" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#686870"/>
+      <stop offset="0.22" stop-color="#cfd0d8"/>
+      <stop offset="0.45" stop-color="#ffffff"/>
+      <stop offset="0.68" stop-color="#80808a"/>
+      <stop offset="0.86" stop-color="#dcdce4"/>
+      <stop offset="1.00" stop-color="#585862"/>
+    </linearGradient>
+
+    <linearGradient id="frontWire" x1="22" y1="60" x2="106" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#484850"/>
+      <stop offset="0.18" stop-color="#f4f4fa"/>
+      <stop offset="0.40" stop-color="#8c8c96"/>
+      <stop offset="0.64" stop-color="#ffffff"/>
+      <stop offset="0.84" stop-color="#686872"/>
+      <stop offset="1.00" stop-color="#42424a"/>
+    </linearGradient>
+
+    <!-- Crumpled white paper gradients inside & crowning the basket (sampled hig_key_zooms.png 2nd) -->
+    <linearGradient id="paperBallBright" x1="64" y1="12" x2="64" y2="42" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.52" stop-color="#f2f4f8"/>
+      <stop offset="1.00" stop-color="#cfd5e0"/>
+    </linearGradient>
+    <linearGradient id="paperBallMid" x1="40" y1="14" x2="90" y2="46" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fcfdff"/>
+      <stop offset="0.48" stop-color="#dfe4ee"/>
+      <stop offset="1.00" stop-color="#b4bcc8"/>
+    </linearGradient>
+    <linearGradient id="innerPaperMass" x1="28" y1="30" x2="98" y2="102" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#eef0f6"/>
+      <stop offset="0.45" stop-color="#cfd4df"/>
+      <stop offset="0.82" stop-color="#9ca2b0"/>
+      <stop offset="1.00" stop-color="#767c8a"/>
+    </linearGradient>
+
+    <pattern id="backMeshPat" width="5.2" height="5.2" patternUnits="userSpaceOnUse">
+      <path d="M 0,0 L 5.2,5.2 M 5.2,0 L 0,5.2" stroke="#2c2c34" stroke-width="0.95" stroke-opacity="0.55"/>
+    </pattern>
+
+    <path id="basketFull" d="M 22.2,23.5 A 41.8,9.8 0 0 1 105.8,23.5 L 93.2,102.5 C 92.5,107.8 79.8,111.5 64.0,111.5 C 48.2,111.5 35.5,107.8 34.8,102.5 Z"/>
+    <clipPath id="clipBasketFull">
+      <use href="#basketFull"/>
+    </clipPath>
+
+    <path id="basketFront" d="M 22.2,23.5 A 41.8,9.8 0 0 0 105.8,23.5 L 93.2,102.5 C 92.5,107.8 79.8,111.5 64.0,111.5 C 48.2,111.5 35.5,107.8 34.8,102.5 Z"/>
+    <clipPath id="clipBasketFront">
+      <use href="#basketFront"/>
+    </clipPath>
+  </defs>
+
+  <!-- Floor shadows -->
+  <ellipse cx="64" cy="109.5" rx="41" ry="9.0" fill="#000000" fill-opacity="0.28" filter="url(#floorBlur)"/>
+  <ellipse cx="64" cy="108.5" rx="31" ry="6.2" fill="#000000" fill-opacity="0.46" filter="url(#contactBlur)"/>
+
+  <!-- Back-half of top tubular chrome rim (behind the heaped crumpled paper!) -->
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 1 106.5,23.5" fill="none" stroke="#34343c" stroke-width="5.0"/>
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 1 106.5,23.5" fill="none" stroke="url(#rimInner)" stroke-width="3.6"/>
+  <path d="M 22.0,22.8 A 42.0,9.8 0 0 1 106.0,22.8" fill="none" stroke="#ffffff" stroke-width="1.05" opacity="0.90"/>
+
+  <!-- Interior of basket packed full of crumpled white paper visible through the wire mesh! -->
+  <g clip-path="url(#clipBasketFull)">
+    <rect x="20" y="14" width="88" height="100" fill="url(#innerPaperMass)"/>
+    <!-- Faceted crumpled paper shadows & bright folds inside basket body -->
+    <g opacity="0.82">
+      <polygon points="28,36 52,28 60,52 34,58" fill="#ffffff"/>
+      <polygon points="58,32 88,30 94,56 64,54" fill="#eef1f7"/>
+      <polygon points="34,58 62,50 68,78 38,82" fill="#e4e8f0"/>
+      <polygon points="62,54 92,52 88,82 64,80" fill="#f7f9fc"/>
+      <polygon points="38,80 68,74 86,96 42,98" fill="#dce0ea"/>
+      <!-- Crisp dark paper fold crevices seen through mesh -->
+      <path d="M 35,44 L 54,39 L 62,56 M 66,42 L 84,48 L 74,66 M 44,70 L 64,64 L 76,82"
+            fill="none" stroke="#6e7584" stroke-width="2.2" filter="url(#paperSoft)"/>
+    </g>
+    <rect x="20" y="14" width="88" height="100" fill="url(#backMeshPat)"/>
+  </g>
+
+  <!-- Sculpted 3D Mound of Crumpled White Paper Balls Crowning the Top Mouth (i-002.png right!) -->
+  <g>
+    <!-- Left crumpled paper wad -->
+    <path d="M 26.5,25.5 L 32.0,17.2 L 44.5,14.8 L 54.8,19.5 L 52.0,30.8 L 32.5,31.5 Z"
+          fill="url(#paperBallMid)" stroke="#aeb5c2" stroke-width="0.6"/>
+    <polygon points="32.0,17.2 44.5,14.8 48.2,22.4 35.8,24.2" fill="#ffffff"/>
+    <polygon points="44.5,14.8 54.8,19.5 48.2,22.4" fill="#cfd5e2"/>
+    <polygon points="26.5,25.5 35.8,24.2 46.5,30.5 31.0,30.8" fill="#c2c9d6"/>
+
+    <!-- Right crumpled paper wad -->
+    <path d="M 71.5,19.0 L 83.2,14.5 L 95.8,18.2 L 101.2,25.8 L 92.5,31.5 L 72.8,30.5 Z"
+          fill="url(#paperBallMid)" stroke="#aeb5c2" stroke-width="0.6"/>
+    <polygon points="83.2,14.5 95.8,18.2 88.5,23.8 76.2,21.2" fill="#ffffff"/>
+    <polygon points="71.5,19.0 83.2,14.5 76.2,21.2" fill="#dce1ec"/>
+    <polygon points="88.5,23.8 101.2,25.8 92.5,31.5 78.5,29.8" fill="#bcc3d0"/>
+
+    <!-- Prominent Center-Top Hero Crumpled Paper Ball (cresting to y=11.8!) -->
+    <path d="M 44.8,26.8 L 49.5,15.2 L 62.4,11.6 L 75.2,14.8 L 81.5,24.8 L 73.5,33.2 L 51.5,33.0 Z"
+          fill="url(#paperBallBright)" stroke="#a8b0be" stroke-width="0.65"/>
+    <!-- Sharp sunlit origami/crumple facets -->
+    <polygon points="49.5,15.2 62.4,11.6 64.8,19.6 52.8,22.2" fill="#ffffff"/>
+    <polygon points="62.4,11.6 75.2,14.8 69.8,22.0 64.8,19.6" fill="#f7f9fc"/>
+    <polygon points="52.8,22.2 64.8,19.6 67.5,27.8 54.2,29.5" fill="#dfe4ef"/>
+    <polygon points="64.8,19.6 75.2,14.8 81.5,24.8 67.5,27.8" fill="#cbd2df"/>
+    <!-- Realistic dark shadow pocket under central fold -->
+    <polygon points="55.5,23.5 64.8,19.6 62.2,25.5" fill="#9ba3b2"/>
+    <polygon points="70.2,22.2 77.5,20.8 73.8,26.8" fill="#a2aab8"/>
+    <!-- Crisp sunlit paper ridge highlights -->
+    <polyline points="49.8,15.4 62.4,11.8 75.0,15.0" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round"/>
+    <polyline points="52.8,22.2 64.8,19.6 73.5,24.2" fill="none" stroke="#ffffff" stroke-width="0.95" stroke-linecap="round"/>
+  </g>
+
+  <!-- Front-wall finely woven curved stainless chrome wires (clipped cleanly below front rim arc!) -->
+  <g clip-path="url(#clipBasketFront)">
+    <g fill="none" stroke="#22242c" stroke-width="1.45" stroke-opacity="0.76">
+      <path d="M 10,24 Q 32,68 56,108"/>
+      <path d="M 15,24 Q 37,68 61,108"/>
+      <path d="M 20,24 Q 42,68 66,108"/>
+      <path d="M 25,24 Q 47,68 71,108"/>
+      <path d="M 30,24 Q 52,68 76,108"/>
+      <path d="M 35,24 Q 57,68 81,108"/>
+      <path d="M 40,24 Q 62,68 86,108"/>
+      <path d="M 45,24 Q 67,68 91,108"/>
+      <path d="M 50,24 Q 72,68 96,106"/>
+      <path d="M 55,24 Q 77,66 100,100"/>
+      <path d="M 60,24 Q 82,64 103,92"/>
+      <path d="M 65,24 Q 87,60 105,84"/>
+      <path d="M 70,24 Q 91,56 106,75"/>
+      <path d="M 75,24 Q 95,51 107,66"/>
+      <path d="M 81,24 Q 98,46 108,57"/>
+      <path d="M 14,38 Q 31,74 51,108"/>
+      <path d="M 18,52 Q 31,80 46,108"/>
+      <path d="M 22,66 Q 32,88 41,106"/>
+
+      <path d="M 118,24 Q 96,68 72,108"/>
+      <path d="M 113,24 Q 91,68 67,108"/>
+      <path d="M 108,24 Q 86,68 62,108"/>
+      <path d="M 103,24 Q 81,68 57,108"/>
+      <path d="M 98,24 Q 76,68 52,108"/>
+      <path d="M 93,24 Q 71,68 47,108"/>
+      <path d="M 88,24 Q 66,68 42,108"/>
+      <path d="M 83,24 Q 61,68 37,108"/>
+      <path d="M 78,24 Q 56,68 32,106"/>
+      <path d="M 73,24 Q 51,66 28,99"/>
+      <path d="M 68,24 Q 46,64 25,92"/>
+      <path d="M 63,24 Q 41,60 23,84"/>
+      <path d="M 58,24 Q 37,56 22,75"/>
+      <path d="M 53,24 Q 33,51 21,66"/>
+      <path d="M 47,24 Q 30,46 20,57"/>
+      <path d="M 114,38 Q 97,74 77,108"/>
+      <path d="M 110,52 Q 97,80 82,108"/>
+      <path d="M 106,66 Q 96,88 87,106"/>
+    </g>
+
+    <g fill="none" stroke="url(#frontWire)" stroke-width="0.92" stroke-opacity="0.96">
+      <path d="M 10,23.5 Q 32,67.5 56,107.5"/>
+      <path d="M 15,23.5 Q 37,67.5 61,107.5"/>
+      <path d="M 20,23.5 Q 42,67.5 66,107.5"/>
+      <path d="M 25,23.5 Q 47,67.5 71,107.5"/>
+      <path d="M 30,23.5 Q 52,67.5 76,107.5"/>
+      <path d="M 35,23.5 Q 57,67.5 81,107.5"/>
+      <path d="M 40,23.5 Q 62,67.5 86,107.5"/>
+      <path d="M 45,23.5 Q 67,67.5 91,107.5"/>
+      <path d="M 50,23.5 Q 72,67.5 96,105.5"/>
+      <path d="M 55,23.5 Q 77,65.5 100,99.5"/>
+      <path d="M 60,23.5 Q 82,63.5 103,91.5"/>
+      <path d="M 65,23.5 Q 87,59.5 105,83.5"/>
+      <path d="M 70,23.5 Q 91,55.5 106,74.5"/>
+      <path d="M 75,23.5 Q 95,50.5 107,65.5"/>
+      <path d="M 81,23.5 Q 98,45.5 108,56.5"/>
+      <path d="M 14,37.5 Q 31,73.5 51,107.5"/>
+      <path d="M 18,51.5 Q 31,79.5 46,107.5"/>
+      <path d="M 22,65.5 Q 32,87.5 41,105.5"/>
+
+      <path d="M 118,23.5 Q 96,67.5 72,107.5"/>
+      <path d="M 113,23.5 Q 91,67.5 67,107.5"/>
+      <path d="M 108,23.5 Q 86,67.5 62,107.5"/>
+      <path d="M 103,23.5 Q 81,67.5 57,107.5"/>
+      <path d="M 98,23.5 Q 76,67.5 52,107.5"/>
+      <path d="M 93,23.5 Q 71,67.5 47,107.5"/>
+      <path d="M 88,23.5 Q 66,67.5 42,107.5"/>
+      <path d="M 83,23.5 Q 61,67.5 37,107.5"/>
+      <path d="M 78,23.5 Q 56,67.5 32,105.5"/>
+      <path d="M 73,23.5 Q 51,65.5 28,99.5"/>
+      <path d="M 68,23.5 Q 46,63.5 25,91.5"/>
+      <path d="M 63,23.5 Q 41,59.5 23,83.5"/>
+      <path d="M 58,23.5 Q 37,55.5 22,74.5"/>
+      <path d="M 53,23.5 Q 33,50.5 21,65.5"/>
+      <path d="M 47,23.5 Q 30,45.5 20,56.5"/>
+      <path d="M 114,37.5 Q 97,73.5 77,107.5"/>
+      <path d="M 110,51.5 Q 97,79.5 82,107.5"/>
+      <path d="M 106,65.5 Q 96,87.5 87,105.5"/>
+    </g>
+
+    <line x1="22.8" y1="24" x2="35.0" y2="103" stroke="#36363e" stroke-width="1.8" stroke-opacity="0.82"/>
+    <line x1="105.2" y1="24" x2="93.0" y2="103" stroke="#36363e" stroke-width="1.8" stroke-opacity="0.82"/>
+    <line x1="24.2" y1="25" x2="36.2" y2="101" stroke="#ffffff" stroke-width="0.9" stroke-opacity="0.55"/>
+  </g>
+
+  <!-- Solid spun-chrome bottom collar ring -->
+  <path d="M 33.8,96.8 C 34.5,102.2 47.6,105.8 64.0,105.8 C 80.4,105.8 93.5,102.2 94.2,96.8 L 93.2,104.2 C 92.5,109.6 79.8,113.2 64.0,113.2 C 48.2,113.2 35.5,109.6 34.8,104.2 Z"
+        fill="url(#chromeEnv)" stroke="#52525c" stroke-width="0.75"/>
+  <path d="M 34.4,97.2 C 36.2,102.2 48.6,105.6 64.0,105.6 C 79.4,105.6 91.8,102.2 93.6,97.2"
+        fill="none" stroke="#ffffff" stroke-width="1.1" opacity="0.88"/>
+
+  <!-- Front lower arc of tubular chrome top rim (wrapping IN FRONT of the heaped paper!) -->
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 0 106.5,23.5" fill="none" stroke="#282830" stroke-width="5.2" stroke-linecap="round"/>
+  <path d="M 21.5,23.5 A 42.5,10.2 0 0 0 106.5,23.5" fill="none" stroke="url(#chromeEnv)" stroke-width="3.8" stroke-linecap="round"/>
+  <path d="M 22.0,22.8 A 42.0,9.8 0 0 0 106.0,22.8" fill="none" stroke="#ffffff" stroke-width="1.15" opacity="0.94"/>
+</svg>
