@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Font / Typography KCM: Stacked Ivory & Crisp White Type Specimen Cards with 3D Aqua 'Aa' -->
+    <filter id="sheetShadow" x="-25%" y="-20%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="3.0"/>
+    </filter>
+
+    <linearGradient id="ivoryCard" x1="20" y1="18" x2="96" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#fffdf4"/>
+      <stop offset="1.00" stop-color="#e5dec8"/>
+    </linearGradient>
+
+    <linearGradient id="whiteCard" x1="24" y1="14" x2="104" y2="112" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.72" stop-color="#f7f9fc"/>
+      <stop offset="1.00" stop-color="#e2e7f0"/>
+    </linearGradient>
+
+    <!-- 3D Royal-Sapphire & Slate-Graphite Ink Gradients for 'A' and 'a' -->
+    <linearGradient id="serifBlue" x1="50" y1="36" x2="50" y2="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0d2c78"/>
+      <stop offset="0.50" stop-color="#2566d4"/>
+      <stop offset="1.00" stop-color="#4e98f5"/>
+    </linearGradient>
+    <linearGradient id="serifGraphite" x1="82" y1="46" x2="82" y2="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#2c333e"/>
+      <stop offset="0.55" stop-color="#566270"/>
+      <stop offset="1.00" stop-color="#3c4652"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Rear angled warm-ivory specimen sheet (-8 deg) -->
+  <g transform="rotate(-8 60 62)">
+    <rect x="22.0" y="19.5" width="78.0" height="90.0" rx="1.2" fill="#000818" fill-opacity="0.26" filter="url(#sheetShadow)"/>
+    <rect x="21.0" y="16.5" width="78.0" height="90.0" rx="1.0" fill="url(#ivoryCard)" stroke="#b8b09c" stroke-width="0.7"/>
+  </g>
+
+  <!-- Foreground Crisp White Typography Specimen Card (+2.5 deg) -->
+  <g transform="rotate(2.5 65 62)">
+    <rect x="25.5" y="18.0" width="80.0" height="93.0" rx="1.2" fill="#000818" fill-opacity="0.30" filter="url(#sheetShadow)"/>
+    <rect x="24.0" y="14.5" width="80.0" height="93.0" rx="1.0" fill="url(#whiteCard)" stroke="#a6aebc" stroke-width="0.75"/>
+    <path d="M 25.0,106.5 L 25.0,15.5 L 103.0,15.5" fill="none" stroke="#ffffff" stroke-width="1.1"/>
+
+    <!-- Crimson typographic ascender, x-height & baseline hairlines -->
+    <g stroke="#e0484c" stroke-width="0.65" stroke-dasharray="2.0,1.5" opacity="0.65">
+      <line x1="30.0" y1="39.0" x2="98.0" y2="39.0"/>
+      <line x1="30.0" y1="56.5" x2="98.0" y2="56.5"/>
+    </g>
+    <line x1="30.0" y1="80.5" x2="98.0" y2="80.5" stroke="#d43238" stroke-width="0.85" opacity="0.78"/>
+
+    <!-- Sculpted Serif 'A' and Italic 'a' with Crisp White Bevel Drop -->
+    <g font-family="Georgia, Liberation Serif, DejaVu Serif, serif">
+      <text x="33.8" y="81.2" font-size="46" font-weight="700" fill="#ffffff">A</text>
+      <text x="33.0" y="80.0" font-size="46" font-weight="700" fill="url(#serifBlue)">A</text>
+
+      <text x="70.8" y="81.2" font-size="40" font-style="italic" font-weight="700" fill="#ffffff">a</text>
+      <text x="70.0" y="80.0" font-size="40" font-style="italic" font-weight="700" fill="url(#serifGraphite)">a</text>
+    </g>
+
+    <!-- Readable Font Specimen Footer (HIG p. 206) -->
+    <text x="31.5" y="92.2" font-family="Luxi Sans, DejaVu Sans, sans-serif" font-size="6.2" font-weight="700" fill="#2c3442">Lucida 13 pt</text>
+    <text x="31.5" y="99.8" font-family="Georgia, Liberation Serif, serif" font-size="5.2" font-style="italic" fill="#687284">ABCDEFGHIJKLM</text>
+  </g>
+</svg>

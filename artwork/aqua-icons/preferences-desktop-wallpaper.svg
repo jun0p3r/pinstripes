@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Desktop Pictures / Wallpaper KCM: Stacked Glossy Landscape Photographs (HIG i-006.png) -->
+    <filter id="photoShadow" x="-25%" y="-25%" width="155%" height="155%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="auroraBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3.4"/>
+    </filter>
+
+    <linearGradient id="skyAqua" x1="22" y1="26" x2="98" y2="92" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#0a2e82"/>
+      <stop offset="0.38" stop-color="#1e68d4"/>
+      <stop offset="0.72" stop-color="#5ab4fa"/>
+      <stop offset="1.00" stop-color="#c2f0ff"/>
+    </linearGradient>
+
+    <linearGradient id="warmDunes" x1="22" y1="68" x2="104" y2="98" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#f7b25c"/>
+      <stop offset="0.48" stop-color="#d86b28"/>
+      <stop offset="1.00" stop-color="#7c2e14"/>
+    </linearGradient>
+
+    <clipPath id="clipFrontPic">
+      <rect x="21.0" y="29.0" width="84.0" height="64.0"/>
+    </clipPath>
+    <clipPath id="clipBackPic">
+      <rect x="20.0" y="22.0" width="78.0" height="58.0"/>
+    </clipPath>
+  </defs>
+
+  <!-- 1. Rear Tilted Desert/Sunset Photo Print (-9 deg, matching i-006.png!) -->
+  <g transform="rotate(-9 58 52)">
+    <rect x="16.5" y="20.5" width="86.0" height="68.0" rx="0.8" fill="#000818" fill-opacity="0.28" filter="url(#photoShadow)"/>
+    <rect x="15.5" y="17.5" width="86.0" height="68.0" rx="0.6" fill="#ffffff" stroke="#b4bcc8" stroke-width="0.7"/>
+    <g clip-path="url(#clipBackPic)">
+      <rect x="20.0" y="22.0" width="78.0" height="58.0" fill="#3a78d8"/>
+      <path d="M 18,58 Q 45,42 70,54 T 100,46 L 100,82 L 18,82 Z" fill="url(#warmDunes)"/>
+    </g>
+  </g>
+
+  <!-- 2. Foreground Hero Glossy Photo Print (+4 deg): Jaguar Aqua Blue Aurora & Mountain Vista -->
+  <g transform="rotate(4 63 64)">
+    <rect x="16.8" y="27.2" width="94.0" height="75.0" rx="0.8" fill="#000a20" fill-opacity="0.34" filter="url(#photoShadow)"/>
+    <rect x="15.5" y="23.5" width="95.0" height="75.0" rx="0.6" fill="#ffffff" stroke="#9ea6b4" stroke-width="0.75"/>
+
+    <g clip-path="url(#clipFrontPic)">
+      <rect x="21.0" y="29.0" width="84.0" height="64.0" fill="url(#skyAqua)"/>
+      <!-- Luminous Jaguar Aqua aurora curtains -->
+      <g filter="url(#auroraBlur)">
+        <path d="M 18,74 C 42,42 68,72 108,36 L 108,94 L 18,94 Z" fill="#7ce0ff" fill-opacity="0.52"/>
+        <path d="M 20,54 C 48,30 74,56 108,28" fill="none" stroke="#ffffff" stroke-width="5.2" stroke-opacity="0.55"/>
+      </g>
+      <!-- Glowing sun orb -->
+      <circle cx="42.5" cy="46.5" r="7.2" fill="#fffbe0" fill-opacity="0.92"/>
+      <!-- Crisp layered mountain silhouettes -->
+      <path d="M 19,94 L 44,68 L 63,82 L 84,60 L 107,85 L 107,94 Z" fill="#184794" fill-opacity="0.85"/>
+      <path d="M 19,94 L 38,76 L 58,90 L 82,70 L 107,94 Z" fill="#0d2a63" fill-opacity="0.92"/>
+      <!-- Glossy photographic emulsion reflection -->
+      <polygon points="21,29 78,29 50,93 21,93" fill="#ffffff" fill-opacity="0.14"/>
+    </g>
+    <rect x="21.0" y="29.0" width="84.0" height="64.0" fill="none" stroke="#6c7c96" stroke-width="0.6"/>
+  </g>
+</svg>

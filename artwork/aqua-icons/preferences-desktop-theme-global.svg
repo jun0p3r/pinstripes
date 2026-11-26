@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Appearance / Global Theme KCM: Pinstriped Aqua Card with Blue & Graphite Gel Jewels -->
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="145%">
+      <feGaussianBlur stdDeviation="3.2"/>
+    </filter>
+    <filter id="gelShadow" x="-25%" y="-25%" width="150%" height="165%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+
+    <linearGradient id="plateBg" x1="64" y1="16" x2="64" y2="110" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.50" stop-color="#f2f4f8"/>
+      <stop offset="1.00" stop-color="#d8dce6"/>
+    </linearGradient>
+
+    <pattern id="winStripes" width="8" height="4" patternUnits="userSpaceOnUse">
+      <rect width="8" height="1" y="0" fill="#ffffff" fill-opacity="0.85"/>
+      <rect width="8" height="1" y="2" fill="#cfd4de" fill-opacity="0.45"/>
+    </pattern>
+
+    <!-- Signature 10.2 Aqua Sapphire Gel Sphere -->
+    <linearGradient id="aquaBlueGel" x1="44" y1="48" x2="44" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#051658"/>
+      <stop offset="0.24" stop-color="#1c56c8"/>
+      <stop offset="0.65" stop-color="#4898f8"/>
+      <stop offset="0.90" stop-color="#a2e4ff"/>
+      <stop offset="1.00" stop-color="#f0fcff"/>
+    </linearGradient>
+
+    <!-- Signature 10.2 Aqua Graphite Gel Sphere -->
+    <linearGradient id="aquaGraphiteGel" x1="86" y1="48" x2="86" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#1e2430"/>
+      <stop offset="0.28" stop-color="#4a5568"/>
+      <stop offset="0.68" stop-color="#7c8a9e"/>
+      <stop offset="0.90" stop-color="#c4cfde"/>
+      <stop offset="1.00" stop-color="#f2f6fc"/>
+    </linearGradient>
+
+    <!-- Traffic lights -->
+    <radialGradient id="tlRed" cx="27" cy="31" r="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#ffb8b0"/><stop offset="0.5" stop-color="#e82820"/><stop offset="1.0" stop-color="#780804"/>
+    </radialGradient>
+    <radialGradient id="tlAmber" cx="43" cy="31" r="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#fff4b0"/><stop offset="0.5" stop-color="#f2a20c"/><stop offset="1.0" stop-color="#885200"/>
+    </radialGradient>
+    <radialGradient id="tlGreen" cx="59" cy="31" r="6" gradientUnits="userSpaceOnUse">
+      <stop offset="0.0" stop-color="#c8ffbe"/><stop offset="0.5" stop-color="#28b838"/><stop offset="1.0" stop-color="#0a5c14"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Overhead card shadow -->
+  <rect x="15.0" y="21.5" width="98.0" height="89.0" rx="6.0" fill="#000818" fill-opacity="0.30" filter="url(#cardShadow)"/>
+
+  <!-- Pinstriped 10.2 Aqua Swatch Card (x=14..114, y=18..108) -->
+  <rect x="14.0" y="18.0" width="100.0" height="90.0" rx="5.5" fill="url(#plateBg)" stroke="#7c8290" stroke-width="0.9"/>
+  <rect x="15.0" y="19.0" width="98.0" height="88.0" rx="4.6" fill="url(#winStripes)"/>
+  <path d="M 15.5,103.0 L 15.5,23.0 C 15.5,20.5 17.2,19.2 19.8,19.2 L 108.2,19.2 C 110.8,19.2 112.5,20.5 112.5,23.0 L 112.5,103.0"
+        fill="none" stroke="#ffffff" stroke-width="1.4"/>
+
+  <!-- Top Divider & Three 10.2 Traffic-Light Gel Gems -->
+  <line x1="14.8" y1="40.5" x2="113.2" y2="40.5" stroke="#aeb4c2" stroke-width="0.9"/>
+  <line x1="14.8" y1="41.5" x2="113.2" y2="41.5" stroke="#ffffff" stroke-width="1.0"/>
+
+  <g>
+    <circle cx="27.0" cy="29.5" r="5.4" fill="url(#tlRed)" stroke="#681210" stroke-width="0.65"/>
+    <ellipse cx="27.0" cy="26.8" rx="3.2" ry="1.5" fill="#ffffff" fill-opacity="0.75"/>
+
+    <circle cx="42.5" cy="29.5" r="5.4" fill="url(#tlAmber)" stroke="#704404" stroke-width="0.65"/>
+    <ellipse cx="42.5" cy="26.8" rx="3.2" ry="1.5" fill="#ffffff" fill-opacity="0.75"/>
+
+    <circle cx="58.0" cy="29.5" r="5.4" fill="url(#tlGreen)" stroke="#0e5218" stroke-width="0.65"/>
+    <ellipse cx="58.0" cy="26.8" rx="3.2" ry="1.5" fill="#ffffff" fill-opacity="0.75"/>
+  </g>
+
+  <!-- Hero Pair: 10.2 Aqua Blue Gel Sphere (left) & Graphite Gel Sphere (right) -->
+  <!-- Left: Aqua Blue Gel Orb + Blue Caustic Shadow -->
+  <ellipse cx="44.5" cy="95.0" rx="19.5" ry="4.5" fill="#1b68e0" fill-opacity="0.34" filter="url(#gelShadow)"/>
+  <circle cx="44.5" cy="72.0" r="22.5" fill="url(#aquaBlueGel)" stroke="#123d8c" stroke-width="0.8"/>
+  <ellipse cx="44.5" cy="59.0" rx="15.2" ry="7.4" fill="#ffffff" fill-opacity="0.72"/>
+
+  <!-- Right: Aqua Graphite Gel Orb + Cool Shadow -->
+  <ellipse cx="85.5" cy="95.0" rx="17.5" ry="4.0" fill="#2c3545" fill-opacity="0.32" filter="url(#gelShadow)"/>
+  <circle cx="85.5" cy="74.0" r="19.5" fill="url(#aquaGraphiteGel)" stroke="#323b4a" stroke-width="0.8"/>
+  <ellipse cx="85.5" cy="62.8" rx="13.2" ry="6.4" fill="#ffffff" fill-opacity="0.68"/>
+</svg>

@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Window Decorations KCM: Miniature Pinstriped Jaguar Window with Traffic Lights & Gel Scrollbar -->
+    <filter id="winShadow" x="-20%" y="-20%" width="140%" height="145%">
+      <feGaussianBlur stdDeviation="3.6"/>
+    </filter>
+
+    <linearGradient id="titleBar" x1="64" y1="20" x2="64" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.45" stop-color="#f0f2f6"/>
+      <stop offset="0.92" stop-color="#d8dce4"/>
+      <stop offset="1.00" stop-color="#aeb4c0"/>
+    </linearGradient>
+
+    <pattern id="winPinstripe" width="8" height="4" patternUnits="userSpaceOnUse">
+      <rect width="8" height="1" y="0" fill="#ffffff"/>
+      <rect width="8" height="1" y="1" fill="#eeeeee"/>
+      <rect width="8" height="1" y="2" fill="#e6e6e6"/>
+      <rect width="8" height="1" y="3" fill="#eeeeee"/>
+    </pattern>
+
+    <linearGradient id="scrollThumb" x1="101" y1="62" x2="112" y2="62" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#1c56c8"/>
+      <stop offset="0.32" stop-color="#b8ebff"/>
+      <stop offset="0.55" stop-color="#4594f5"/>
+      <stop offset="0.88" stop-color="#8ad6ff"/>
+      <stop offset="1.00" stop-color="#194ca8"/>
+    </linearGradient>
+
+    <clipPath id="clipWin">
+      <rect x="12.0" y="20.0" width="104.0" height="88.0" rx="5.5"/>
+    </clipPath>
+  </defs>
+
+  <!-- Classic Mac OS X 10.2 active window shadow -->
+  <rect x="13.0" y="24.0" width="102.0" height="87.0" rx="6.0" fill="#000000" fill-opacity="0.32" filter="url(#winShadow)"/>
+
+  <g clip-path="url(#clipWin)">
+    <!-- Pinstriped Window Content Area -->
+    <rect x="12.0" y="20.0" width="104.0" height="88.0" fill="url(#winPinstripe)"/>
+
+    <!-- Recessed White Document View + Right Aqua Scrollbar Track -->
+    <rect x="12.0" y="44.0" width="90.0" height="64.0" fill="#ffffff"/>
+    <rect x="102.0" y="44.0" width="14.0" height="64.0" fill="#e8eaef"/>
+    <line x1="102.0" y1="44.0" x2="102.0" y2="108.0" stroke="#aeb4c0" stroke-width="0.9"/>
+
+    <!-- Glossy 10.2 Aqua Blue Gel Scrollbar Thumb -->
+    <rect x="104.0" y="49.0" width="10.0" height="36.0" rx="5.0" fill="url(#scrollThumb)" stroke="#18479e" stroke-width="0.7"/>
+    <line x1="107.2" y1="52.5" x2="107.2" y2="81.5" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round" opacity="0.78"/>
+
+    <!-- Subtle inner shadow under title bar -->
+    <rect x="12.0" y="44.0" width="90.0" height="2.5" fill="#000000" fill-opacity="0.08"/>
+
+    <!-- Curved 24px Pinstriped Jaguar Title Bar -->
+    <rect x="12.0" y="20.0" width="104.0" height="24.0" fill="url(#titleBar)"/>
+    <rect x="12.0" y="20.0" width="104.0" height="23.0" fill="url(#winPinstripe)" opacity="0.55"/>
+    <line x1="12.0" y1="43.6" x2="116.0" y2="43.6" stroke="#858a96" stroke-width="0.9"/>
+    <path d="M 13.5,43.0 L 13.5,25.5 C 13.5,22.8 15.2,21.2 18.0,21.2 L 110.0,21.2 C 112.8,21.2 114.5,22.8 114.5,25.5 L 114.5,43.0"
+          fill="none" stroke="#ffffff" stroke-width="1.3"/>
+
+    <!-- Three 10.2 Traffic-Light Gel Window Buttons -->
+    <g>
+      <circle cx="24.5" cy="32.0" r="5.2" fill="#e83228" stroke="#781410" stroke-width="0.7"/>
+      <ellipse cx="24.5" cy="29.4" rx="3.0" ry="1.4" fill="#ffffff" fill-opacity="0.78"/>
+
+      <circle cx="39.5" cy="32.0" r="5.2" fill="#f5a812" stroke="#825204" stroke-width="0.7"/>
+      <ellipse cx="39.5" cy="29.4" rx="3.0" ry="1.4" fill="#ffffff" fill-opacity="0.78"/>
+
+      <circle cx="54.5" cy="32.0" r="5.2" fill="#2cc23c" stroke="#10601a" stroke-width="0.7"/>
+      <ellipse cx="54.5" cy="29.4" rx="3.0" ry="1.4" fill="#ffffff" fill-opacity="0.78"/>
+    </g>
+
+    <!-- Readable Window Title -->
+    <text x="79.0" y="35.2" text-anchor="middle" font-family="Luxi Sans, DejaVu Sans, sans-serif"
+          font-size="8.6" font-weight="700" fill="#222630">Aqua</text>
+  </g>
+
+  <rect x="12.0" y="20.0" width="104.0" height="88.0" rx="5.5" fill="none" stroke="#6c7280" stroke-width="0.9"/>
+</svg>

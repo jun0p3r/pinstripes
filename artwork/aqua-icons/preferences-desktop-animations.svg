@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Desktop Animations & Effects KCM: Swooping Luminous Aqua Genie Ribbon + Chrome/Ebony Wand -->
+    <filter id="ribbonGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.4"/>
+    </filter>
+    <filter id="wandShadow" x="-30%" y="-30%" width="165%" height="165%">
+      <feGaussianBlur stdDeviation="2.6"/>
+    </filter>
+    <filter id="starBloom" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="2.2"/>
+    </filter>
+
+    <linearGradient id="genieAqua" x1="16" y1="96" x2="108" y2="22" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#1248b8" stop-opacity="0.15"/>
+      <stop offset="0.35" stop-color="#2882f2" stop-opacity="0.78"/>
+      <stop offset="0.72" stop-color="#6ce0ff" stop-opacity="0.92"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.98"/>
+    </linearGradient>
+
+    <linearGradient id="ebonyShaft" x1="-4.5" y1="0" x2="4.5" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#14161c"/>
+      <stop offset="0.32" stop-color="#585e6c"/>
+      <stop offset="0.50" stop-color="#9ca4b4"/>
+      <stop offset="0.68" stop-color="#232730"/>
+      <stop offset="1.00" stop-color="#0d0f14"/>
+    </linearGradient>
+
+    <linearGradient id="chromeTip" x1="-4.5" y1="0" x2="4.5" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#3c424e"/>
+      <stop offset="0.30" stop-color="#ffffff"/>
+      <stop offset="0.55" stop-color="#d8dee8"/>
+      <stop offset="0.78" stop-color="#282c36"/>
+      <stop offset="1.00" stop-color="#aeb4c0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Swooping 10.2 Genie Translucent Aqua Light Ribbon -->
+  <path d="M 16,96 C 18,62 52,82 64,52 C 74,28 88,24 96,26 C 84,36 82,56 68,74 C 54,92 26,108 16,96 Z"
+        fill="#3aa4ff" fill-opacity="0.48" filter="url(#ribbonGlow)"/>
+  <path d="M 16,96 C 18,62 52,82 64,52 C 74,28 88,24 96,26 C 84,36 82,56 68,74 C 54,92 26,108 16,96 Z"
+        fill="url(#genieAqua)" stroke="#bceeff" stroke-width="0.9"/>
+  <!-- Crisp luminous filament arcs inside ribbon -->
+  <path d="M 22,93 C 30,72 56,78 70,48 C 78,32 88,27 96,26"
+        fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.92"/>
+
+  <!-- 2. Polished Ebony & Spun-Chrome Magician's Wand (angled +42 deg) -->
+  <g transform="translate(68, 66) rotate(42)">
+    <!-- Soft cast shadow -->
+    <rect x="-4.0" y="-44.0" width="8.8" height="92.0" rx="2.5" transform="translate(3.0, 4.2)"
+          fill="#000a24" fill-opacity="0.34" filter="url(#wandShadow)"/>
+
+    <!-- Ebony lacquer center shaft -->
+    <rect x="-4.2" y="-26.0" width="8.4" height="56.0" fill="url(#ebonyShaft)" stroke="#0d0f14" stroke-width="0.55"/>
+    <!-- Top chrome ferrule tip -->
+    <path d="M -4.2,-26.0 L -4.2,-44.0 C -4.2,-45.6 -2.4,-46.8 0.0,-46.8 C 2.4,-46.8 4.2,-45.6 4.2,-44.0 L 4.2,-26.0 Z"
+          fill="url(#chromeTip)" stroke="#3a404c" stroke-width="0.55"/>
+    <!-- Bottom chrome ferrule cap -->
+    <path d="M -4.2,30.0 L 4.2,30.0 L 4.2,44.5 C 4.2,46.0 2.4,47.2 0.0,47.2 C -2.4,47.2 -4.2,46.0 -4.2,44.5 Z"
+          fill="url(#chromeTip)" stroke="#3a404c" stroke-width="0.55"/>
+  </g>
+
+  <!-- 3. Blooming Incandescent Star-White & Golden Sparkles around Wand Tip (96, 26) -->
+  <g>
+    <circle cx="96.5" cy="26.5" r="11.0" fill="#9ce8ff" filter="url(#starBloom)" opacity="0.85"/>
+    <circle cx="52.0" cy="40.0" r="6.0" fill="#ffe878" filter="url(#starBloom)" opacity="0.78"/>
+    <circle cx="42.0" cy="68.0" r="5.5" fill="#9ce8ff" filter="url(#starBloom)" opacity="0.75"/>
+
+    <!-- Crisp 4-point star flares -->
+    <path d="M 96.5,12.0 L 98.8,24.2 L 111.0,26.5 L 98.8,28.8 L 96.5,41.0 L 94.2,28.8 L 82.0,26.5 L 94.2,24.2 Z" fill="#ffffff"/>
+    <path d="M 52.0,31.5 L 53.5,38.5 L 60.5,40.0 L 53.5,41.5 L 52.0,48.5 L 50.5,41.5 L 43.5,40.0 L 50.5,38.5 Z" fill="#fffbe0"/>
+    <path d="M 42.0,61.0 L 43.2,66.8 L 49.0,68.0 L 43.2,69.2 L 42.0,75.0 L 40.8,69.2 L 35.0,68.0 L 40.8,66.8 Z" fill="#ffffff"/>
+  </g>
+</svg>

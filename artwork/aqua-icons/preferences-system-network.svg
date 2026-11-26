@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Exact HIG Fig. 11-17 Bottom-Left (i-017.png): Glowing Sapphire Network Globe on Aluminum Drive Base! -->
+    <filter id="deskShadow" x="-25%" y="-35%" width="150%" height="190%">
+      <feGaussianBlur stdDeviation="3.8"/>
+    </filter>
+    <filter id="contactShadow" x="-15%" y="-30%" width="130%" height="170%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
+    <filter id="arcGlow" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+    <filter id="nodeBloom" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+
+    <linearGradient id="aluBaseTop" x1="64" y1="74" x2="64" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ececf2"/>
+      <stop offset="0.50" stop-color="#c2c2ca"/>
+      <stop offset="0.92" stop-color="#a8a8b2"/>
+      <stop offset="1.00" stop-color="#f2f2f8"/>
+    </linearGradient>
+    <linearGradient id="aluBaseFront" x1="24" y1="100" x2="104" y2="114" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#262730"/>
+      <stop offset="0.45" stop-color="#565864"/>
+      <stop offset="1.00" stop-color="#2c2d36"/>
+    </linearGradient>
+
+    <linearGradient id="sapphireGlobe" x1="64" y1="12" x2="64" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#02052b"/>
+      <stop offset="0.16" stop-color="#091d6e"/>
+      <stop offset="0.38" stop-color="#194cb4"/>
+      <stop offset="0.62" stop-color="#327ce0"/>
+      <stop offset="0.84" stop-color="#72c0fa"/>
+      <stop offset="1.00" stop-color="#f2feff"/>
+    </linearGradient>
+
+    <radialGradient id="bottomCaustic" cx="64" cy="86" r="36" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.96"/>
+      <stop offset="0.30" stop-color="#d2f6ff" stop-opacity="0.78"/>
+      <stop offset="1.00" stop-color="#1c5ad0" stop-opacity="0.0"/>
+    </radialGradient>
+
+    <linearGradient id="topLens" x1="64" y1="13.5" x2="64" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="0.40" stop-color="#d8f0ff" stop-opacity="0.30"/>
+      <stop offset="1.00" stop-color="#ffffff" stop-opacity="0.0"/>
+    </linearGradient>
+
+    <circle id="netGlobe" cx="64" cy="53.0" r="41.0"/>
+    <clipPath id="clipNetGlobe">
+      <use href="#netGlobe"/>
+    </clipPath>
+  </defs>
+
+  <!-- Grounded two-layer shadow under aluminum base -->
+  <ellipse cx="64" cy="114.5" rx="44" ry="5.5" fill="#000614" fill-opacity="0.34" filter="url(#deskShadow)"/>
+  <rect x="24" y="111.5" width="80" height="3.8" rx="1.8" fill="#000614" fill-opacity="0.50" filter="url(#contactShadow)"/>
+
+  <!-- 1. Diminishing-Perspective Aluminum Server/Drive Pedestal (exact i-017.png bottom-left!) -->
+  <!-- Front chassis with cooling vents & lime LED -->
+  <path d="M 23.0,99.5 L 105.0,99.5 L 104.2,111.2 C 104.0,112.8 102.6,113.8 100.5,113.8 L 27.5,113.8 C 25.4,113.8 24.0,112.8 23.8,111.2 Z"
+        fill="#8b8c96" stroke="#484952" stroke-width="0.75"/>
+  <rect x="31.0" y="101.5" width="66.0" height="11.2" fill="url(#aluBaseFront)"/>
+  <g fill="#121318">
+    <rect x="64.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="67.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="70.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="73.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="76.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="79.0" y="102.5" width="1.6" height="9.4"/>
+    <rect x="82.0" y="102.5" width="1.6" height="9.4"/>
+  </g>
+  <circle cx="91.5" cy="108.5" r="1.8" fill="#e8ff4a" stroke="#22242c" stroke-width="0.6"/>
+
+  <!-- Top aluminum deck + sapphire caustic reflection cast by the glowing globe! -->
+  <path d="M 32.0,73.0 L 96.0,73.0 L 105.0,100.0 L 23.0,100.0 Z" fill="url(#aluBaseTop)" stroke="#747580" stroke-width="0.8"/>
+  <line x1="24.2" y1="99.2" x2="103.8" y2="99.2" stroke="#ffffff" stroke-width="1.4"/>
+  <!-- Recessed circular seat + blue glow under globe -->
+  <ellipse cx="64" cy="91.5" rx="28" ry="7.2" fill="#18479e" fill-opacity="0.38" filter="url(#contactShadow)"/>
+  <ellipse cx="64" cy="92.5" rx="18" ry="4.5" fill="#70cbff" fill-opacity="0.45" filter="url(#arcGlow)"/>
+
+  <!-- 2. Glowing Sapphire 10.2 Network Globe Hovering Over Pedestal (cx=64, cy=53, r=41) -->
+  <use href="#netGlobe" fill="url(#sapphireGlobe)"/>
+
+  <g clip-path="url(#clipNetGlobe)">
+    <rect x="20" y="10" width="88" height="88" fill="url(#bottomCaustic)"/>
+
+    <!-- Swooping Geodesic Light Filaments -->
+    <g fill="none" stroke="#9be8ff" stroke-width="2.6" stroke-opacity="0.58" filter="url(#arcGlow)">
+      <path d="M 20,49 C 40,30 76,26 106,42"/>
+      <path d="M 24,69 C 50,58 80,42 100,24"/>
+      <path d="M 34,23 C 48,49 74,68 102,72"/>
+      <path d="M 55,12 C 45,40 50,72 69,94"/>
+      <path d="M 82,15 C 88,42 78,72 54,92"/>
+    </g>
+    <g fill="none" stroke="#f2fdff" stroke-width="1.3" stroke-linecap="round">
+      <path d="M 20,49 C 40,30 76,26 106,42"/>
+      <path d="M 24,69 C 50,58 80,42 100,24"/>
+      <path d="M 34,23 C 48,49 74,68 102,72"/>
+      <path d="M 55,12 C 45,40 50,72 69,94"/>
+      <path d="M 82,15 C 88,42 78,72 54,92"/>
+    </g>
+
+    <!-- Blooming Star-White Intersection Nodes -->
+    <g fill="#bdf4ff" filter="url(#nodeBloom)">
+      <circle cx="50.5" cy="35.2" r="4.4"/>
+      <circle cx="83.0" cy="34.8" r="4.2"/>
+      <circle cx="63.5" cy="53.5" r="5.0"/>
+      <circle cx="51.5" cy="60.0" r="4.4"/>
+      <circle cx="74.2" cy="65.8" r="4.6"/>
+    </g>
+    <g fill="#ffffff">
+      <circle cx="50.5" cy="35.2" r="1.9"/>
+      <circle cx="83.0" cy="34.8" r="1.8"/>
+      <circle cx="63.5" cy="53.5" r="2.2"/>
+      <circle cx="51.5" cy="60.0" r="1.9"/>
+      <circle cx="74.2" cy="65.8" r="2.0"/>
+    </g>
+
+    <ellipse cx="64" cy="27.2" rx="29.0" ry="13.5" fill="url(#topLens)"/>
+  </g>
+
+  <use href="#netGlobe" fill="none" stroke="#18479e" stroke-width="0.8" stroke-opacity="0.60"/>
+</svg>

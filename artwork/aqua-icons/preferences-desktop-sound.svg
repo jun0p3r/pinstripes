@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- 10.2 Sound KCM: 2002 Apple Pro Clear-Acrylic Spherical Speaker + Luminous Aqua Sound Arcs -->
+    <filter id="floorBlur" x="-30%" y="-45%" width="160%" height="200%">
+      <feGaussianBlur stdDeviation="4.5"/>
+    </filter>
+    <filter id="contactBlur" x="-20%" y="-30%" width="140%" height="170%">
+      <feGaussianBlur stdDeviation="1.8"/>
+    </filter>
+    <filter id="waveGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.0"/>
+    </filter>
+
+    <!-- Clear polycarbonate outer acoustic sphere -->
+    <radialGradient id="clearAcrylic" cx="48" cy="48" r="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff" stop-opacity="0.92"/>
+      <stop offset="0.55" stop-color="#e5ecf6" stop-opacity="0.78"/>
+      <stop offset="0.85" stop-color="#bac6d8" stop-opacity="0.88"/>
+      <stop offset="1.00" stop-color="#8592a6" stop-opacity="0.95"/>
+    </radialGradient>
+
+    <!-- Spun-chrome inner speaker baffle ring -->
+    <linearGradient id="baffleChrome" x1="28" y1="34" x2="86" y2="94" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.30" stop-color="#dfe3ec"/>
+      <stop offset="0.58" stop-color="#7c8290"/>
+      <stop offset="0.82" stop-color="#d4d8e2"/>
+      <stop offset="1.00" stop-color="#585e6a"/>
+    </linearGradient>
+
+    <!-- Sculpted black elastomer surround & brushed-aluminum center phase dome -->
+    <radialGradient id="driverCone" cx="58" cy="64" r="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#484d58"/>
+      <stop offset="0.55" stop-color="#22252c"/>
+      <stop offset="0.82" stop-color="#111318"/>
+      <stop offset="1.00" stop-color="#383c46"/>
+    </radialGradient>
+    <radialGradient id="metalDustCap" cx="56" cy="61" r="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0.00" stop-color="#ffffff"/>
+      <stop offset="0.50" stop-color="#cfd4e0"/>
+      <stop offset="1.00" stop-color="#686e7c"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Overhead floor shadow -->
+  <ellipse cx="55" cy="112.0" rx="38" ry="5.8" fill="#000818" fill-opacity="0.32" filter="url(#floorBlur)"/>
+  <ellipse cx="55" cy="111.2" rx="22" ry="3.2" fill="#000818" fill-opacity="0.48" filter="url(#contactBlur)"/>
+
+  <!-- 1. Clear Polycarbonate Spherical Speaker Enclosure (cx=54, cy=63, r=43) -->
+  <circle cx="54.0" cy="63.0" r="43.0" fill="url(#clearAcrylic)" stroke="#788496" stroke-width="0.9"/>
+  <circle cx="54.0" cy="63.0" r="41.6" fill="none" stroke="#ffffff" stroke-width="1.4" opacity="0.9"/>
+
+  <!-- Internal silver acoustic basket ribs visible through clear sphere -->
+  <ellipse cx="50.0" cy="63.0" rx="34.0" ry="34.0" fill="none" stroke="#9ea8ba" stroke-width="2.2" opacity="0.45"/>
+
+  <!-- Angled Front Acoustic Driver Baffle Facing Right (cx=59.5, cy=63.0) -->
+  <ellipse cx="59.5" cy="63.0" rx="28.5" ry="32.5" fill="url(#baffleChrome)" stroke="#5c6270" stroke-width="0.85"/>
+  <!-- 4 tiny chrome hex mounting screws around driver ring -->
+  <g fill="#424652">
+    <circle cx="59.5" cy="34.0" r="1.5"/>
+    <circle cx="59.5" cy="92.0" r="1.5"/>
+    <circle cx="34.5" cy="63.0" r="1.5"/>
+    <circle cx="84.5" cy="63.0" r="1.5"/>
+  </g>
+
+  <!-- Ribbed Black Neodymium Woofer Cone + Spun-Aluminum Center Dust Cap -->
+  <ellipse cx="60.5" cy="63.0" rx="22.5" ry="26.2" fill="url(#driverCone)" stroke="#14161c" stroke-width="0.9"/>
+  <ellipse cx="60.5" cy="63.0" rx="18.2" ry="21.4" fill="none" stroke="#585e6c" stroke-width="1.2" opacity="0.65"/>
+  <ellipse cx="61.5" cy="63.0" rx="9.2" ry="10.8" fill="url(#metalDustCap)" stroke="#2c303a" stroke-width="0.8"/>
+
+  <!-- Curved Clear-Glass Dome Specular Crescent Over Speaker -->
+  <ellipse cx="48.0" cy="36.0" rx="26.0" ry="11.5" fill="#ffffff" fill-opacity="0.68" transform="rotate(-14 48.0 36.0)"/>
+
+  <!-- 2. Three Luminous 10.2 Aqua Sound-Pressure Wave Arcs Radiating Right -->
+  <g fill="none" stroke="#2888ff" stroke-width="3.6" stroke-linecap="round" stroke-opacity="0.48" filter="url(#waveGlow)">
+    <path d="M 96,47 A 24,24 0 0 1 96,79"/>
+    <path d="M 105,38 A 36,36 0 0 1 105,88"/>
+    <path d="M 114,29 A 48,48 0 0 1 114,97"/>
+  </g>
+  <g fill="none" stroke="#2c7be8" stroke-linecap="round">
+    <path d="M 96,47 A 24,24 0 0 1 96,79" stroke-width="2.6"/>
+    <path d="M 105,38 A 36,36 0 0 1 105,88" stroke-width="2.4" stroke-opacity="0.82"/>
+    <path d="M 114,29 A 48,48 0 0 1 114,97" stroke-width="2.2" stroke-opacity="0.62"/>
+  </g>
+</svg>
