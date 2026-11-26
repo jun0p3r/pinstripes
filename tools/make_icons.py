@@ -2261,6 +2261,24 @@ def svg_d(path):
     return "".join(out) + "Z"
 
 
+# The glyphs are drawn as solid shapes on a 16-unit grid; these erode every edge by a fixed
+# amount so strokes read lighter, more on the panel where they're drawn at 22-24 px.
+THIN = 0.18
+THIN_PANEL = 0.27
+
+
+def thin(path, d):
+    if path is None or path.isEmpty() or d <= 0:
+        return path
+    st = QPainterPathStroker()
+    st.setWidth(2 * d)
+    st.setJoinStyle(Qt.RoundJoin)
+    st.setCapStyle(Qt.RoundCap)
+    p = QPainterPath(path)
+    p.setFillRule(Qt.OddEvenFill)
+    return p.subtracted(st.createStroke(p)).simplified()
+
+
 def svg(solid, faint, size=16):
     body = []
     if faint is not None and not faint.isEmpty():
@@ -2431,12 +2449,12 @@ def build():
         d = os.path.join(OUT, "symbolic", ctx)
         os.makedirs(d, exist_ok=True)
         with open(os.path.join(d, f"{name}-symbolic.svg"), "w") as f:
-            f.write(svg(solid, faint))
+            f.write(svg(thin(solid, THIN), thin(faint, THIN)))
         if name.startswith(TRAY):
             d = os.path.join(OUT, "panel", "status")
             os.makedirs(d, exist_ok=True)
             with open(os.path.join(d, f"{name}.svg"), "w") as f:
-                f.write(svg(solid, faint))
+                f.write(svg(thin(solid, THIN_PANEL), thin(faint, THIN_PANEL)))
 
     ctx_names = {
         "actions": "Actions", "status": "Status", "devices": "Devices",
