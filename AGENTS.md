@@ -260,3 +260,13 @@ Claude again) relies on them to resume without re-deriving anything.
   (`antigravity`, `bazaar`, `discord`, `github-desktop`) in `~/projects/agy-aqua-icons/`, wrote
   `artwork/aqua-icons/STYLE-GUIDE.md` for seamless shared authoring, and confirmed the
   `places`+`devices` / `preferences-*`+`apps` split with Claude.
+* 2026-11-26 Claude Code (Opus 5.5): bug hunt inside apps, tested in a hidden nested KWin
+  (`dbus-run-session kwin_wayland --virtual ... --exit-with-session script`, with
+  `QT_PLUGIN_PATH=build-system/bin`, `XDG_CURRENT_DESKTOP=KDE` and `QT_QPA_PLATFORMTHEME=kde`;
+  never pop windows on the user's desktop, they work while we test). Fixed: catch-all
+  `preferences-*` aliases; grey drop shadow instead of Oxygen's blue glow (decoration repo);
+  Dolphin's floating status bar (elided text, square pinstripe box: DolphinStatusBar palette and
+  `PE_Frame`); combo/spin line edits double-padded (Okular "it Width"); text-only dialog
+  buttons; a visible default-button pulse; `layoutSpacing()` (nested layouts were ~2 px apart);
+  libadwaita via `~/.config/gtk-4.0/gtk.css`; glass `overflow-menu`. Confirmed limits: Kirigami
+  pages (and QML KCMs inside `QmlConfigModuleWidget`) paint a flat colour.
