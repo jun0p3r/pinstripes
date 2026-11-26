@@ -1,0 +1,6 @@
+[Misc]
+Name=Pinstripe
+Comment=Aqua-inspired gel controls on pinstriped windows (Blue appearance)
+
+[KDE]
+WidgetStyle=Pinstripe

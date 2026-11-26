@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Franco"
+            }
+        ],
+        "Category": "",
+        "Description": "Pinstriped popups, a menu-bar top panel and a glass Dock, after Mac OS X 10.2",
+        "Id": "pinstripe",
+        "License": "GPL-2.0-or-later",
+        "Name": "Pinstripe",
+        "Version": "0.1"
+    },
+    "X-Plasma-API": "5.0"
+}
