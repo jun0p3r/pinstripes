@@ -72,6 +72,9 @@ SLICES = {n: v for n, v in {
     "thumb-v": ("v", 7, 8), "thumb-v-backdrop": ("v", 7, 8), "thumb-h": ("h", 7, 8), "thumb-h-backdrop": ("h", 7, 8)}.items()}
 
 
+FIXED_HEIGHT = {"button", "button-default", "button-pressed", "popup", "popup-backdrop"}
+
+
 def three(name):
     """Background layers that draw a gel as start cap + stretched middle + end cap.
     GTK ignores the centre slice of border-image, so this replaces it. The middle column is
@@ -80,16 +83,26 @@ def three(name):
     axis, a, b = SLICES[name]
     sc = lambda k: f'-gtk-scaled(url("assets/{name}-{k}.png"), url("assets/{name}-{k}@2.png"))'  # noqa: E731
     if axis == "h":
+        # gels keep their natural height, centred: a taller widget (libadwaita's 34-40 px buttons,
+        # a double-height calculator key) shows the 20 px Aqua capsule rather than stretched caps
+        if name in FIXED_HEIGHT:
+            from PySide6.QtGui import QImage as _QImage
+            h = _QImage(os.path.join(OUT, "assets", f"{name}-s.png")).height()
+            return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
+                    f"background-position: left center, right center, left center; "
+                    f"background-size: {a}px {h}px, {b}px {h}px, 1px {h}px; "
+                    f"background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, border-box; "
+                    f"background-clip: border-box, border-box, content-box; border-image: none; background-color: transparent;")
         return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
                 f"background-position: left top, right top, left top; "
                 f"background-size: {a}px 100%, {b}px 100%, 1px 100%; "
                 f"background-repeat: no-repeat, no-repeat, repeat-x; background-origin: border-box, border-box, content-box; "
-                f"background-clip: border-box, border-box, content-box; border-image: none;")
+                f"background-clip: border-box, border-box, content-box; border-image: none; background-color: transparent;")
     return (f"background-image: {sc('s')}, {sc('e')}, {sc('m')}; "
             f"background-position: left top, left bottom, left top; "
             f"background-size: 100% {a}px, 100% {b}px, 100% 1px; "
             f"background-repeat: no-repeat, no-repeat, repeat-y; background-origin: border-box, border-box, content-box; "
-            f"background-clip: border-box, border-box, content-box; border-image: none;")
+            f"background-clip: border-box, border-box, content-box; border-image: none; background-color: transparent;")
 
 
 def capsule(g):
@@ -539,6 +552,46 @@ button.flat > *, headerbar button:not(.titlebutton):not(.close):not(.minimize):n
 button.flat:hover, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):hover {{ background-color: rgba(0, 0, 0, 0.06); }}
 button.flat:active, button.flat:checked, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):active, headerbar button:not(.titlebutton):not(.close):not(.minimize):not(.maximize):checked,
 toolbar button:active, toolbar button:checked, .toolbar button:active, .toolbar button:checked {{ background-color: rgba(0, 0, 0, 0.18); }}
+
+/* ---------------- page switchers (GtkStackSwitcher, libadwaita view switchers): an Aqua segmented
+   control like the Finder's View buttons: joined glass segments, the selected one in blue gel */
+stackswitcher > button, stackswitcher > button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize),
+headerbar stackswitcher > button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize),
+.stack-switcher > button, headerbar .stack-switcher > button:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize) {{
+  min-height: 18px;
+  padding: 0 10px;
+  margin: 0;
+  border: 1px solid #8a8c92;
+  border-top-color: #9a9ca2;
+  border-bottom-color: #5a5c62;
+  border-left-width: 0;
+  border-radius: 0;
+  border-image: none;
+  background-color: transparent;
+  background-image: linear-gradient(to bottom, #ffffff 0%, #f1f2f5 45%, #e1e4ea 50%, #eef0f4 80%, #ffffff 100%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.7);
+  color: #000000;
+}}
+stackswitcher > button:first-child, .stack-switcher > button:first-child,
+headerbar stackswitcher > button:first-child:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize) {{
+  border-left-width: 1px; border-radius: 5px 0 0 5px;
+}}
+stackswitcher > button:last-child, .stack-switcher > button:last-child,
+headerbar stackswitcher > button:last-child:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize) {{
+  border-radius: 0 5px 5px 0;
+}}
+stackswitcher > button:checked, .stack-switcher > button:checked,
+headerbar stackswitcher > button:checked:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize),
+headerbar .stack-switcher > button:checked:not(.titlebutton):not(.suggested-action):not(.close):not(.minimize):not(.maximize) {{
+  border-color: #3a64a8;
+  border-bottom-color: #23457e;
+  background-color: transparent;
+  background-image: linear-gradient(to bottom, #d6ecff 0%, #a2cdf6 42%, #6ea8ec 50%, #8cc4fa 82%, #c4e6ff 100%);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.55);
+}}
+stackswitcher > button:active, .stack-switcher > button:active {{
+  background-image: linear-gradient(to bottom, #c8cbd2 0%, #b6bac2 50%, #a8acb4 51%, #c4c8cf 100%);
+}}
 
 /* ---------------- check boxes and radio buttons: 18x18 including the shadow */
 {check} {{
