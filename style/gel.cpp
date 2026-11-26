@@ -281,17 +281,11 @@ void paintSelection(QPainter *p, const QRectF &rect, Appearance appearance, qrea
     shape.addRoundedRect(rect, radius, radius);
     p->setClipPath(shape, Qt::IntersectClip);
 
-    // body: deep blue under the lens, saturated in the middle, glowing cyan at the bottom
-    QLinearGradient body(rect.topLeft(), rect.bottomLeft());
-    body.setColorAt(0.00, c(74, 132, 222));
-    body.setColorAt(0.48, c(38, 104, 214));
-    body.setColorAt(0.52, c(44, 116, 226));
-    body.setColorAt(0.80, c(84, 162, 246));
-    body.setColorAt(1.00, c(128, 202, 255));
-    p->fillRect(rect, body);
+    // fixed-height lens and glow (11px / 8px, as in the Plasma style) around a striped body,
+    // so a tall icon tile and a menu row carry the same gel
+    p->fillRect(rect, c(40, 108, 218));
 
     // pinstripes through the gel (same 4px rhythm as the window: 255, 238, 230, 238)
-    // light row lifted, the two middle rows darkened, so the stripes read clearly through the blue
     const int rowDark[4] = {0, 44, 66, 44};
     for (qreal y = std::floor(rect.top()); y < rect.bottom(); y += 1.0) {
         const int row = (int(y) % 4 + 4) % 4;
@@ -301,13 +295,20 @@ void paintSelection(QPainter *p, const QRectF &rect, Appearance appearance, qrea
             p->fillRect(QRectF(rect.left(), y, rect.width(), 1.0), QColor(255, 255, 255, 34));
     }
 
-    // wet lens over the top half
-    const QRectF lens(rect.left(), rect.top(), rect.width(), rect.height() * 0.48);
+    const qreal lensH = qMin<qreal>(11.0, rect.height() * 0.5);
+    const QRectF lens(rect.left(), rect.top(), rect.width(), lensH);
     QLinearGradient lg(lens.topLeft(), lens.bottomLeft());
     lg.setColorAt(0.0, QColor(255, 255, 255, 170));
     lg.setColorAt(0.25, QColor(255, 255, 255, 105));
-    lg.setColorAt(1.0, QColor(255, 255, 255, 38));
+    lg.setColorAt(1.0, QColor(255, 255, 255, 30));
     p->fillRect(lens, lg);
+
+    const qreal glowH = qMin<qreal>(8.0, rect.height() * 0.4);
+    const QRectF glow(rect.left(), rect.bottom() - glowH, rect.width(), glowH);
+    QLinearGradient gg(glow.topLeft(), glow.bottomLeft());
+    gg.setColorAt(0.0, c(128, 202, 255, 0));
+    gg.setColorAt(1.0, c(128, 202, 255, 200));
+    p->fillRect(glow, gg);
 
     // fine rim: darker on top, a bright line just inside the bottom
     p->fillRect(QRectF(rect.left(), rect.top(), rect.width(), 1.0), c(24, 66, 160, 230));

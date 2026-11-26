@@ -25,15 +25,16 @@ It pairs with the [Oxygen Traffic Lights](../oxygen-traffic-lights) window decor
 Oxygen's symbolic icons, and the Breeze ones it falls back to, are thin line art in two
 different styles. Oxygen Pinstripe replaces them with one family of solid, rounded glyphs
 modelled on the 10.2 menu extras: the AirPort fan, the speaker with waves, the horizontal
-battery, the eject key, and solid triangle arrows. It covers 276 names (124 distinct
+battery, the eject key, and solid triangle arrows. It covers 408 names (132 distinct
 glyphs): volume, wireless, wired, battery and charging levels, Bluetooth, notifications,
 session and power, search and zoom, files and folders, editing, navigation, media, window
 and view controls, and dialogs.
 
 * It inherits Oxygen (then Breeze and hicolor), so every full-colour icon is still Oxygen's.
-* The tray names (volume, network, battery, Bluetooth, notifications) are also provided at
-  panel sizes (16 to 24 px), so the Plasma system tray shows the menu extras instead of
-  Oxygen's colour tray icons.
+* The tray names are also provided at panel sizes (16 to 24 px), so the Plasma system tray
+  shows the menu extras instead of Oxygen's colour tray icons: volume, network, battery
+  (including power profiles), Bluetooth, brightness, notifications, updates, microphone,
+  camera, clipboard, KDE Connect and media.
 * The glyphs are filled shapes only, with no strokes, using KDE's `ColorScheme-Text` class
   and `fill:currentColor`, so KDE and GTK recolour them. Unused signal bars and quiet
   volume waves are the same colour at 35 % opacity.
@@ -72,12 +73,29 @@ Behaviour follows the HIG too:
 * Scroll bars: the whole bar is an opaque white cylinder, and the track has rounded, shaded ends. The thumb sits 1 px inside the track with a crisp navy rim; its columns are measured pixel by pixel from the real thumb, including the sharp dip after the lens. The arrows sit together at the end of the bar.
 * Determinate progress bars have moving light bands, and indeterminate ones are a barber pole.
 
-**Deliberate departure from 10.2: the selection highlight.** Jaguar's menu highlight was flat blue. Here it's a glossy gel with the pinstripes showing through, used for menus, the menu bar, selected list rows and Plasma lists.
+**Deliberate departure from 10.2: the selection highlight.** Jaguar's menu highlight was flat blue. Here it's a glossy gel with the pinstripes showing through, used for menus, the menu bar, selected list rows and Plasma lists. The highlight on top (11 px) and the glow at the bottom (8 px) have fixed heights, and only the striped middle grows, so a tall launcher tile and a menu row look the same in Qt, GTK and Plasma.
 
 **Font:** 10.2 used Lucida Grande, which is Apple's and can't be redistributed. If you own a Mac, you can copy it from `/System/Library/Fonts`. The closest freely redistributable font is **Luxi Sans** by Bigelow & Holmes, Lucida's designers, from X.Org's `font-bh-ttf` package. The previews use it. The GTK theme asks for Lucida Grande, then Luxi Sans. For Qt and Plasma apps, set it in System Settings → Text & Fonts. To install Luxi for your user:
 
 ```bash
 mkdir -p ~/.local/share/fonts/luxi && curl -sSfL https://www.x.org/releases/individual/font/font-bh-ttf-1.0.4.tar.xz | tar -xJ --strip-components=1 -C ~/.local/share/fonts/luxi --wildcards '*.ttf' '*/COPYING' && fc-cache -f
+```
+
+## Switch everything at once
+
+After installing (below), one script switches the colour scheme, Plasma style, icons, widget
+style, GTK theme, Luxi Sans and the Oxygen Traffic Lights decoration. Your current settings
+are saved first, so the revert script puts back exactly what you had.
+
+```bash
+contrib/apply-pinstripe.sh
+```
+
+`--graphite` picks the Graphite variants, `--no-font` leaves your fonts alone and
+`--mac-buttons` puts close, minimize and maximize on the left of the title bar. To go back:
+
+```bash
+contrib/revert-pinstripe.sh
 ```
 
 ## Build
@@ -153,7 +171,7 @@ cmake -S . -B build -DBUILD_GALLERY=ON && cmake --build build && QT_PLUGIN_PATH=
 ```
 
 ```bash
-python3 tools/preview_plasma.py /tmp/plasma.png ~/projects/pinstripe/sddm/pinstripe/backgrounds/water.jpg /tmp/gallery/more-active.png
+python3 tools/preview_plasma.py /tmp/plasma.png path/to/wallpaper.jpg /tmp/gallery/more-active.png
 ```
 
 GTK, rendered through a headless Broadway display:
@@ -168,6 +186,10 @@ gtk4-broadwayd :8 & GDK_BACKEND=broadway BROADWAY_DISPLAY=:8 python3 tools/gtk_g
 
 ## Limits
 
+* **QML apps** (System Settings, Discover and other Kirigami apps) paint their page
+  backgrounds as flat colours from the palette, so they can't show the pinstripes. Their
+  controls still use the widget style. Every Qt Widgets app (Dolphin, Kate, Konsole and so on)
+  gets the stripes.
 * **Dock triangles:** a Plasma frame can't centre a single shape. The triangle sits in a stretched bottom edge between wide, transparent corners. It's sized for the default 44 px panel; on thicker panels it gets wider.
 * **GTK tabs** can't be centred, because GTK's CSS has no `margin: auto`. They stay left-aligned over the blue accent bar.
 * **libadwaita apps** (most GNOME apps) ignore GTK themes; only plain GTK 3 and GTK 4 apps pick up Pinstripe.

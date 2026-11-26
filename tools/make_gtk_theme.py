@@ -336,10 +336,14 @@ def scaled(name):
 STRIPES = "repeating-linear-gradient(to bottom, #ffffff 0px, #ffffff 1px, #eeeeee 1px, #eeeeee 2px, #e6e6e6 2px, #e6e6e6 3px, #eeeeee 3px, #eeeeee 4px)"
 MENU_STRIPES = "repeating-linear-gradient(to bottom, #ffffff 0px, #ffffff 1px, #f9f9f9 1px, #f9f9f9 2px, #eeeeee 2px, #eeeeee 3px, #f9f9f9 3px, #f9f9f9 4px)"
 TITLE = ("linear-gradient(to bottom, rgba(255,255,255,0.0), rgba(0,0,0,0.10)), " + STRIPES)
-SELECTION = ("linear-gradient(to bottom, rgba(255,255,255,0.67), rgba(255,255,255,0.41) 12%, rgba(255,255,255,0.12) 44%, rgba(255,255,255,0) 54%), "
+# fixed 11px lens on top, 8px glow at the bottom, striped body between (as in Qt and Plasma)
+SELECTION = ("linear-gradient(to bottom, rgba(255,255,255,0.67), rgba(255,255,255,0.41) 3px, rgba(255,255,255,0.12) 11px), "
+             "linear-gradient(to bottom, rgba(128,202,255,0), rgba(128,202,255,0.78)), "
              "repeating-linear-gradient(to bottom, rgba(255,255,255,0.13) 0px, rgba(255,255,255,0.13) 1px, rgba(0,26,100,0.17) 1px, rgba(0,26,100,0.17) 2px, "
-             "rgba(0,26,100,0.26) 2px, rgba(0,26,100,0.26) 3px, rgba(0,26,100,0.17) 3px, rgba(0,26,100,0.17) 4px), "
-             "linear-gradient(to bottom, #4a84de 0%, #2668d6 48%, #2c74e2 52%, #54a2f6 80%, #80caff 100%)")
+             "rgba(0,26,100,0.26) 2px, rgba(0,26,100,0.26) 3px, rgba(0,26,100,0.17) 3px, rgba(0,26,100,0.17) 4px)")
+SELECTION_LAYOUT = ("background-size: 100% 11px, 100% 8px, 100% 4px; background-position: left top, left bottom, left top; "
+                    "background-repeat: no-repeat, no-repeat, repeat; "
+                    "box-shadow: inset 0 1px rgba(24,66,160,0.9), inset 0 -1px rgba(40,92,180,0.8), inset 0 -2px rgba(170,225,255,0.6);")
 # accent bar rows measured from HIG Figure 7-23: six blue rows, then a three-row grey shadow
 ACCENT = ("linear-gradient(to bottom, #0057ae 0px, #0057ae 1px, #a2d7f0 1px, #a2d7f0 2px, #a8d1ee 2px, #a8d1ee 3px, "
           "#51b0ea 3px, #51b0ea 4px, #79ccff 4px, #79ccff 5px, #acefff 5px, #acefff 6px, #626262 6px, #626262 7px, "
@@ -498,8 +502,9 @@ entry selection, text selection, entry > text > selection, label selection {{ ba
   color: #000000;
 }}
 {rows_sel} {{
-  background-color: #3875d7;
+  background-color: #286cda;
   background-image: {SELECTION};
+  {SELECTION_LAYOUT}
   color: #ffffff;
 }}
 treeview.view:selected:backdrop, list row:selected:backdrop, listview > row:selected:backdrop, row:selected:backdrop {{
@@ -681,8 +686,9 @@ notebook > stack:not(:only-child) {{
   background: none;
 }}
 {menuitem_hover} {{
-  background-color: #3875d7;
+  background-color: #286cda;
   background-image: {SELECTION};
+  {SELECTION_LAYOUT}
   color: #ffffff;
 }}
 menubar {{

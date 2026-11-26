@@ -269,6 +269,10 @@ def circular_arrow(clockwise=True):
     return p if clockwise else flip_h(p)
 
 
+def circular_arrow_small():
+    return scale(circular_arrow(True), 0.62)
+
+
 def undo_arrow():
     a = arc(9.0, 10.0, 4.6, 0, 160, 2.2, Qt.FlatCap)
     head = poly((0.8, 9.0), (6.6, 8.2), (3.0, 13.6), round_=0.6)
@@ -443,11 +447,54 @@ def build_icons():
     add("dialog-error data-error emblem-important", S(poly(*[(8 + 7.2 * math.cos(math.radians(22.5 + i * 45)), 8 + 7.2 * math.sin(math.radians(22.5 + i * 45))) for i in range(8)], round_=0.8), bang_glyph(8, 3.6, 9.4)))
     add("emblem-shared emblem-symbolic-link", arrow("right"))
 
+    # more tray names Plasma 6 asks for
+    add("network-bluetooth network-bluetooth-activated network-bluetooth-activated-locked network-wireless-bluetooth", S(oval, rune))
+    add("network-bluetooth-inactive", QPainterPath(), S(oval, rune))
+    sun_core, sun_rays = circ(8, 8, 3.2), U(*[rot(rr(7.2, 0.6, 1.6, 3.0, 0.8), a) for a in range(0, 360, 45)])
+    add("brightness-high high-brightness video-display-brightness display-brightness", U(sun_core, sun_rays))
+    add("brightness-medium", U(sun_core, *[rot(rr(7.2, 0.6, 1.6, 3.0, 0.8), a) for a in range(0, 360, 90)]), U(*[rot(rr(7.2, 0.6, 1.6, 3.0, 0.8), a) for a in range(45, 360, 90)]))
+    add("brightness-low low-brightness", sun_core, sun_rays)
+    upd = circ(8, 8, 7.0)
+    add("update-low update-medium update-high kpackagekit-updates system-software-update software-update-available", S(upd, move(scale(arrow("down"), 0.62), 0, 0.2)))
+    add("update-none", S(upd, scale(check_mark(2.6), 0.62)))
+    add("update-busy", S(upd, circular_arrow_small()))
+    mic = U(rr(5.4, 1.2, 5.2, 8.6, 2.6), arc(8, 6.6, 4.6, 180, 180, 1.6, Qt.FlatCap), rr(7.2, 11.0, 1.6, 2.6), rr(4.6, 13.2, 6.8, 1.6, 0.8))
+    add("mic-on mic-ready microphone-sensitivity-high microphone-sensitivity-medium audio-input-microphone-high audio-input-microphone-medium", mic)
+    add("microphone-sensitivity-low audio-input-microphone-low", mic)
+    add("mic-off microphone-sensitivity-muted audio-input-microphone-muted", U(S(mic, line(2.0, 2.0, 14.0, 14.0, 3.4)), line(2.6, 2.6, 13.4, 13.4, 1.6)))
+    add("media-playback-playing", triangle("right", 8.6, 8, 6.0))
+    add("media-playback-paused", U(rr(3.4, 2.4, 3.4, 11.2, 1.0), rr(9.2, 2.4, 3.4, 11.2, 1.0)))
+    add("media-playback-stopped", rr(2.8, 2.8, 10.4, 10.4, 1.6))
+    cam = S(U(rr(0.8, 4.2, 14.4, 9.6, 1.8), rr(5.0, 2.4, 6.0, 2.6, 0.8)), ring(8, 8.9, 2.6, 1.5))
+    add("camera-on camera-ready", cam)
+    add("camera-off", U(S(cam, line(1.6, 1.6, 14.4, 14.4, 3.4)), line(2.2, 2.2, 13.8, 13.8, 1.6)))
+    add("klipper edit-paste-style", U(S(rr(2.2, 2.6, 11.6, 12.2, 1.6), rr(4.0, 5.0, 8.0, 8.2, 0.6)), rr(5.0, 1.0, 6.0, 3.2, 1.0), rr(5.6, 6.6, 4.8, 1.0, 0.4), rr(5.6, 8.8, 4.8, 1.0, 0.4), rr(5.6, 11.0, 3.2, 1.0, 0.4)))
+    add("kdeconnect-tray kdeconnect", S(rr(4.0, 0.8, 8.0, 14.4, 1.8), rr(5.4, 2.6, 5.2, 9.4, 0.4), circ(8, 13.4, 0.8)))
+    add("input-keyboard-virtual-on input-keyboard-virtual-off keyboard-layout", S(keyboard, keys))
+    fd, fa1, fa2, fa3 = fan_arcs()
+    add("network-wireless-acquiring network-wireless-available network-wireless-on", U(fd, fa1), U(fa2, fa3))
+    add("network-wireless-off", QPainterPath(), U(fd, fa1, fa2, fa3))
+    # aliases of existing glyphs under the extra names the applets use
+    for base, extra in (("network-wireless-signal-excellent", ("network-wireless-100-locked", "network-wireless-100-limited", "network-wireless-80-locked", "network-wireless-80-limited", "network-wireless-connected-80")),
+                        ("network-wireless-signal-good", ("network-wireless-60-locked", "network-wireless-60-limited", "network-wireless-connected-60")),
+                        ("network-wireless-signal-ok", ("network-wireless-40-locked", "network-wireless-40-limited", "network-wireless-connected-40")),
+                        ("network-wireless-signal-weak", ("network-wireless-20-locked", "network-wireless-20-limited", "network-wireless-connected-20")),
+                        ("network-wireless-signal-none", ("network-wireless-0-locked", "network-wireless-0-limited")),
+                        ("audio-volume-high", ("audio-volume-high-danger", "audio-volume-high-warning"))):
+        for n in extra:
+            I[n] = I[base]
+    for pct in (0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100):
+        for prof in ("balanced", "performance", "powersave"):
+            I[f"battery-{pct:03d}-profile-{prof}"] = I[f"battery-{pct:03d}"]
+            I[f"battery-{pct:03d}-charging-profile-{prof}"] = I[f"battery-{pct:03d}-charging"]
+
     return I
 
 
 CONTEXT = {
-    "status": ("audio-volume", "network-", "battery", "bluetooth", "notification", "dialog-", "data-", "weather", "object-locked", "object-unlocked", "non-starred", "starred", "process-"),
+    "status": ("audio-volume", "network-", "battery", "bluetooth", "notification", "dialog-", "data-", "weather", "object-locked", "object-unlocked", "non-starred", "starred", "process-",
+               "brightness", "high-brightness", "low-brightness", "update-", "mic-", "microphone-", "media-playback-playing", "media-playback-paused", "media-playback-stopped",
+               "camera-on", "camera-off", "camera-ready", "klipper", "kdeconnect-tray", "input-keyboard-virtual", "keyboard-layout"),
     "devices": ("audio-input", "audio-headphones", "audio-speakers", "computer", "video-display", "drive-", "media-optical", "media-removable", "camera", "phone", "smartphone", "input-", "printer"),
     "places": ("folder", "user-trash", "user-home", "user-identity", "network-workgroup", "network-server", "inode-directory"),
     "apps": ("preferences-", "system-users", "internet-mail", "office-calendar", "help-browser"),
@@ -495,7 +542,10 @@ def svg(solid, faint, size=16):
             + "\n".join(body) + "\n</svg>\n")
 
 
-TRAY = ("audio-volume", "network-wireless", "network-wired", "network-offline", "battery", "bluetooth", "notification")
+TRAY = ("audio-volume", "network-wireless", "network-wired", "network-offline", "network-bluetooth", "battery", "bluetooth", "notification",
+        "brightness", "high-brightness", "low-brightness", "video-display-brightness", "update-", "kpackagekit", "mic-", "microphone-",
+        "media-playback-playing", "media-playback-paused", "media-playback-stopped", "camera-on", "camera-off", "camera-ready",
+        "klipper", "kdeconnect", "input-keyboard-virtual", "keyboard-layout")
 
 
 def build():

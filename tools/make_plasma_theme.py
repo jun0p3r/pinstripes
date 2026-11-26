@@ -289,25 +289,29 @@ def text_field(p, r):
     p.fillRect(QRectF(f.left(), f.bottom() - 1, f.width(), 1), QColor(184, 184, 188))
 
 
+LENS_H, GLOW_H = 11, 8  # fixed heights, so tall tiles and short rows look the same
+
+
 def selection(p, r):
-    """Glossy blue gel with the pinstripes showing through (matches the widget style)."""
+    """Glossy blue gel with the pinstripes showing through (matches the widget style).
+    A fixed 11px lens on top and an 8px glow at the bottom; in between only the striped
+    body, which the frame tiles, so the gel keeps its proportions at any height."""
     p.setPen(Qt.NoPen)
-    body = QLinearGradient(r.topLeft(), r.bottomLeft())
-    for pos, c in ((0.0, (74, 132, 222)), (0.48, (38, 104, 214)), (0.52, (44, 116, 226)), (0.80, (84, 162, 246)), (1.0, (128, 202, 255))):
-        body.setColorAt(pos, qc(c))
-    p.fillRect(r, body)
+    p.fillRect(r, QColor(40, 108, 218))
     for y in range(int(r.height())):
         a = (0, 44, 66, 44)[y % 4]
-        if a:
-            p.fillRect(QRectF(r.left(), r.top() + y, r.width(), 1), QColor(0, 26, 100, a))
-        else:
-            p.fillRect(QRectF(r.left(), r.top() + y, r.width(), 1), QColor(255, 255, 255, 34))
-    lens = QRectF(r.left(), r.top(), r.width(), r.height() * 0.48)
+        p.fillRect(QRectF(r.left(), r.top() + y, r.width(), 1), QColor(0, 26, 100, a) if a else QColor(255, 255, 255, 34))
+    lens = QRectF(r.left(), r.top(), r.width(), LENS_H)
     lg = QLinearGradient(lens.topLeft(), lens.bottomLeft())
     lg.setColorAt(0, QColor(255, 255, 255, 170))
     lg.setColorAt(0.25, QColor(255, 255, 255, 105))
-    lg.setColorAt(1, QColor(255, 255, 255, 38))
+    lg.setColorAt(1, QColor(255, 255, 255, 30))
     p.fillRect(lens, lg)
+    glow = QRectF(r.left(), r.bottom() - GLOW_H, r.width(), GLOW_H)
+    gg = QLinearGradient(glow.topLeft(), glow.bottomLeft())
+    gg.setColorAt(0, QColor(128, 202, 255, 0))
+    gg.setColorAt(1, QColor(128, 202, 255, 200))
+    p.fillRect(glow, gg)
     p.fillRect(QRectF(r.left(), r.top(), r.width(), 1), QColor(24, 66, 160, 230))
     p.fillRect(QRectF(r.left(), r.bottom() - 2, r.width(), 1), QColor(170, 225, 255, 150))
     p.fillRect(QRectF(r.left(), r.bottom() - 1, r.width(), 1), QColor(40, 92, 180, 200))
@@ -532,10 +536,10 @@ def build():
 
     # list highlights: Aqua selection blue
     s = Svg()
-    # a 24px gel: the left/right borders and centre stretch vertically (gradient), so rows of any
-    # height keep the lens on top and the glow at the bottom
+    # lens in the top border, glow in the bottom border, one stripe period (4px) in the
+    # tiled centre: the highlight looks the same on a menu row and on a tall launcher tile
     for prefix in ("selected", "hover", "selected+hover"):
-        s.add_frame(prefix, Frame(24, 24, 2, 2, 2, 2, selection), [("hint-stretch-borders", 1)])
+        s.add_frame(prefix, Frame(24, LENS_H + 4 + GLOW_H, 2, LENS_H, 2, GLOW_H, selection), [("hint-tile-center", 1)])
 
     s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
     s.write(os.path.join(OUT, "widgets", "viewitem.svg"))
@@ -595,7 +599,7 @@ def build():
     # menu bar items for the global menu: the same striped gel
     s = Svg()
     for prefix in ("hover", "pressed"):
-        s.add_frame(prefix, Frame(24, 24, 2, 2, 2, 2, selection), [("hint-stretch-borders", 1)])
+        s.add_frame(prefix, Frame(24, LENS_H + 4 + GLOW_H, 2, LENS_H, 2, GLOW_H, selection), [("hint-tile-center", 1)])
     s.add_frame("normal", Frame(16, 16, 4, 4, 4, 4, transparent))
     s.write(os.path.join(OUT, "widgets", "menubaritem.svg"))
 
