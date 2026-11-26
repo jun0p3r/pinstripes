@@ -18,6 +18,7 @@ wr() { kwriteconfig6 --file "$1" --group "$2" --key "$3" "$4"; }
 [[ -n "${prev[desktoptheme]}" ]] && plasma-apply-desktoptheme "${prev[desktoptheme]}" >/dev/null || plasma-apply-desktoptheme default >/dev/null
 [[ -n "${prev[icons]}" ]] && { /usr/libexec/plasma-changeicons "${prev[icons]}" >/dev/null 2>&1 || wr kdeglobals Icons Theme "${prev[icons]}"; }
 wr kdeglobals KDE widgetStyle "${prev[widgetstyle]:-Breeze}"
+if [[ -n "${prev[buttonicons]}" ]]; then wr kdeglobals KDE ShowIconsOnPushButtons "${prev[buttonicons]}"; else kwriteconfig6 --file kdeglobals --group KDE --key ShowIconsOnPushButtons --delete; fi
 for pair in font:font menufont:menuFont toolbarfont:toolBarFont smallfont:smallestReadableFont; do
     k=${pair%%:*}; key=${pair#*:}
     if [[ -n "${prev[$k]}" ]]; then wr kdeglobals General "$key" "${prev[$k]}"; else kwriteconfig6 --file kdeglobals --group General --key "$key" --delete; fi

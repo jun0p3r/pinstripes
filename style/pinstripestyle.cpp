@@ -104,6 +104,11 @@ QColor alpha(QColor c, int a)
     return c;
 }
 
+bool inDialogButtonBox(const QWidget *w)
+{
+    return w && w->parentWidget() && w->parentWidget()->inherits("QDialogButtonBox");
+}
+
 // HIG chapter 10: small system font is 11pt next to the 13pt system font
 QFont smallFont(const QFont &f)
 {
@@ -333,10 +338,19 @@ Gel Style::buttonGel(const QStyleOption *opt, bool isDefault, bool sunken) const
     if (sunken)
         return gel(GelKind::Pressed, m_appearance);
     if (isDefault && windowActive(opt) && enabled(opt)) {
-        // the default button pulses between full colour and a paler, brighter colour
+        // the default button throbs between full colour and a pale, bright aqua blue (the light
+        // gel of a selected tab) about every 1.7 s, staying blue rather than fading to grey
         const qreal t = 0.5 - 0.5 * qCos(m_phase * 2 * M_PI / 1.7);
-        Gel pale = mix(coloredGel(), gel(GelKind::Clear, m_appearance), 0.55);
-        return mix(coloredGel(), pale, t * 0.75);
+        const Gel base = coloredGel();
+        Gel bright = base;
+        const QColor glow = m_appearance == Appearance::Graphite ? QColor(232, 238, 245) : QColor(214, 240, 255);
+        for (auto &s : bright.body)
+            s.second = QColor::fromRgbF(s.second.redF() + (glow.redF() - s.second.redF()) * 0.6,
+                                        s.second.greenF() + (glow.greenF() - s.second.greenF()) * 0.6,
+                                        s.second.blueF() + (glow.blueF() - s.second.blueF()) * 0.6, s.second.alphaF());
+        bright.rimTop = bright.rimTop.lighter(135);
+        bright.rimBottom = bright.rimBottom.lighter(135);
+        return mix(base, bright, t);
     }
     return gel(GelKind::Clear, m_appearance);
 }
@@ -1054,6 +1068,8 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         QStyleOptionButton copy(*b);
         copy.palette.setColor(QPalette::ButtonText, enabled(opt) ? Ink : QColor(128, 128, 128));
         copy.rect.translate(0, -1); // centre on the 20px capsule, not the shadow
+        if (inDialogButtonBox(w) && !copy.text.isEmpty())
+            copy.icon = QIcon(); // Aqua dialog buttons carry text only
         QProxyStyle::drawControl(ce, &copy, p, w);
         return;
     }
@@ -2233,7 +2249,10 @@ QSize Style::sizeFromContents(ContentsType ct, const QStyleOption *opt, const QS
     switch (ct) {
     case CT_PushButton: {
         const auto *b = qstyleoption_cast<const QStyleOptionButton *>(opt);
-        int width = size.width() + 2 * ButtonEndCap;
+        QSize content = size;
+        if (b && inDialogButtonBox(w) && !b->icon.isNull() && !b->text.isEmpty())
+            content.rwidth() -= b->iconSize.width() + 4; // the icon isn't drawn (CE_PushButtonLabel)
+        int width = content.width() + 2 * ButtonEndCap;
         if (b && !b->text.isEmpty())
             width = qMax(width, ButtonMinWidth);
         int height = qMax(size.height() + 4, ButtonHeight) + ShadowSpace;
@@ -2354,6 +2373,8 @@ int Style::styleHint(StyleHint sh, const QStyleOption *opt, const QWidget *w, QS
     switch (sh) {
     case SH_TabBar_Alignment:
         return Qt::AlignCenter; // Aqua tabs are centred above the pane
+    case SH_DialogButtonBox_ButtonsHaveIcons:
+        return false; // Aqua push buttons carry text only (HIG chapter 7)
     case SH_ComboBox_Popup:
         return true; // pop-up menus open as a menu over the button
     case SH_ScrollBar_Transient:

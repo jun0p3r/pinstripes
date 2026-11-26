@@ -34,6 +34,7 @@ if [[ ! -f "$state" ]]; then
         echo "desktoptheme=$(rd plasmarc Theme name)"
         echo "icons=$(rd kdeglobals Icons Theme)"
         echo "widgetstyle=$(rd kdeglobals KDE widgetStyle)"
+        echo "buttonicons=$(rd kdeglobals KDE ShowIconsOnPushButtons)"
         echo "font=$(rd kdeglobals General font)"
         echo "menufont=$(rd kdeglobals General menuFont)"
         echo "toolbarfont=$(rd kdeglobals General toolBarFont)"
@@ -71,6 +72,8 @@ a = QApplication(["x", "-platform", "offscreen"])
 sys.exit(0 if "Pinstripe" in QStyleFactory.keys() else 1)' 2>/dev/null; then
     echo "widget style: $style"
     wr kdeglobals KDE widgetStyle "$style"
+    # Aqua push buttons carry text only, never icons
+    wr kdeglobals KDE ShowIconsOnPushButtons false
 else
     echo "widget style: Pinstripe plugin not found by Qt; install it system-wide (see README), then rerun" >&2
 fi
