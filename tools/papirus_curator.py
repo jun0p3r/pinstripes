@@ -2,9 +2,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """Papirus -> 10.2 Aqua Interactive Curator GUI.
 
-Review the entire 6,676-icon upstream Papirus set auto-glassified in Mac OS X 10.2 Aqua style:
+Review the entire 6,688-icon upstream Papirus set auto-glassified in Mac OS X 10.2 Aqua style:
   - [Space]      Accept the auto-glassified icon (saves SVG + installs PNGs + records in accepted list)
   - [Backspace]  Reject the auto-glassified icon (adds to the hand-craft todo list: artwork/papirus-rejected.txt)
+  - [Insert]     Add / edit a note for the current icon (saved in artwork/papirus-notes.txt & rejected/accepted lists)
   - [Tab] / [M]  Toggle between Full Aqua Gel ("badge") and Popped-Out Brand Symbol Gel ("symbol")
   - [Left] / [Z] Undo / go back to the previous icon
   - [Right]      Skip for later
@@ -46,8 +47,10 @@ from PySide6.QtWidgets import (  # noqa: E402
     QApplication,
     QCheckBox,
     QComboBox,
+    QDialog,
     QFrame,
     QHBoxLayout,
+    QInputDialog,
     QLabel,
     QLineEdit,
     QListWidget,
@@ -66,6 +69,7 @@ ARTWORK_DIR = os.path.join(ROOT, "artwork")
 STATE_JSON = os.path.join(ARTWORK_DIR, "papirus-curation.json")
 REJECTED_TXT = os.path.join(ARTWORK_DIR, "papirus-rejected.txt")
 ACCEPTED_TXT = os.path.join(ARTWORK_DIR, "papirus-accepted.txt")
+NOTES_TXT = os.path.join(ARTWORK_DIR, "papirus-notes.txt")
 ACCEPTED_SVGS_DIR = os.path.join(ARTWORK_DIR, "papirus-accepted-svgs")
 LOCAL_THEME_DIR = os.path.expanduser("~/.local/share/icons/Oxygen-Pinstripe")
 KCACHE_PATH = os.path.expanduser("~/.cache/icon-cache.kcache")
@@ -195,6 +199,72 @@ class IconStageWidget(QWidget):
             p.drawPixmap(alt_x + 18, mid_y + 38, self.alt_64)
 
 
+class _QuickRejectLineEdit(QLineEdit):
+    backspaceOnEmpty = Signal()
+
+    def keyPressEvent(self, event):
+        if event.key() in (Qt.Key_Backspace, Qt.Key_Delete) and self.text() == "" and not event.isAutoRepeat():
+            self.backspaceOnEmpty.emit()
+            event.accept()
+            return
+        super().keyPressEvent(event)
+
+
+class RejectNoteDialog(QDialog):
+    """Popup triggered on Backspace: type a note + Enter to reject with note,
+    or press Backspace again on empty input to immediately reject without a note."""
+
+    def __init__(self, item_id, initial_note="", parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"Reject — {item_id}")
+        self.setModal(True)
+        self.resize(470, 140)
+        self.note_text = ""
+
+        lay = QVBoxLayout(self)
+        lay.setContentsMargins(18, 16, 18, 16)
+        lay.setSpacing(10)
+
+        lbl = QLabel(
+            f"<b>Reject {item_id}</b><br>"
+            "Type a note + <b>Enter</b>, or press <b>Backspace</b> again to reject without a note:"
+        )
+        lbl.setWordWrap(True)
+        lay.addWidget(lbl)
+
+        self.edit = _QuickRejectLineEdit(initial_note)
+        self.edit.setPlaceholderText("Optional note (Backspace = reject without note, Esc = cancel)…")
+        if initial_note:
+            self.edit.selectAll()
+        self.edit.backspaceOnEmpty.connect(self._accept_no_note)
+        self.edit.returnPressed.connect(self._accept_with_text)
+        lay.addWidget(self.edit)
+
+        btns = QHBoxLayout()
+        btns.addStretch(1)
+        btn_cancel = QPushButton("Cancel (Esc)")
+        btn_cancel.clicked.connect(self.reject)
+        btn_no_note = QPushButton("⌫ No Note (Backspace)")
+        btn_no_note.clicked.connect(self._accept_no_note)
+        btn_ok = QPushButton("Reject With Note (Enter)")
+        btn_ok.setDefault(True)
+        btn_ok.clicked.connect(self._accept_with_text)
+        btns.addWidget(btn_cancel)
+        btns.addWidget(btn_no_note)
+        btns.addWidget(btn_ok)
+        lay.addLayout(btns)
+
+        self.edit.setFocus()
+
+    def _accept_no_note(self):
+        self.note_text = ""
+        self.accept()
+
+    def _accept_with_text(self):
+        self.note_text = self.edit.text().strip()
+        self.accept()
+
+
 class PrefetchSignals(QObject):
     ready = Signal(str)
 
@@ -214,6 +284,7 @@ class PapirusCuratorWindow(QMainWindow):
 
         # Load persistent progress state
         self.decisions = {}  # id -> {"status": "accepted"|"rejected", "mode": "badge"|"symbol"}
+        self.notes = {}      # id -> str
         self.history_stack = []
         self._load_progress()
 
@@ -241,25 +312,38 @@ class PapirusCuratorWindow(QMainWindow):
                 with open(STATE_JSON, encoding="utf-8") as f:
                     data = json.load(f)
                 self.decisions = data.get("decisions", {})
+                self.notes = {k: v for k, v in data.get("notes", {}).items() if v}
             except Exception as e:
                 print(f"Warning: could not read {STATE_JSON}: {e}", file=sys.stderr)
 
     def _save_progress(self):
         accepted_lines = []
         rejected_lines = []
+        notes_lines = []
         for item_id, rec in sorted(self.decisions.items()):
             it = self.item_by_id.get(item_id)
             al_str = f"  # aliases: {', '.join(it['aliases'][:8])}" if (it and it["aliases"]) else ""
+            note_val = self.notes.get(item_id, "").strip()
+            note_str = f"  | note: {note_val}" if note_val else ""
             if rec["status"] == "accepted":
-                accepted_lines.append(f"{item_id}\tmode={rec.get('mode', 'badge')}{al_str}")
+                accepted_lines.append(f"{item_id}\tmode={rec.get('mode', 'badge')}{note_str}{al_str}")
             elif rec["status"] == "rejected":
-                rejected_lines.append(f"{item_id}{al_str}")
+                rejected_lines.append(f"{item_id}{note_str}{al_str}")
+
+        for item_id, note_val in sorted(self.notes.items()):
+            note_val = note_val.strip()
+            if not note_val:
+                continue
+            st = self.decisions.get(item_id, {}).get("status", "unreviewed")
+            notes_lines.append(f"{item_id}\t[{st}]\t{note_val}")
 
         payload = {
             "total_papirus_masters": len(self.all_items),
             "accepted_count": len(accepted_lines),
             "rejected_count": len(rejected_lines),
+            "notes_count": len(notes_lines),
             "decisions": self.decisions,
+            "notes": {k: v for k, v in self.notes.items() if v.strip()},
         }
         tmp_json = STATE_JSON + ".tmp"
         with open(tmp_json, "w", encoding="utf-8") as f:
@@ -279,6 +363,13 @@ class PapirusCuratorWindow(QMainWindow):
             for ln in accepted_lines:
                 f.write(ln + "\n")
         os.replace(tmp_acc, ACCEPTED_TXT)
+
+        tmp_notes = NOTES_TXT + ".tmp"
+        with open(tmp_notes, "w", encoding="utf-8") as f:
+            f.write("# Curator Notes on Papirus Icons\n")
+            for ln in notes_lines:
+                f.write(ln + "\n")
+        os.replace(tmp_notes, NOTES_TXT)
 
     def _persist_accepted_icon_files(self, item, mode, bundle):
         """Write accepted 10.2 Aqua SVG to artwork/papirus-accepted-svgs/<cat>/<name>.svg
@@ -395,6 +486,7 @@ class PapirusCuratorWindow(QMainWindow):
             "Category: emblems / emotes / actions",
             "Accepted Only",
             "Rejected (Hand-Craft List) Only",
+            "Has Note Only",
         ])
         self.cmb_filter.currentIndexChanged.connect(lambda _: self._apply_filter(jump_to_unreviewed=True))
         top_row.addWidget(self.cmb_filter)
@@ -439,6 +531,12 @@ class PapirusCuratorWindow(QMainWindow):
         self.lbl_meta.setWordWrap(True)
         left_lay.addWidget(self.lbl_meta)
 
+        self.lbl_note = QLabel()
+        self.lbl_note.setWordWrap(True)
+        self.lbl_note.setStyleSheet("color: #0e4499; font-weight: bold;")
+        self.lbl_note.hide()
+        left_lay.addWidget(self.lbl_note)
+
         self.stage = IconStageWidget()
         left_lay.addWidget(self.stage, 1)
 
@@ -448,11 +546,15 @@ class PapirusCuratorWindow(QMainWindow):
         self.btn_undo.setFocusPolicy(Qt.NoFocus)
         self.btn_undo.clicked.connect(self.action_undo)
 
-        self.btn_reject = QPushButton("⌫ Reject → Add to Hand-Craft List (Backspace)")
+        self.btn_reject = QPushButton("⌫ Reject (Backspace)")
         self.btn_reject.setFocusPolicy(Qt.NoFocus)
         self.btn_reject.clicked.connect(self.action_reject)
 
-        self.btn_mode = QPushButton("⇄ Switch Full / Symbol Gel (Tab)")
+        self.btn_note = QPushButton("✎ Add Note (Ins)")
+        self.btn_note.setFocusPolicy(Qt.NoFocus)
+        self.btn_note.clicked.connect(self.action_add_note)
+
+        self.btn_mode = QPushButton("⇄ Full / Symbol (Tab)")
         self.btn_mode.setFocusPolicy(Qt.NoFocus)
         self.btn_mode.clicked.connect(self.action_toggle_mode)
 
@@ -465,13 +567,13 @@ class PapirusCuratorWindow(QMainWindow):
         self.btn_accept.setFocusPolicy(Qt.NoFocus)
         self.btn_accept.clicked.connect(self.action_accept)
 
-        for b in (self.btn_undo, self.btn_reject, self.btn_mode, self.btn_skip, self.btn_accept):
+        for b in (self.btn_undo, self.btn_reject, self.btn_note, self.btn_mode, self.btn_skip, self.btn_accept):
             btn_row.addWidget(b)
         left_lay.addLayout(btn_row)
 
         splitter.addWidget(left_pane)
 
-        # Right Pane: Live Rejected List ("put it in a list") & Accepted List
+        # Right Pane: Live Rejected List, Accepted List & Notes List
         right_pane = QWidget()
         right_lay = QVBoxLayout(right_pane)
         right_lay.setContentsMargins(6, 0, 0, 0)
@@ -481,12 +583,17 @@ class PapirusCuratorWindow(QMainWindow):
         self.lst_rejected = QListWidget()
         self.lst_rejected.setFocusPolicy(Qt.NoFocus)
         self.lst_rejected.itemClicked.connect(self._on_list_item_clicked)
-        self.tabs.addTab(self.lst_rejected, "Rejected List (0)")
+        self.tabs.addTab(self.lst_rejected, "Rejected (0)")
 
         self.lst_accepted = QListWidget()
         self.lst_accepted.setFocusPolicy(Qt.NoFocus)
         self.lst_accepted.itemClicked.connect(self._on_list_item_clicked)
-        self.tabs.addTab(self.lst_accepted, "Accepted List (0)")
+        self.tabs.addTab(self.lst_accepted, "Accepted (0)")
+
+        self.lst_notes = QListWidget()
+        self.lst_notes.setFocusPolicy(Qt.NoFocus)
+        self.lst_notes.itemClicked.connect(self._on_list_item_clicked)
+        self.tabs.addTab(self.lst_notes, "Notes (0)")
 
         right_lay.addWidget(self.tabs, 1)
 
@@ -495,7 +602,10 @@ class PapirusCuratorWindow(QMainWindow):
         flush_btn.clicked.connect(self._flush_kde_cache)
         right_lay.addWidget(flush_btn)
 
-        lbl_paths = QLabel(f"Auto-saved on every keypress:\n• {os.path.relpath(REJECTED_TXT, ROOT)}\n• {os.path.relpath(STATE_JSON, ROOT)}")
+        lbl_paths = QLabel(
+            f"Auto-saved on every keypress:\n• {os.path.relpath(REJECTED_TXT, ROOT)}\n"
+            f"• {os.path.relpath(NOTES_TXT, ROOT)}\n• {os.path.relpath(STATE_JSON, ROOT)}"
+        )
         f_small = QFont(self.font())
         f_small.setPointSize(9)
         lbl_paths.setFont(f_small)
@@ -510,6 +620,9 @@ class PapirusCuratorWindow(QMainWindow):
 
     def eventFilter(self, obj, event):
         if event.type() == QEvent.KeyPress:
+            # Never hijack keys while a modal dialog (e.g. Add Note) or popup menu is open!
+            if QApplication.activeModalWidget() is not None or QApplication.activePopupWidget() is not None:
+                return super().eventFilter(obj, event)
             key = event.key()
             if key == Qt.Key_Escape:
                 self.txt_search.clearFocus()
@@ -517,6 +630,9 @@ class PapirusCuratorWindow(QMainWindow):
                 self.stage.setFocus()
                 return True
             if not self.txt_search.hasFocus():
+                if key == Qt.Key_Insert and not event.isAutoRepeat():
+                    self.action_add_note()
+                    return True
                 if key == Qt.Key_Space and not event.isAutoRepeat():
                     self.action_accept()
                     return True
@@ -567,9 +683,12 @@ class PapirusCuratorWindow(QMainWindow):
                 continue
             elif mode_idx == 10 and st != "rejected":
                 continue
+            elif mode_idx == 11 and not self.notes.get(it["id"], "").strip():
+                continue
 
             if q:
-                hay = f"{it['id']} {' '.join(it['aliases'])}".lower()
+                note_txt = self.notes.get(it["id"], "")
+                hay = f"{it['id']} {' '.join(it['aliases'])} {note_txt}".lower()
                 if q not in hay:
                     continue
             out.append(it)
@@ -621,40 +740,74 @@ class PapirusCuratorWindow(QMainWindow):
             f"Source: Papirus/{it['size_dir']}/{it['category']}/{it['name']}.svg"
             + (f"   |   Aliases: {aliases_preview}" if aliases_preview else "   |   Aliases: none")
         )
+        note_val = self.notes.get(it["id"], "").strip()
+        if note_val:
+            self.lbl_note.setText(f"✎ Note: {note_val}   [Press Insert to edit]")
+            self.lbl_note.show()
+        else:
+            self.lbl_note.hide()
         self.stage.set_bundle(bundle, self.current_mode, st)
+
+    def _format_list_label(self, item_id):
+        note_val = self.notes.get(item_id, "").strip()
+        return f"{item_id}  — ✎ {note_val}" if note_val else item_id
 
     def _update_counters(self):
         n_acc = sum(1 for r in self.decisions.values() if r["status"] == "accepted")
         n_rej = sum(1 for r in self.decisions.values() if r["status"] == "rejected")
+        n_not = sum(1 for v in self.notes.values() if v.strip())
         n_tot = n_acc + n_rej
         self.progress.setValue(n_tot)
         self.lbl_counts.setText(
-            f"Reviewed: {n_tot:,} / {len(self.all_items):,}   |   ✓ Accepted: {n_acc:,}   |   ⌫ Rejected: {n_rej:,}"
+            f"Reviewed: {n_tot:,} / {len(self.all_items):,}   |   ✓ Accepted: {n_acc:,}   |   ⌫ Rejected: {n_rej:,}   |   ✎ Notes: {n_not:,}"
         )
-        self.tabs.setTabText(0, f"Rejected List ({n_rej:,})")
-        self.tabs.setTabText(1, f"Accepted List ({n_acc:,})")
+        self.tabs.setTabText(0, f"Rejected ({n_rej:,})")
+        self.tabs.setTabText(1, f"Accepted ({n_acc:,})")
+        self.tabs.setTabText(2, f"Notes ({n_not:,})")
 
     def _rebuild_lists(self):
         self.lst_rejected.clear()
         self.lst_accepted.clear()
+        self.lst_notes.clear()
         for item_id, rec in self.decisions.items():
             lw = self.lst_rejected if rec["status"] == "rejected" else self.lst_accepted
-            qli = QListWidgetItem(item_id)
+            qli = QListWidgetItem(self._format_list_label(item_id))
             qli.setData(Qt.UserRole, item_id)
             lw.addItem(qli)
+        for item_id, note_val in self.notes.items():
+            if note_val.strip():
+                qli = QListWidgetItem(f"{item_id}: {note_val.strip()}")
+                qli.setData(Qt.UserRole, item_id)
+                self.lst_notes.addItem(qli)
         self._update_counters()
 
     def _upsert_side_list(self, item_id, status):
-        # Remove existing entry from both lists, then append to target list
+        # Remove existing entry from rejected/accepted lists, then re-insert with current note label
         for lw in (self.lst_rejected, self.lst_accepted):
             for i in range(lw.count() - 1, -1, -1):
                 if lw.item(i).data(Qt.UserRole) == item_id:
                     lw.takeItem(i)
         if status in ("rejected", "accepted"):
             target = self.lst_rejected if status == "rejected" else self.lst_accepted
-            qli = QListWidgetItem(item_id)
+            qli = QListWidgetItem(self._format_list_label(item_id))
             qli.setData(Qt.UserRole, item_id)
             target.insertItem(0, qli)
+        self._upsert_note_list(item_id)
+
+    def _upsert_note_list(self, item_id):
+        for i in range(self.lst_notes.count() - 1, -1, -1):
+            if self.lst_notes.item(i).data(Qt.UserRole) == item_id:
+                self.lst_notes.takeItem(i)
+        note_val = self.notes.get(item_id, "").strip()
+        if note_val:
+            qli = QListWidgetItem(f"{item_id}: {note_val}")
+            qli.setData(Qt.UserRole, item_id)
+            self.lst_notes.insertItem(0, qli)
+        # Refresh label in rejected/accepted list if present
+        for lw in (self.lst_rejected, self.lst_accepted):
+            for i in range(lw.count()):
+                if lw.item(i).data(Qt.UserRole) == item_id:
+                    lw.item(i).setText(self._format_list_label(item_id))
 
     def _on_list_item_clicked(self, qli):
         item_id = qli.data(Qt.UserRole)
@@ -679,7 +832,8 @@ class PapirusCuratorWindow(QMainWindow):
             return
         it = self.filtered_items[self.current_idx]
         prev = self.decisions.get(it["id"])
-        self.history_stack.append((self.current_idx, it["id"], prev))
+        prev_note = self.notes.get(it["id"])
+        self.history_stack.append((self.current_idx, it["id"], prev, prev_note))
 
         bundle = self._compute_bundle(it)
         self.decisions[it["id"]] = {"status": "accepted", "mode": self.current_mode}
@@ -692,18 +846,55 @@ class PapirusCuratorWindow(QMainWindow):
         if not self.filtered_items:
             return
         it = self.filtered_items[self.current_idx]
+        cur_note = self.notes.get(it["id"], "")
+        dlg = RejectNoteDialog(it["id"], cur_note, self)
+        if dlg.exec() != QDialog.Accepted:
+            self.stage.setFocus()
+            return
+
         prev = self.decisions.get(it["id"])
-        self.history_stack.append((self.current_idx, it["id"], prev))
+        prev_note = self.notes.get(it["id"])
+        self.history_stack.append((self.current_idx, it["id"], prev, prev_note))
+
+        if dlg.note_text:
+            self.notes[it["id"]] = dlg.note_text
+        else:
+            self.notes.pop(it["id"], None)
 
         self.decisions[it["id"]] = {"status": "rejected", "mode": self.current_mode}
         self._remove_accepted_icon_files(it)
         self._save_progress()
         self._upsert_side_list(it["id"], "rejected")
         self._advance_next()
+        self.stage.setFocus()
 
     def action_toggle_mode(self):
         self.current_mode = "symbol" if self.current_mode == "badge" else "badge"
         self._refresh_stage()
+
+    def action_add_note(self):
+        if not self.filtered_items:
+            return
+        it = self.filtered_items[self.current_idx]
+        cur_note = self.notes.get(it["id"], "")
+        txt, ok = QInputDialog.getText(
+            self,
+            f"Add Note — {it['id']}",
+            f"Note for {it['id']} (leave blank to clear):",
+            QLineEdit.Normal,
+            cur_note,
+        )
+        if ok:
+            cleaned = txt.strip()
+            if cleaned:
+                self.notes[it["id"]] = cleaned
+            else:
+                self.notes.pop(it["id"], None)
+            self._save_progress()
+            self._upsert_note_list(it["id"])
+            self._update_counters()
+            self._refresh_stage()
+        self.stage.setFocus()
 
     def action_skip(self):
         if not self.filtered_items:
@@ -723,8 +914,12 @@ class PapirusCuratorWindow(QMainWindow):
         if not self.history_stack:
             self.action_prev()
             return
-        prev_idx, item_id, prev_rec = self.history_stack.pop()
+        prev_idx, item_id, prev_rec, prev_note = self.history_stack.pop()
         it = self.item_by_id.get(item_id)
+        if prev_note:
+            self.notes[item_id] = prev_note
+        else:
+            self.notes.pop(item_id, None)
         if prev_rec is None:
             self.decisions.pop(item_id, None)
             if it:
