@@ -2122,6 +2122,10 @@ QRect Style::subElementRect(SubElement se, const QStyleOption *opt, const QWidge
         return opt->rect.adjusted(0, 0, -labelW, 0);
     }
     case SE_LineEditContents:
+        // a line edit inside a combination or spin box already sits in the inset edit-field rect;
+        // padding it again cut the first letters off in narrow fixed-width combos (Okular's zoom)
+        if (w && (qobject_cast<const QComboBox *>(w->parentWidget()) || qobject_cast<const QAbstractSpinBox *>(w->parentWidget())))
+            return opt->rect.adjusted(1, 0, -1, 0);
         return opt->rect.adjusted(5, 3, -5, -3);
     default:
         break;
