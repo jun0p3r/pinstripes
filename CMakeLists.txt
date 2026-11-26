@@ -15,6 +15,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 
 find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets)
+find_package(KF6WindowSystem REQUIRED) # KWindowShadow: drop shadows for menus and help tags
 
 add_subdirectory(style)
 

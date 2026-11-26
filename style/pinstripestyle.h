@@ -8,7 +8,10 @@
 #include <QPainterPath>
 #include <QProxyStyle>
 #include <QStyleOption>
+#include <QHash>
 #include <QList>
+
+class KWindowShadow;
 
 namespace Pinstripe
 {
@@ -35,6 +38,7 @@ public:
 
 protected:
     void timerEvent(QTimerEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     Gel coloredGel() const;
@@ -48,10 +52,13 @@ private:
     void drawArrow(QPainter *p, const QRectF &r, Qt::ArrowType type, const QColor &c) const;
     void paintGelPath(QPainter *p, const QPainterPath &path, const QRectF &bounds, const Gel &g, Qt::Orientation o, bool shadow, const QPainterPath *rimPath = nullptr) const;
     void updateAnimationTimer();
+    void installShadow(QWidget *w);
+    void removeShadow(QWidget *w);
 
     Appearance m_appearance;
     QBasicTimer m_timer;
     QList<QPointer<QWidget>> m_animated; // default buttons and progress bars
     qreal m_phase = 0; // seconds, drives pulse and stripes
+    QHash<const QWidget *, KWindowShadow *> m_shadows; // menus, tooltips, pop-up lists
 };
 }

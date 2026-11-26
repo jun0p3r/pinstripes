@@ -29,6 +29,12 @@
 #include <QToolButton>
 #include <QtMath>
 
+#include <KWindowShadow>
+#include <KWindowShadowTile>
+
+#include <array>
+#include <cmath>
+
 namespace Pinstripe
 {
 namespace
@@ -104,6 +110,17 @@ QFont smallFont(const QFont &f)
         s.setPointSizeF(f.pointSizeF() * 11.0 / 13.0);
     else if (f.pixelSize() > 0)
         s.setPixelSize(qRound(f.pixelSize() * 11.0 / 13.0));
+    return s;
+}
+
+// HIG chapter 10: the label font is 10pt (bevel button labels)
+QFont labelFont(const QFont &f)
+{
+    QFont s = f;
+    if (f.pointSizeF() > 0)
+        s.setPointSizeF(f.pointSizeF() * 10.0 / 13.0);
+    else if (f.pixelSize() > 0)
+        s.setPixelSize(qRound(f.pixelSize() * 10.0 / 13.0));
     return s;
 }
 
@@ -204,6 +221,42 @@ void paintTitleBar(QPainter *p, const QRect &r, bool active)
     p->fillRect(QRect(r.left(), r.bottom(), r.width(), 1), active ? QColor(127, 127, 127) : QColor(160, 160, 160));
     p->restore();
 }
+
+// Aqua bevel button (HIG Figure 7-14): matte, not gel. A soft white-to-light-grey face, a fine
+// grey border that is darker at the bottom, small rounded corners, a faint shadow; pressed or
+// toggled on, the face turns a darker grey.
+void paintBevel(QPainter *p, const QRectF &rect, bool down, qreal radius = 3.0)
+{
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing, true);
+    const QRectF r = rect.adjusted(0.5, 0.5, -0.5, -1.5);
+    p->setPen(Qt::NoPen);
+    p->setBrush(QColor(0, 0, 0, 28));
+    p->drawRoundedRect(r.translated(0, 1.0), radius, radius);
+    QLinearGradient face(r.topLeft(), r.bottomLeft());
+    if (down) {
+        face.setColorAt(0.0, QColor(196, 196, 198));
+        face.setColorAt(1.0, QColor(214, 214, 216));
+    } else {
+        face.setColorAt(0.0, QColor(252, 252, 252));
+        face.setColorAt(0.5, QColor(242, 242, 243));
+        face.setColorAt(1.0, QColor(229, 229, 231));
+    }
+    QLinearGradient rim(r.topLeft(), r.bottomLeft());
+    rim.setColorAt(0.0, QColor(150, 150, 152));
+    rim.setColorAt(1.0, QColor(118, 118, 120));
+    p->setPen(QPen(QBrush(rim), 1.0));
+    p->setBrush(face);
+    p->drawRoundedRect(r, radius, radius);
+    if (!down) {
+        p->setPen(QColor(255, 255, 255, 200));
+        p->drawLine(QPointF(r.left() + radius, r.top() + 1), QPointF(r.right() - radius, r.top() + 1));
+    } else {
+        p->setPen(QColor(0, 0, 0, 40));
+        p->drawLine(QPointF(r.left() + radius, r.top() + 1), QPointF(r.right() - radius, r.top() + 1));
+    }
+    p->restore();
+}
 }
 
 Style::Style(Appearance appearance)
@@ -261,6 +314,9 @@ void Style::polish(QWidget *w)
         m_animated.append(w);
         updateAnimationTimer();
     }
+    // menus, help tags and pop-up lists cast the soft Aqua drop shadow
+    if (qobject_cast<QMenu *>(w) || w->inherits("QTipLabel") || w->inherits("QComboBoxPrivateContainer"))
+        w->installEventFilter(this);
     // help tags use the small system font (HIG chapter 10)
     if (w->inherits("QTipLabel"))
         w->setFont(smallFont(w->font()));
@@ -279,6 +335,8 @@ void Style::polish(QWidget *w)
 void Style::unpolish(QWidget *w)
 {
     m_animated.removeAll(w);
+    w->removeEventFilter(this);
+    removeShadow(w);
     if (qobject_cast<QMenu *>(w))
         w->setAttribute(Qt::WA_TranslucentBackground, false);
     QProxyStyle::unpolish(w);
@@ -291,6 +349,80 @@ void Style::updateAnimationTimer()
         m_timer.stop();
     else if (!m_timer.isActive())
         m_timer.start(40, this);
+}
+
+namespace
+{
+// Soft drop shadow, heavier below (offset 3px down), as under 10.2 menus and windows.
+constexpr int ShadowSize = 14;
+constexpr int ShadowOffset = 3;
+
+std::array<KWindowShadowTile::Ptr, 8> shadowTiles()
+{
+    static std::array<KWindowShadowTile::Ptr, 8> tiles;
+    if (tiles[0])
+        return tiles;
+    const int n = 2 * ShadowSize + 1;
+    QImage img(n, n, QImage::Format_ARGB32_Premultiplied);
+    img.fill(Qt::transparent);
+    const double sigma = ShadowSize / 2.6;
+    for (int y = 0; y < n; ++y) {
+        for (int x = 0; x < n; ++x) {
+            const double dx = std::abs(x - ShadowSize);
+            const double dy = std::abs(y - (ShadowSize + ShadowOffset));
+            const double d2 = dx * dx + dy * dy;
+            const int a = qBound(0, int(std::lround(92.0 * std::exp(-d2 / (2 * sigma * sigma)))), 255);
+            img.setPixel(x, y, qPremultiply(qRgba(0, 0, 0, a)));
+        }
+    }
+    const int s = ShadowSize;
+    const QRect rects[8] = {QRect(0, 0, s, s), QRect(s, 0, 1, s), QRect(s + 1, 0, s, s), QRect(s + 1, s, s, 1),
+                            QRect(s + 1, s + 1, s, s), QRect(s, s + 1, 1, s), QRect(0, s + 1, s, s), QRect(0, s, s, 1)};
+    for (int i = 0; i < 8; ++i) {
+        tiles[i] = KWindowShadowTile::Ptr::create();
+        tiles[i]->setImage(img.copy(rects[i]));
+    }
+    return tiles;
+}
+}
+
+void Style::installShadow(QWidget *w)
+{
+    if (!w->windowHandle() || m_shadows.contains(w))
+        return;
+    const auto t = shadowTiles();
+    auto *shadow = new KWindowShadow(w);
+    shadow->setTopLeftTile(t[0]);
+    shadow->setTopTile(t[1]);
+    shadow->setTopRightTile(t[2]);
+    shadow->setRightTile(t[3]);
+    shadow->setBottomRightTile(t[4]);
+    shadow->setBottomTile(t[5]);
+    shadow->setBottomLeftTile(t[6]);
+    shadow->setLeftTile(t[7]);
+    shadow->setPadding(QMargins(ShadowSize, ShadowSize, ShadowSize, ShadowSize));
+    shadow->setWindow(w->windowHandle());
+    if (shadow->create())
+        m_shadows.insert(w, shadow);
+    else
+        delete shadow;
+}
+
+void Style::removeShadow(QWidget *w)
+{
+    if (auto *shadow = m_shadows.take(w))
+        delete shadow;
+}
+
+bool Style::eventFilter(QObject *obj, QEvent *event)
+{
+    if (auto *w = qobject_cast<QWidget *>(obj)) {
+        if (event->type() == QEvent::Show)
+            installShadow(w);
+        else if (event->type() == QEvent::Hide || event->type() == QEvent::Destroy)
+            removeShadow(w);
+    }
+    return QProxyStyle::eventFilter(obj, event);
 }
 
 void Style::timerEvent(QTimerEvent *event)
@@ -494,12 +626,7 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
 
     case PE_PanelButtonCommand:
     case PE_PanelButtonBevel: {
-        // bevel buttons (square, 4px corners)
-        const bool sunken = opt->state & (State_Sunken | State_On);
-        GelOptions o;
-        o.radius = 4.0;
-        o.lensInset = 3;
-        paintGel(p, QRectF(opt->rect).adjusted(0.5, 0.5, -0.5, -2.5), sunken ? gel(GelKind::Pressed, m_appearance) : gel(GelKind::Clear, m_appearance), o);
+        paintBevel(p, QRectF(opt->rect), opt->state & (State_Sunken | State_On));
         return;
     }
 
@@ -518,10 +645,7 @@ void Style::drawPrimitive(PrimitiveElement pe, const QStyleOption *opt, QPainter
             }
             return;
         }
-        GelOptions o;
-        o.radius = 4.0;
-        o.lensInset = 3;
-        paintGel(p, QRectF(opt->rect).adjusted(0.5, 0.5, -0.5, -2.5), sunken ? gel(GelKind::Pressed, m_appearance) : gel(GelKind::Clear, m_appearance), o);
+        paintBevel(p, QRectF(opt->rect), sunken);
         return;
     }
 
@@ -758,11 +882,15 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         if (!enabled(opt))
             p->setOpacity(0.55);
         if (r.height() > ButtonHeight + ShadowSpace + 8) {
-            // tall buttons become bevel buttons, as the HIG recommends
-            GelOptions o;
-            o.radius = 5.0;
-            o.lensInset = 4;
-            paintGel(p, QRectF(r).adjusted(0.5, 0.5, -0.5, -2.5), buttonGel(opt, isDefault, sunken), o);
+            // tall buttons become bevel buttons, as the HIG recommends (larger text or an icon)
+            if (isDefault && windowActive(opt) && !sunken) {
+                GelOptions o;
+                o.radius = 5.0;
+                o.lensInset = 4;
+                paintGel(p, QRectF(r).adjusted(0.5, 0.5, -0.5, -2.5), buttonGel(opt, isDefault, sunken), o);
+            } else {
+                paintBevel(p, QRectF(r), sunken, 4.0);
+            }
         } else {
             const qreal h = qMin<qreal>(ButtonHeight, r.height() - ShadowSpace);
             const QRectF capsule(r.left() + 0.5, r.top() + (r.height() - ShadowSpace - h) / 2.0, r.width() - 1, h);
@@ -954,7 +1082,7 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             text = Qt::white;
         }
         p->setPen(text);
-        const int checkCol = 20;
+        const int checkCol = 23; // 10.2 menus start their text ~23px in
         int x = r.left() + checkCol;
         if (mi->checkType != QStyleOptionMenuItem::NotCheckable && mi->checked) {
             QFont f = mi->font;
@@ -978,8 +1106,25 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
         p->setFont(mi->font);
         const int rightPad = mi->menuItemType == QStyleOptionMenuItem::SubMenu ? 22 : 14;
         p->drawText(QRect(x, r.top(), r.right() - x - rightPad, r.height()), Qt::AlignVCenter | Qt::AlignLeft | Qt::TextShowMnemonic, label);
-        if (!shortcut.isEmpty())
-            p->drawText(QRect(x, r.top(), r.right() - x - rightPad, r.height()), Qt::AlignVCenter | Qt::AlignRight, shortcut);
+        if (!shortcut.isEmpty()) {
+            // 10.2 shortcut column: modifier symbols right-aligned against the key, keys in a
+            // left-aligned column (Ctrl is shown as the Control symbol, which is what it is)
+            QString mods, key = shortcut;
+            const QStringList parts = shortcut.split(QLatin1Char('+'));
+            if (parts.size() > 1 && !parts.last().isEmpty()) {
+                key = parts.last();
+                const QString order[4][2] = {{QStringLiteral("Ctrl"), QStringLiteral("⌃")}, {QStringLiteral("Alt"), QStringLiteral("⌥")},
+                                             {QStringLiteral("Shift"), QStringLiteral("⇧")}, {QStringLiteral("Meta"), QStringLiteral("⌘")}};
+                for (const auto &o : order)
+                    if (parts.contains(o[0]))
+                        mods += o[1];
+            }
+            const int keyW = qMax(mi->fontMetrics.horizontalAdvance(QStringLiteral("W")) + 4, mi->fontMetrics.horizontalAdvance(key) + 2);
+            const int keyX = r.right() - rightPad - keyW;
+            p->drawText(QRect(keyX, r.top(), keyW, r.height()), Qt::AlignVCenter | Qt::AlignLeft, key);
+            if (!mods.isEmpty())
+                p->drawText(QRect(x, r.top(), keyX - x - 1, r.height()), Qt::AlignVCenter | Qt::AlignRight, mods);
+        }
         if (mi->menuItemType == QStyleOptionMenuItem::SubMenu)
             drawArrow(p, QRectF(r.right() - 16, r.top(), 10, r.height()), Qt::RightArrow, text);
         p->restore();
@@ -1020,7 +1165,7 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             o.radius = 0;
             o.shadow = false;
             o.lensInset = 0;
-            paintGel(p, QRectF(r).adjusted(-1, -1, 1, 0), coloredGel(), o);
+            paintGel(p, QRectF(r).adjusted(-1, -1, 1, 0), gel(GelKind::TabSelected, m_appearance), o); // lighter blue, HIG Figure 7-34
         } else {
             QLinearGradient g(r.topLeft(), r.bottomLeft());
             g.setColorAt(0, QColor(255, 255, 255));
@@ -1035,6 +1180,21 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             p->drawLine(r.topRight() + QPoint(0, 2), r.bottomRight() - QPoint(0, 2));
         p->restore();
         return;
+    }
+
+    case CE_ToolButtonLabel: {
+        // bevel button labels use the label font, toolbar labels the small system font
+        const auto *t = qstyleoption_cast<const QStyleOptionToolButton *>(opt);
+        if (t && !t->text.isEmpty() && t->toolButtonStyle != Qt::ToolButtonIconOnly && t->toolButtonStyle != Qt::ToolButtonTextOnly) {
+            QStyleOptionToolButton copy(*t);
+            copy.font = (t->state & State_AutoRaise) ? smallFont(t->font) : labelFont(t->font);
+            p->save();
+            p->setFont(copy.font);
+            QProxyStyle::drawControl(ce, &copy, p, w);
+            p->restore();
+            return;
+        }
+        break;
     }
 
     case CE_HeaderLabel: {

@@ -41,6 +41,7 @@
 #include <QTextEdit>
 #include <QTimer>
 #include <QTreeWidget>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 static void spin(int ms)
@@ -232,7 +233,23 @@ static QWidget *dialogWindow()
     sl->setValue(60);
     fl->addWidget(sl);
     lay->addWidget(flat);
-    win->resize(430, 300);
+    // bevel buttons (HIG Figure 7-14): icon above the label; the middle one toggled on
+    auto *bevels = new QHBoxLayout;
+    const char *names[][2] = {{"document-print", "Print"}, {"preferences-system", "Settings"}, {"internet-mail", "Mail"}};
+    for (int i = 0; i < 3; ++i) {
+        auto *b = new QToolButton;
+        b->setIcon(QIcon::fromTheme(QString::fromLatin1(names[i][0])));
+        b->setIconSize(QSize(32, 32));
+        b->setText(QString::fromLatin1(names[i][1]));
+        b->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+        b->setCheckable(true);
+        b->setChecked(i == 1);
+        b->setMinimumSize(64, 60);
+        bevels->addWidget(b);
+    }
+    bevels->addStretch();
+    lay->addLayout(bevels);
+    win->resize(430, 380);
     return win;
 }
 
