@@ -15,6 +15,7 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMenu>
+#include <QMenuBar>
 #include <QPainter>
 #include <QProgressBar>
 #include <QPushButton>
@@ -1272,8 +1273,9 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
     }
 
     case CE_MenuBarEmptyArea: {
+        // an in-window menu bar sits on the window pinstripes like the title bar above it; only a
+        // divider marks its bottom, drawn under the items too so it runs the full width
         p->save();
-        p->fillRect(opt->rect, QBrush(menuStripes()));
         p->setPen(QColor(150, 150, 150));
         p->drawLine(opt->rect.bottomLeft(), opt->rect.bottomRight());
         p->restore();
@@ -1285,6 +1287,10 @@ void Style::drawControl(ControlElement ce, const QStyleOption *opt, QPainter *p,
             break;
         p->save();
         const bool selected = (mi->state & State_Selected) && (mi->state & State_Sunken);
+        if (const auto *bar = qobject_cast<const QMenuBar *>(w); bar && mi->rect.bottom() >= bar->rect().bottom()) {
+            p->setPen(QColor(150, 150, 150));
+            p->drawLine(QPoint(mi->rect.left(), bar->rect().bottom()), QPoint(mi->rect.right(), bar->rect().bottom()));
+        }
         if (selected)
             paintSelection(p, QRectF(mi->rect.adjusted(0, 0, 0, -1)), m_appearance);
         p->setPen(selected ? Qt::white : (enabled(opt) ? Ink : QColor(150, 150, 150)));
