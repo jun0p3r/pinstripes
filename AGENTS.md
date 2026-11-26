@@ -155,7 +155,12 @@ Claude again) relies on them to resume without re-deriving anything.
     #484b50; globe navy #28338a at the top to #bfe0fa at the bottom; disk top #c4c3c8..#aaa9af,
     front #4a4a54; logo #9aa0a5..#4c5a61). The KDE logo replaces Apple's. Side-by-side with
     Apple's figures: `docs/mockups/aqua-remix/hig-side-by-side.png`.
-  * **Glass toolbar action icons** (111 + 200 aliases) and the 426 menu-extra symbolics, as before.
+  * **Glass toolbar action icons** (111 + 200 aliases) and the 426 menu-extra symbolics. The
+    user found the action icons too heavy: `render_action_png` now paints through `SoftPainter`,
+    which lifts dark outline pens toward a mid tone, draws them 30 % thinner and turns near-black
+    glyph fills into Jaguar's dark grey #3b3e43 (matching the Finder's light-rimmed Back/Forward
+    buttons in real 10.2 screenshots). Symbolic glyphs are eroded by `thin()` (0.18 units, 0.27 on
+    the panel); more than that breaks the Bluetooth rune and clipboard lines apart.
   * **Crystal for everything else**: `index.theme` inherits `KrystalSVG,oxygen,breeze,hicolor`.
     KrystalSVG (https://invent.kde.org/blackcrack/krystalsvg) continues Everaldo's KDE 3 Crystal
     SVG. Its licence is **CC BY-NC-SA**, so it must never be committed here; users install it
@@ -222,3 +227,6 @@ Claude again) relies on them to resume without re-deriving anything.
   stripes); `gh` signed in so pushes work; set up `~/projects/AGENT-CHAT.md` as a mailbox with
   Antigravity. Icons: hand-drawn HIG-matched set (`artwork/aqua-icons/`), procedural colour
   categories dropped, theme now inherits Crystal via KrystalSVG (`contrib/install-krystalsvg.sh`).
+* 2026-11-26 Claude Code (Opus 5.5): thinner symbolics (`thin()`), lighter toolbar action icons
+  (`SoftPainter`), checked against Jaguar screenshots from guidebookgallery.org (menu bar volume
+  extra, Finder and Mail toolbars).

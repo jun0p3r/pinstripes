@@ -2200,12 +2200,50 @@ def build_action_painters():
     return actions
 
 
+class SoftPainter(QPainter):
+    """Jaguar's toolbar icons have light grey rims and dark grey (not black) glyphs. The painters
+    above draw near-black outlines, which read heavy, so every dark pen is lifted toward a mid tone
+    and drawn thinner, and near-black fills become dark grey."""
+    PEN_WIDTH = 0.7
+    PEN_LIFT = 0.5     # move dark outline lightness halfway to OUTLINE_L
+    OUTLINE_L = 0.62
+    GLYPH = QColor("#3b3e43")
+
+    @staticmethod
+    def _lift(col, target, k):
+        h, s, l, a = col.getHslF()
+        if l >= target:
+            return col
+        out = QColor.fromHslF(max(h, 0.0), s * 0.85, l + (target - l) * k, a)
+        return out
+
+    def setPen(self, pen):
+        if isinstance(pen, QColor):
+            pen = QPen(pen)
+        if isinstance(pen, QPen) and pen.style() != Qt.NoPen:
+            col = pen.color()
+            if col.lightnessF() < 0.55:
+                pen = QPen(pen)
+                pen.setColor(self._lift(col, self.OUTLINE_L, self.PEN_LIFT))
+                pen.setWidthF(max(0.6, pen.widthF() * self.PEN_WIDTH))
+        super().setPen(pen)
+
+    def setBrush(self, brush):
+        col = brush if isinstance(brush, QColor) else (
+            brush.color() if isinstance(brush, QBrush) and brush.style() == Qt.SolidPattern else None)
+        if col is not None and col.alpha() > 200 and col.lightnessF() < 0.16 and col.hslSaturationF() < 0.3:
+            g = QColor(self.GLYPH)
+            g.setAlpha(col.alpha())
+            brush = g
+        super().setBrush(brush)
+
+
 def render_action_png(fn, size):
     """Supersample 2x onto a 32x32 logical coordinate space, then smooth-downsample."""
     ss = size * 2
     hi = QImage(ss, ss, QImage.Format_ARGB32_Premultiplied)
     hi.fill(Qt.transparent)
-    p = QPainter(hi)
+    p = SoftPainter(hi)
     p.setRenderHint(QPainter.Antialiasing, True)
     p.setRenderHint(QPainter.TextAntialiasing, True)
     p.setRenderHint(QPainter.SmoothPixmapTransform, True)
