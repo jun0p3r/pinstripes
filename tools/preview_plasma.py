@@ -12,7 +12,7 @@ import os
 import sys
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtCore import QByteArray, QPointF, QRectF, Qt
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QImage, QLinearGradient, QPainter, QPen, QPixmap, QRadialGradient
 from PySide6.QtSvg import QSvgRenderer
 
@@ -156,10 +156,13 @@ def main():
         p.setPen(Qt.black)
         x += w
     p.drawText(QRectF(W - 150, 0, 140, 23), Qt.AlignVCenter | Qt.AlignRight, "Fri 7:17 PM")
-    for i, n in enumerate(("audio-volume-high", "network-wireless")):
-        pm = icon(n, 16)
-        if not pm.isNull():
-            p.drawPixmap(W - 200 - i * 24, 4, 16, 16, pm)
+    # menu extras from the Oxygen Pinstripe icon theme
+    tray = os.path.join(ROOT, "icons", "Oxygen-Pinstripe", "panel", "status")
+    for i, n in enumerate(("notifications", "bluetooth-active", "battery-080-charging", "audio-volume-high", "network-wireless-signal-good")):
+        f = os.path.join(tray, n + ".svg")
+        if os.path.exists(f):
+            data = open(f).read().replace("#232629", "#111111")
+            QSvgRenderer(QByteArray(data.encode())).render(p, QRectF(W - 128 - i * 26, 3, 17, 17))
 
     # an application window drawn by the Pinstripe widget style (optional third argument)
     if len(sys.argv) > 3 and os.path.exists(sys.argv[3]):

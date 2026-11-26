@@ -21,6 +21,7 @@ add_subdirectory(style)
 install(FILES colors/Pinstripe.colors colors/PinstripeGraphite.colors DESTINATION ${KDE_INSTALL_DATADIR}/color-schemes)
 install(DIRECTORY plasma/pinstripe DESTINATION ${KDE_INSTALL_DATADIR}/plasma/desktoptheme OPTIONAL)
 install(DIRECTORY gtk/Pinstripe DESTINATION ${KDE_INSTALL_DATADIR}/themes OPTIONAL)
+install(DIRECTORY icons/Oxygen-Pinstripe DESTINATION ${KDE_INSTALL_DATADIR}/icons OPTIONAL)
 
 option(BUILD_GALLERY "Build the offscreen widget gallery renderer (tools/gallery)" OFF)
 if(BUILD_GALLERY)
